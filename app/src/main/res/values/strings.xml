@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Baltazar</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_start">Start</string>
+    <string name="onboarding_title_1">Welcome</string>
+    <string name="onboarding_description_1">Discover the features of Baltazar.</string>
+    <string name="onboarding_title_2">Security</string>
+    <string name="onboarding_description_2">Your data is safe and secure.</string>
+    <string name="onboarding_title_3">Fast &amp; Reliable</string>
+    <string name="onboarding_description_3">Get your things done quickly.</string>
 </resources>

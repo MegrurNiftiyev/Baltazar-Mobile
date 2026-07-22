@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Baltazar</string>
+    <string name="onboarding_skip">Ötür</string>
+    <string name="onboarding_next">Növbəti</string>
+    <string name="onboarding_start">Başla</string>
+    <string name="onboarding_title_1">Xoş gəlmisiniz</string>
+    <string name="onboarding_description_1">Baltazarın xüsusiyyətlərini kəşf edin.</string>
+    <string name="onboarding_title_2">Təhlükəsizlik</string>
+    <string name="onboarding_description_2">Məlumatlarınız təhlükəsizdir.</string>
+    <string name="onboarding_title_3">Sürətli və Etibarlı</string>
+    <string name="onboarding_description_3">İşlərinizi sürətlə tamamlayın.</string>
+</resources>

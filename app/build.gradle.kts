@@ -45,55 +45,15 @@ android {
 }
 
 dependencies {
-    // Core
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.kotlinx.coroutines.android)
+    implementation(project(":core"))
+    implementation(project(":feature:auth"))
+    implementation(project(":feature:food"))
+    implementation(project(":feature:taxi"))
+    implementation(project(":feature:travel"))
 
-    // Compose
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.foundation.layout)
-    implementation(libs.androidx.compose.animation.core)
-    implementation(libs.androidx.compose.runtime)
-    implementation(libs.androidx.ui)
-    
-    // Navigation
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.hilt.navigation.compose)
-
-    // Dependency Injection
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
-
-    // Networking
-    implementation(libs.okhttp.core)
-    implementation(libs.okhttp.logging.interceptor)
-    implementation(libs.retrofit.core)
-    implementation(libs.retrofit.converter.serialization)
-    implementation(libs.kotlinx.serialization.json)
-
-    // Storage
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.androidx.security.crypto)
-
-    // Utils
-    implementation(libs.timber)
-    implementation(libs.coil.compose)
     implementation(libs.compose.shimmer)
     debugImplementation(libs.leakcanary.android)
 
-    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
