@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.baltazar.feature.taxi"
+    namespace = "com.example.baltazar.feature.profile"
     compileSdk {
         version = release(35)
     }
@@ -12,7 +12,7 @@ android {
     defaultConfig {
         minSdk = 24
 
-        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
     compileOptions {
@@ -27,7 +27,9 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.material)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(libs.runner)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit)
 }

@@ -51,6 +51,9 @@ dependencies {
     implementation(project(":feature:taxi"))
     implementation(project(":feature:travel"))
 
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
     implementation(libs.compose.shimmer)
     debugImplementation(libs.leakcanary.android)
 

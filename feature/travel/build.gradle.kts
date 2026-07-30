@@ -26,7 +26,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.appcompat.v7)
+    implementation(project(":core"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.runner)
