@@ -1,0 +1,19 @@
+<resources>
+    <string name="onboarding_skip">Atla</string>
+    <string name="onboarding_next">Sonraki</string>
+    <string name="onboarding_start">Başla</string>
+    <string name="onboarding_title_1">Hoş geldiniz</string>
+    <string name="onboarding_description_1">Baltazarın özelliklerini keşfedin.</string>
+    <string name="onboarding_title_2">Güvenlik</string>
+    <string name="onboarding_description_2">Verileriniz güvende.</string>
+    <string name="onboarding_title_3">Hızlı ve Güvenilir</string>
+    <string name="onboarding_description_3">İşlerinizi hızla tamamlayın.</string>
+
+    <string name="error_field_blank">Bu alan boş olamaz</string>
+    <string name="error_invalid_format">Geçersiz format</string>
+    <string name="error_too_short">Çok kısa</string>
+    <string name="error_too_long">Çok uzun</string>
+    <string name="error_missing_digit">En az 1 rakam gereklidir</string>
+    <string name="error_missing_uppercase">En az 1 büyük harf gereklidir</string>
+    <string name="error_missing_special_char">En az 1 özel karakter gereklidir</string>
+</resources>

@@ -56,6 +56,7 @@ dependencies {
 
     // Dependency Injection
     api(libs.hilt.android)
+    implementation(libs.androidx.compose.material3.lint)
     ksp(libs.hilt.android.compiler)
 
     // Networking

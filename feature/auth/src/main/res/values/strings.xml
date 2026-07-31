@@ -1,0 +1,19 @@
+<resources>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_start">Start</string>
+    <string name="onboarding_title_1">Welcome</string>
+    <string name="onboarding_description_1">Discover the features of Baltazar.</string>
+    <string name="onboarding_title_2">Security</string>
+    <string name="onboarding_description_2">Your data is safe and secure.</string>
+    <string name="onboarding_title_3">Fast &amp; Reliable</string>
+    <string name="onboarding_description_3">Get your things done quickly.</string>
+
+    <string name="error_field_blank">Field cannot be blank</string>
+    <string name="error_invalid_format">Invalid format</string>
+    <string name="error_too_short">Too short</string>
+    <string name="error_too_long">Too long</string>
+    <string name="error_missing_digit">At least 1 digit required</string>
+    <string name="error_missing_uppercase">At least 1 uppercase letter required</string>
+    <string name="error_missing_special_char">At least 1 special character required</string>
+</resources>

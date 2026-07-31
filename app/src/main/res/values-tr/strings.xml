@@ -1,12 +1,3 @@
 <resources>
     <string name="app_name">Baltazar</string>
-    <string name="onboarding_skip">Atla</string>
-    <string name="onboarding_next">Sonraki</string>
-    <string name="onboarding_start">Başla</string>
-    <string name="onboarding_title_1">Hoş geldiniz</string>
-    <string name="onboarding_description_1">Baltazarın özelliklerini keşfedin.</string>
-    <string name="onboarding_title_2">Güvenlik</string>
-    <string name="onboarding_description_2">Verileriniz güvende.</string>
-    <string name="onboarding_title_3">Hızlı ve Güvenilir</string>
-    <string name="onboarding_description_3">İşlerinizi hızla tamamlayın.</string>
 </resources>

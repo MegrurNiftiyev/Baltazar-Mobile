@@ -27,7 +27,7 @@ fun RoundedButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    borderRadius: Dp = _root_ide_package_.com.example.baltazar.core.constants.BorderRadiuses.Medium,
+    borderRadius: Dp = BorderRadiuses.Medium,
     enabled: Boolean = true,
     isLoading: Boolean = false,
     containerColor: Color = MaterialTheme.colorScheme.primary,
@@ -35,8 +35,8 @@ fun RoundedButton(
     disabledContainerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     disabledContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     elevation: ButtonElevation? = ButtonDefaults.buttonElevation(
-        defaultElevation = _root_ide_package_.com.example.baltazar.core.constants.Spaces.Mini,
-        pressedElevation = _root_ide_package_.com.example.baltazar.core.constants.Spaces.Tiny
+        defaultElevation = Spaces.Mini,
+        pressedElevation = Spaces.Tiny
     ),
     textStyle: TextStyle = MaterialTheme.typography.labelLarge
 ) {
@@ -45,7 +45,7 @@ fun RoundedButton(
         enabled = enabled && !isLoading,
         modifier = modifier
             .fillMaxWidth()
-            .height(_root_ide_package_.com.example.baltazar.core.constants.Spaces.GiantPlus),
+            .height(Spaces.GiantPlus),
         shape = RoundedCornerShape(borderRadius),
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
@@ -60,9 +60,9 @@ fun RoundedButton(
         ) {
             if (isLoading) {
                 CircularProgressIndicator(
-                    modifier = Modifier.size(_root_ide_package_.com.example.baltazar.core.constants.IconSizes.Medium),
+                    modifier = Modifier.size(IconSizes.Medium),
                     color = contentColor,
-                    strokeWidth = _root_ide_package_.com.example.baltazar.core.constants.Paddings.ExtraMini
+                    strokeWidth = Paddings.ExtraMini
                 )
             } else {
                 Text(
