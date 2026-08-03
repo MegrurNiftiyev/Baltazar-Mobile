@@ -18,6 +18,9 @@
             <option value="$PROJECT_DIR$/feature/profile" />
             <option value="$PROJECT_DIR$/feature/taxi" />
             <option value="$PROJECT_DIR$/feature/travel" />
+            <option value="$PROJECT_DIR$/feture" />
+            <option value="$PROJECT_DIR$/feture/hotel" />
+            <option value="$PROJECT_DIR$/feture/rentacar" />
           </set>
         </option>
       </GradleProjectSettings>

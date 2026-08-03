@@ -36,6 +36,8 @@ espressoCoreVersion = "3.0.2"
 appcompatV7 = "28.0.0"
 material = "1.14.0"
 material3Lint = "1.4.0"
+materialIconsCoreAndroid = "1.7.4"
+coreSplashscreen = "1.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -83,6 +85,8 @@ espresso-core = { group = "com.android.support.test.espresso", name = "espresso-
 appcompat-v7 = { group = "com.android.support", name = "appcompat-v7", version.ref = "appcompatV7" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-compose-material3-lint = { group = "androidx.compose.material3", name = "material3-lint", version.ref = "material3Lint" }
+androidx-compose-material-icons-core-android = { group = "androidx.compose.material", name = "material-icons-core-android", version.ref = "materialIconsCoreAndroid" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

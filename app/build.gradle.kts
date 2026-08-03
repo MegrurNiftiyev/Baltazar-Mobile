@@ -54,6 +54,9 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
+    //control
+    implementation(libs.androidx.core.splashscreen)
+
     implementation(libs.compose.shimmer)
     debugImplementation(libs.leakcanary.android)
 
