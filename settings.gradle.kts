@@ -28,5 +28,6 @@ include(":feature:food")
 include(":core")
 include(":feature:home")
 include(":feature:profile")
-include(":feture:hotel")
-include(":feture:rentacar")
+
+include(":feature:hotel")
+include(":feature:rentacar")

@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.baltazar.feature.food"
+    namespace = "com.example.baltazar.feature.hotel"
     compileSdk = 35
 
     defaultConfig {
