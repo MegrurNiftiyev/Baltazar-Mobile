@@ -21,7 +21,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,19 +30,8 @@ import com.example.baltazar.core.components.RoundedButton
 import com.example.baltazar.core.constants.Paddings
 import com.example.baltazar.core.constants.Spaces
 import com.example.baltazar.core.navigation.Explore
-import com.example.baltazar.feature.auth.R
-import com.example.baltazar.feature.auth.core.error.ValidationError
+import com.example.baltazar.feature.auth.core.mapper.toMessage
 
-@Composable
-private fun ValidationError.toMessage(): String = when (this) {
-    ValidationError.Blank -> stringResource(R.string.error_field_blank)
-    ValidationError.InvalidFormat -> stringResource(R.string.error_invalid_format)
-    ValidationError.TooShort -> stringResource(R.string.error_too_short)
-    ValidationError.TooLong -> stringResource(R.string.error_too_long)
-    ValidationError.MissingDigit -> stringResource(R.string.error_missing_digit)
-    ValidationError.MissingUppercase -> stringResource(R.string.error_missing_uppercase)
-    ValidationError.MissingSpecialChar -> stringResource(R.string.error_missing_special_char)
-}
 
 @Composable
 fun RegisterScreen(

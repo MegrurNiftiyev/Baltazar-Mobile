@@ -1,12 +1,13 @@
 package com.example.baltazar.core.constants
 
 object CacheKeys {
+    //cache keys
     const val APP_CACHE = "app_cache"
+
     const val IS_DARK_MODE = "is_dark_mode"
 
-
-    //cache keys
     const val IS_ONBOARDED = "is_onboarded"
+    const val IS_LOGIN_FINISHED = "is_login_finished"
 
     //encrypted cache keys
 
