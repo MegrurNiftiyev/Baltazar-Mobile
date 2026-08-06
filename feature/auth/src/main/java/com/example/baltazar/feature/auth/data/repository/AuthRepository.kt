@@ -1,8 +1,11 @@
 package com.example.baltazar.feature.auth.data.repository
 
 import com.example.baltazar.feature.auth.domain.repository.IAuthRepository
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AuthRepository : IAuthRepository {
+@Singleton
+class AuthRepository @Inject constructor() : IAuthRepository {
     override suspend fun login(email: String, password: String): Result<Unit> {
         return Result.success(Unit)
     }

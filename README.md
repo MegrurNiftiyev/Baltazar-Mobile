@@ -1,106 +1,116 @@
-# Baltazar - Modern Multi-Module Android App
+<p align="center">
+  <img src="app/src/main/res/drawable/ic_launcher_foreground.xml" width="110" alt="Baltazar Logo"/>
+</p>
 
-Baltazar is a robust, scalable, and theme-driven Android application built with **Kotlin** and **Jetpack Compose**. The project follows a **Feature-based Multi-Module Architecture** combined with **Clean Architecture** principles to ensure maintainability and high-speed development.
+<h1 align="center">Baltazar</h1>
 
----
+<p align="center">
+  A robust, scalable, and theme-driven multi-module Android application built with <b>Kotlin</b> and <b>Jetpack Compose</b>. Baltazar offers a comprehensive suite of services including Food delivery, Hotel booking, Travel tours, and Rent-a-car, all integrated into a single seamless experience.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin"/>
+  <img src="https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white" alt="Jetpack Compose"/>
+  <img src="https://img.shields.io/badge/Hilt-34A853?style=for-the-badge&logo=dagger&logoColor=white" alt="Hilt"/>
+  <img src="https://img.shields.io/badge/Retrofit-48B983?style=for-the-badge&logo=square&logoColor=white" alt="Retrofit"/>
+  <img src="https://img.shields.io/badge/KSP-7F52FF?style=for-the-badge" alt="KSP"/>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Coil-2C2C2C?style=flat-square" alt="Coil"/>
+  <img src="https://img.shields.io/badge/DataStore-4285F4?style=flat-square" alt="DataStore"/>
+  <img src="https://img.shields.io/badge/OkHttp-48B983?style=flat-square" alt="OkHttp"/>
+  <img src="https://img.shields.io/badge/kotlinx.serialization-7F52FF?style=flat-square" alt="kotlinx.serialization"/>
+  <img src="https://img.shields.io/badge/Navigation%20Compose-4285F4?style=flat-square" alt="Navigation Compose"/>
+  <img src="https://img.shields.io/badge/Material3-777777?style=flat-square" alt="Material3"/>
+  <img src="https://img.shields.io/badge/Timber-F4B400?style=flat-square" alt="Timber"/>
+</p>
 
 ## 🏗️ Architecture Overview
 
-The app is divided into layers and features to isolate business logic from UI and data sources:
+The project follows a **Feature-based Multi-Module Architecture** combined with **Clean Architecture** principles. This ensures strict isolation of business logic, high modularity, and faster build times.
 
-- **Multi-Module Structure**: Each business domain (Auth, Food, Hotel, etc.) is its own Gradle module.
-- **Clean Architecture**: Within each module, code is organized into `ui`, `domain`, `data`, and `core` layers.
-- **Theme-Driven UI**: Entire UI is controlled by `MaterialTheme`, using centralized constants for paddings, spaces, and durations.
-- **Dependency Injection**: Powered by **Dagger Hilt** for modular and testable code.
+- **`app`**: The main entry point. Handles global navigation, Splash logic, and Hilt application configuration.
+- **`core`**: The shared foundation module containing global UI components, design tokens (constants), common enums, and utility managers (Network, Cache).
+- **`feature:*`**: Encapsulated business domains (Auth, Food, Hotel, etc.) that depend only on the `:core` module.
 
 ---
 
 ## 📁 Project Structure
 
-This project follows a strict multi-module hierarchy. Each `:feature:*` module is independent and depends only on the `:core` module.
-
 ```text
 root/
-├── app/                        # [Module] Entry point
-│   └── src/main/java/com/example/baltazar/
-│       ├── BaltazarApplication.kt   # Hilt Application class
-│       ├── MainActivity.kt          # Single Activity entry
-│       └── core/
-│           ├── navigation/          # Main NavGraph setup
-│           └── splash/              # Splash logic & ViewModels
-│
+├── app/                        # [Module] Entry point (NavGraph, MainActivity)
 ├── core/                       # [Module] Shared foundation
-│   └── src/main/java/com/example/baltazar/core/
-│       ├── components/              # Global UI atoms (Buttons, TextFields)
-│       ├── constants/               # Design tokens (Paddings, Spaces, Durations)
-│       ├── enums/                   # Global enums (Language, Region, ServiceType)
-│       ├── extensions/              # Kotlin property extensions
-│       ├── managers/                # Logic managers (Network, Cache, Storage)
-│       ├── navigation/              # Type-safe Route definitions (Serializable)
-│       └── theme/                   # Material3 Theme, Color, Type, Shape
+│   ├── components/             # Global UI atoms (CustomTextField, RoundedButton)
+│   ├── constants/              # Design tokens (Paddings, Spaces, Durations)
+│   ├── enums/                  # Global enums (Language, Region, ServiceType)
+│   ├── managers/               # Logic managers (Network, Cache, Encryption)
+│   └── theme/                  # Material3 Theme, Color, and Typography
 │
-└── feature/                    # [Namespace] Encapsulated Business Domains
-    ├── auth/                   # [Module] Login, Register, Onboarding, Validations
-    ├── explore/                # [Module] Discovery hub & Global Search
-    ├── food/                   # [Module] Food listings, Company & Detail views
-    ├── hotel/                  # [Module] Hotel search, Booking & Details
-    ├── travel/                 # [Module] Tour packages & Travel details
-    ├── rentacar/               # [Module] Car rental listings & Specs
-    ├── taxi/                   # [Module] Ride hailing & Taxi tracking
-    ├── profile/                # [Module] Personal Info, Address & Wishlist
-    └── order/                  # [Module] Centralized Checkout flow (Payment, Confirm)
+└── feature/                    # [Namespace] Business Modules
+    ├── auth/                   # Login, Register, Onboarding & Validations
+    ├── explore/                # Main discovery hub and global search
+    ├── food/                   # Foods listing, Detail and Company views
+    ├── hotel/                  # Hotels search, Booking and Detail views
+    ├── travel/                 # Travels packages and Detail views
+    ├── rentacar/               # Rent-a-car listings and Specifications
+    ├── taxi/                   # Ride hailing and tracking
+    ├── profile/                # User Profile, Personal Info, and Wishlist
+    └── order/                  # Centralized Checkout flow (Payment, Confirm)
 ```
 
-### 🧱 Inside a Feature Module
-Every feature module follows a standardized **Clean Architecture** internal layout:
-
-```text
-feature-module/
-├── ui/
-│   ├── screens/                # State-driven screen compositions
-│   │   └── [feature_name]/
-│   │       ├── [Name]Screen.kt     # UI Layout (Stateless/Stateful)
-│   │       ├── [Name]ViewModel.kt  # Logic & State handling
-│   │       └── [Name]State.kt      # Immutable UI State model
-│   └── components/             # Reusable UI parts local to this feature
-├── domain/
-│   ├── repository/             # Abstractions (Interfaces)
-│   ├── model/                  # Pure Business/Domain models
-│   └── enums/                  # Feature-specific enums
-├── data/
-│   ├── repository/             # Repository implementations (Logic)
-│   ├── datasource/             # API/Database interaction logic
-│   └── model/dto/              # Serialization models (Request/Response)
-└── core/                       # Internal utilities (Validations, Local Extensions)
-```
+### 🧱 Feature Module Layout
+Each feature module is organized into a four-layer Clean Architecture structure:
+- **`ui`**: Pager-based or Single-screen Composables with `State` + `ViewModel`.
+- **`domain`**: Pure Kotlin business logic, Repository interfaces, and Domain models.
+- **`data`**: Repository implementations, API services, and Serialization DTOs.
+- **`core`**: Module-specific utilities like local validations or extensions.
 
 ---
 
 ## 🚀 Tech Stack
 
-- **UI**: Jetpack Compose (1.7+)
-- **Logic**: Kotlin Coroutines & Flow
-- **DI**: Dagger Hilt (2.5+)
-- **Navigation**: Compose Navigation (Type-safe routes)
-- **Networking**: Retrofit & OkHttp (planned)
-- **Serialization**: Kotlinx Serialization
-- **Image Loading**: Coil
-- **Local Storage**: DataStore & Room (planned)
+| Layer | Tools |
+|---|---|
+| **Language** | Kotlin (Coroutines, Flow) |
+| **UI** | Jetpack Compose, Material3, Coil, Shimmer |
+| **DI** | Dagger Hilt |
+| **Networking** | Retrofit, OkHttp, Kotlinx Serialization |
+| **Navigation** | Compose Navigation (Type-safe Routes) |
+| **Storage** | DataStore, Room (Planned), EncryptedSharedPreferences |
+| **Build** | Gradle Kotlin DSL, Version Catalog (TOML), KSP |
 
 ---
 
-## 🎨 Design System Rules
+## 🎨 AI Coding Rules & Design System
 
-To maintain consistency, this project follows strict AI coding rules:
-1. **No Hardcoding**: All colors/fonts come from `MaterialTheme`.
-2. **Multi-language**: All strings are stored in `strings.xml` (AZ, TR, EN).
-3. **Constants**: No raw `.dp` or `.ms`. Use `Paddings`, `Spaces`, and `AppDurations`.
-4. **Model-Based**: Data is passed to Composables via dedicated State models.
+To ensure codebase consistency and high quality, we follow these strict rules:
+1. **Theme-Driven**: Every color and font must come from `MaterialTheme`. No hardcoded hex codes or `.sp` values.
+2. **Zero Hardcoded Strings**: All user-facing text resides in `strings.xml` with full support for **English, Azerbaijani, and Turkish**.
+3. **Design Tokens**: Spacing, padding, and durations are exclusively managed via `:core:constants`.
+4. **Unidirectional Data Flow**: Data is passed to UI through immutable `State` models within `ViewModels`.
+
+---
+
+## 🌐 Backend Services
+
+The mobile application communicates with the following backend services:
+
+- **[Baltazar-Backend](https://github.com/MegrurNiftiyev/Baltazar-Backend)**: The primary REST API handling authentication and core business data (Food, Hotel, Travel, etc.).
+- **[Baltazar-Payment-Backend](https://github.com/MegrurNiftiyev/Baltazar-Payment-Backend)**: A dedicated microservice for processing secure payments and order flows.
 
 ---
 
 ## 🛠️ Getting Started
 
-1. Clone the repository.
-2. Open with **Android Studio Ladybug** or newer.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/MegrurNiftiyev/Baltazar-Mobile.git
+   ```
+2. Open the project in **Android Studio Ladybug** (or newer).
 3. Sync Gradle and run the `:app` module.
+
+## 📄 License
+
+This project is licensed under the MIT License.
