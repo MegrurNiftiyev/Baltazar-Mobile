@@ -49,6 +49,9 @@ dependencies {
     api(libs.androidx.compose.foundation.layout)
     api(libs.androidx.compose.animation.core)
     api(libs.androidx.compose.runtime)
+    api(libs.androidx.icons.extended)
+    api(libs.compose.icons.tabler)
+
 
     // Navigation
     api(libs.androidx.navigation.compose)

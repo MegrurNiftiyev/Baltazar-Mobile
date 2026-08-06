@@ -50,12 +50,19 @@ dependencies {
     implementation(project(":feature:food"))
     implementation(project(":feature:taxi"))
     implementation(project(":feature:travel"))
+    implementation(project(":feature:rentacar"))
+    implementation(project(":feature:hotel"))
+    implementation(project(":feature:profile"))
+    implementation(project(":feature:explore"))
+    implementation(project(":feature:order"))
+    implementation(libs.androidx.ui.graphics)
+
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-    //control
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.compose.icons.tabler)
 
     implementation(libs.compose.shimmer)
     debugImplementation(libs.leakcanary.android)
