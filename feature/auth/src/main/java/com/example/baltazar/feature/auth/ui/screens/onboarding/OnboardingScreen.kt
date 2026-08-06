@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,8 +29,9 @@ import androidx.navigation.NavController
 import com.example.baltazar.core.components.RoundedButton
 import com.example.baltazar.core.constants.Paddings
 import com.example.baltazar.core.constants.Spaces
-import com.example.baltazar.core.navigation.Explore
+import com.example.baltazar.core.navigation.AuthSelection
 import com.example.baltazar.feature.auth.R
+import com.example.baltazar.feature.auth.domain.model.OnboardingModel
 import com.example.baltazar.feature.auth.ui.screens.onboarding.components.OnboardingPageItem
 import kotlinx.coroutines.launch
 
@@ -39,14 +41,33 @@ fun OnboardingScreen(
     modifier: Modifier = Modifier,
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
+    val pages = remember {
+        listOf(
+            OnboardingModel(
+                R.string.onboarding_title_1,
+                R.string.onboarding_description_1,
+                R.drawable.onboarding_1
+            ),
+            OnboardingModel(
+                R.string.onboarding_title_2,
+                R.string.onboarding_description_2,
+                R.drawable.onboarding_1
+            ),
+            OnboardingModel(
+                R.string.onboarding_title_3,
+                R.string.onboarding_description_3,
+                R.drawable.onboarding_1
+            )
+        )
+    }
     val state = viewModel.state.collectAsState().value
-    val pagerState = rememberPagerState(pageCount = { state.pages.size })
+    val pagerState = rememberPagerState(pageCount = { pages.size })
     val coroutineScope = rememberCoroutineScope()
-    val isLastPage = pagerState.currentPage == state.pages.size - 1
+    val isLastPage = pagerState.currentPage == pages.size - 1
 
     fun finishOnboarding() {
         viewModel.setOnboardingCompleted()
-        navController.navigate(Explore) {
+        navController.navigate(AuthSelection) {
             popUpTo(0) { inclusive = true }
         }
     }
@@ -75,14 +96,14 @@ fun OnboardingScreen(
 
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.Companion
+            modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
         ) { page ->
             OnboardingPageItem(
-                title = state.pages[page].title,
-                description = state.pages[page].description,
-                imageSource = state.pages[page].imageSource
+                title = pages[page].title,
+                description = pages[page].description,
+                imageSource = pages[page].imageSource
             )
         }
 
@@ -92,7 +113,7 @@ fun OnboardingScreen(
                 .padding(vertical = Paddings.Medium),
             horizontalArrangement = Arrangement.Center
         ) {
-            repeat(state.pages.size) { index ->
+            repeat(pages.size) { index ->
                 val isSelected = pagerState.currentPage == index
                 Box(
                     modifier = Modifier

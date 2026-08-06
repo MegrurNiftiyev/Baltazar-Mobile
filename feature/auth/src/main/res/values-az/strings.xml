@@ -16,4 +16,11 @@
     <string name="error_missing_digit">Ən azı 1 rəqəm lazımdır</string>
     <string name="error_missing_uppercase">Ən azı 1 böyük hərf lazımdır</string>
     <string name="error_missing_special_char">Ən azı 1 xüsusi simvol lazımdır</string>
+
+    <!-- Auth Selection -->
+    <string name="auth_selection_title">Baltazara Xoş Gəlmisiniz</string>
+    <string name="auth_selection_subtitle">Necə davam etmək istədiyinizi seçin</string>
+    <string name="auth_selection_login">Giriş</string>
+    <string name="auth_selection_register">Qeydiyyat</string>
+    <string name="auth_selection_guest">Qonaq olaraq davam et</string>
 </resources>

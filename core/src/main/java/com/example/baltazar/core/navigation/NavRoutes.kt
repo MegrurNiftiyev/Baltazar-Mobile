@@ -18,6 +18,9 @@ object Login
 object Register
 
 @Serializable
+object AuthSelection
+
+@Serializable
 object Explore
 
 @Serializable

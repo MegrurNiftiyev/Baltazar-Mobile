@@ -16,4 +16,11 @@
     <string name="error_missing_digit">At least 1 digit required</string>
     <string name="error_missing_uppercase">At least 1 uppercase letter required</string>
     <string name="error_missing_special_char">At least 1 special character required</string>
+
+    <!-- Auth Selection -->
+    <string name="auth_selection_title">Welcome to Baltazar</string>
+    <string name="auth_selection_subtitle">Choose how you want to continue</string>
+    <string name="auth_selection_login">Login</string>
+    <string name="auth_selection_register">Register</string>
+    <string name="auth_selection_guest">Continue as Guest</string>
 </resources>

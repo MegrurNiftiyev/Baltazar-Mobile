@@ -1,4 +1,4 @@
-package com.example.baltazar.feature.auth.ui.screens.onboarding
+package com.example.baltazar.feature.auth.ui.screens.auth_selection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,22 +9,20 @@ import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class OnboardingViewModel @Inject constructor(
-    private val cacheManger: CacheManager
+class AuthSelectionViewModel @Inject constructor(
+    private val cacheManager: CacheManager
 ) : ViewModel() {
-    private val _state = MutableStateFlow(
-        OnboardingState()
-    )
-    val state: StateFlow<OnboardingState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(AuthSelectionState())
+    val state: StateFlow<AuthSelectionState> = _state.asStateFlow()
 
-    fun setOnboardingCompleted() {
+
+    fun continueAsGuest() {
         viewModelScope.launch {
-            cacheManger.setBoolean(CacheKeys.IS_ONBOARDED, true)
-            _state.update { it.copy(isCompleted = true) }
+            cacheManager.setBoolean(CacheKeys.IS_LOGIN_FINISHED, true)
+
         }
     }
 }
