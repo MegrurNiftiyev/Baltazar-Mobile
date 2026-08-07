@@ -12,7 +12,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 25
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -60,6 +60,7 @@ dependencies {
     // Dependency Injection
     api(libs.hilt.android)
     implementation(libs.androidx.compose.material3.lint)
+    implementation(libs.compose.material3)
     ksp(libs.hilt.android.compiler)
 
     // Networking

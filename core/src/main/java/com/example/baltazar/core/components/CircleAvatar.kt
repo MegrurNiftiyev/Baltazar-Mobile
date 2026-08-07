@@ -18,7 +18,7 @@ import com.example.baltazar.core.constants.CircileRadiuses
 @Composable
 fun CircleAvatar(
     modifier: Modifier = Modifier,
-    size: Dp = _root_ide_package_.com.example.baltazar.core.constants.CircileRadiuses.Medium,
+    size: Dp = CircileRadiuses.Medium,
     backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     content: @Composable BoxScope.() -> Unit
 ) {

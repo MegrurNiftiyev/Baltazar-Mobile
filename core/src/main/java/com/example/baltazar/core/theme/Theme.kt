@@ -90,7 +90,7 @@ private val DarkColorScheme = darkColorScheme(
 @Composable
 fun BaltazarAppTheme(
     darkTheme: Boolean = false,
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

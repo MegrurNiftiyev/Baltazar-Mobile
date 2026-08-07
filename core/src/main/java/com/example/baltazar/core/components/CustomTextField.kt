@@ -1,10 +1,8 @@
 package com.example.baltazar.core.components
 
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -18,7 +16,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import com.example.baltazar.core.constants.BorderRadiuses
 import com.example.baltazar.core.constants.Paddings
-
+import com.example.baltazar.core.enums.CornerShape
+import com.example.baltazar.core.extensions.toShape
 
 @Composable
 fun CustomTextField(
@@ -32,6 +31,7 @@ fun CustomTextField(
     singleLine: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    shape: CornerShape = CornerShape.Rounded,
     borderRadius: Dp = BorderRadiuses.Medium,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
@@ -57,7 +57,7 @@ fun CustomTextField(
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,
             textStyle = textStyle,
-            shape = RoundedCornerShape(borderRadius),
+            shape = shape.toShape(borderRadius),
             keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = keyboardType),
             visualTransformation = visualTransformation,
             colors = OutlinedTextFieldDefaults.colors(
@@ -81,5 +81,3 @@ fun CustomTextField(
         }
     }
 }
-
-
