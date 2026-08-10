@@ -21,13 +21,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -35,24 +38,32 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.baltazar.core.components.CustomTextField
-import com.example.baltazar.core.components.RoundedButton
-import com.example.baltazar.core.constants.Paddings
-import com.example.baltazar.core.constants.Spaces
-import com.example.baltazar.core.navigation.Explore
-import com.example.baltazar.core.navigation.Register
+import com.example.baltazar.core.core.components.CustomTextField
+import com.example.baltazar.core.core.components.RoundedButton
+import com.example.baltazar.core.core.constants.Paddings
+import com.example.baltazar.core.core.constants.Spaces
+import com.example.baltazar.core.core.navigation.Explore
+import com.example.baltazar.core.core.navigation.Register
 import com.example.baltazar.feature.auth.R
-import com.example.baltazar.feature.auth.core.mapper.toMessage
-
+import com.example.baltazar.feature.auth.core.utils.launchGoogleSignIn
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
     navController: NavHostController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     val state by viewModel.state.collectAsState()
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    LaunchedEffect(state.isSuccess) {
+        if (state.isSuccess) {
+            navController.navigate(Explore) { popUpTo(0) { inclusive = true } }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -90,7 +101,7 @@ fun LoginScreen(
                     placeholder = stringResource(R.string.login_email_placeholder),
                     keyboardType = KeyboardType.Email,
                     leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
-                    errorText = state.emailError?.toMessage()
+                    errorText = state.emailError?.asString()
                 )
                 Spacer(Modifier.height(Spaces.Medium))
 
@@ -101,41 +112,26 @@ fun LoginScreen(
                     placeholder = stringResource(R.string.login_password_placeholder),
                     visualTransformation = PasswordVisualTransformation(),
                     leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
-                    errorText = state.passwordError?.toMessage()
+                    errorText = state.passwordError?.asString()
                 )
 
-                state.generalError?.let {
+                state.generalError?.let { errorUiText ->
                     Spacer(Modifier.height(Spaces.Mini))
                     Text(
-                        it,
+                        errorUiText.asString(),
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
 
-                Spacer(Modifier.height(Spaces.Small))
-
-                TextButton(
-                    onClick = { /* TODO: forgot password */ },
-                    modifier = Modifier.align(Alignment.End)
-                ) {
-                    Text(
-                        stringResource(R.string.login_forgot_password),
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-
-                Spacer(Modifier.height(Spaces.Small))
+                Spacer(Modifier.height(Spaces.Medium))
 
                 RoundedButton(
                     text = stringResource(R.string.login_button),
                     contentColor = MaterialTheme.colorScheme.background,
-
                     isLoading = state.isLoading,
                     onClick = {
-                        viewModel.login(email, password) {
-                            navController.navigate(Explore) { popUpTo(0) { inclusive = true } }
-                        }
+                        viewModel.login(email, password)
                     }
                 )
 
@@ -155,11 +151,19 @@ fun LoginScreen(
                     HorizontalDividerLine()
                 }
 
-                Spacer(Modifier.height(Spaces.Medium))
-
                 RoundedButton(
                     text = stringResource(R.string.login_google),
-                    onClick = { /* TODO: google sign-in */ },
+                    onClick = {
+                        coroutineScope.launch {
+                            launchGoogleSignIn(
+                                context = context,
+                                onSuccess = { idToken ->
+                                    viewModel.loginWithGoogle(idToken)
+                                },
+                                onError = { _ -> }
+                            )
+                        }
+                    },
                 )
             }
         }

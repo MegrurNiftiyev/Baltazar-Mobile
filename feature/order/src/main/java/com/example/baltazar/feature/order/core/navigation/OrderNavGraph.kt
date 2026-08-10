@@ -4,7 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.baltazar.core.navigation.OrderFlow
+import com.example.baltazar.core.core.navigation.OrderFlow
 import com.example.baltazar.feature.order.ui.screens.address.AddressScreen
 import com.example.baltazar.feature.order.ui.screens.confirm.ConfirmScreen
 import com.example.baltazar.feature.order.ui.screens.delivery_address.DeliveryAddressScreen
@@ -21,3 +21,4 @@ fun NavGraphBuilder.orderNavGraph(navController: NavHostController) {
         PersonalInfoScreen(navController)
     }
 }
+

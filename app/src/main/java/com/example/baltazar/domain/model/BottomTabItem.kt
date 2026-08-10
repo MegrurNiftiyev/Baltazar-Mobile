@@ -9,3 +9,4 @@ data class BottomTabItem(
     val icon: ImageVector,
     @StringRes val label: Int
 )
+

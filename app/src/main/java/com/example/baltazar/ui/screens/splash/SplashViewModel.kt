@@ -2,8 +2,8 @@ package com.example.baltazar.ui.screens.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.baltazar.core.constants.CacheKeys
-import com.example.baltazar.core.managers.CacheManager
+import com.example.baltazar.core.core.constants.CacheKeys
+import com.example.baltazar.core.core.managers.CacheManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,3 +43,4 @@ class SplashViewModel @Inject constructor(
     }
 
 }
+

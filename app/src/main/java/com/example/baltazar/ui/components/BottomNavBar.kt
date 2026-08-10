@@ -11,9 +11,9 @@
 //import androidx.navigation.NavDestination.Companion.hasRoute
 //import androidx.navigation.NavGraph.Companion.findStartDestination
 //import androidx.navigation.compose.currentBackStackEntryAsState
-//import com.example.baltazar.core.navigation.Explore
-//import com.example.baltazar.core.navigation.Profile
-//import com.example.baltazar.core.navigation.Wishlist
+//import com.example.baltazar.core.core.navigation.Explore
+//import com.example.baltazar.core.core.navigation.Profile
+//import com.example.baltazar.core.core.navigation.Wishlist
 //
 //@Composable
 //fun BottomNavBar(navController: NavController) {

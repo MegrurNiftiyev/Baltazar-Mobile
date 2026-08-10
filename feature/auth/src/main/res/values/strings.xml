@@ -7,7 +7,7 @@
     <string name="onboarding_title_2">Discover Your Next Escape</string>
     <string name="onboarding_description_2">Book the best hotels and curated travel packages tailored to your journey.</string>
     <string name="onboarding_title_3">Hit the Road, Your Way</string>
-    <string name="onboarding_description_3">Rent the perfect car for your trip flexible pickup, transparent pricing, zero hassle.</string>
+    <string name="onboarding_description_3">Rent the perfect car for your trip flexible pickup, transparent pricing.</string>
 
     <string name="error_field_blank">Field cannot be blank</string>
     <string name="error_invalid_format">Invalid format</string>

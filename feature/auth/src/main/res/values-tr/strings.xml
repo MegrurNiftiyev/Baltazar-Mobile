@@ -7,7 +7,7 @@
     <string name="onboarding_title_2">Sıradaki Kaçamağınızı Keşfedin</string>
     <string name="onboarding_description_2">Yolculuğunuza özel en iyi otelleri ve küratörlüğünde seyahat paketlerini ayırtın.</string>
     <string name="onboarding_title_3">Yola Koyulun, Kendi Tarzınızla</string>
-    <string name="onboarding_description_3">Seyahatiniz için mükemmel aracı kiralayın esnek teslimat, şeffaf fiyatlandırma, sıfır zahmet.</string>
+    <string name="onboarding_description_3">Seyahatiniz için mükemmel aracı kiralayın esnek teslimat, şeffaf fiyatlandırma.</string>
 
     <string name="error_field_blank">Bu alan boş olamaz</string>
     <string name="error_invalid_format">Geçersiz format</string>

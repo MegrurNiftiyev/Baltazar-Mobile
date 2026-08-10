@@ -8,6 +8,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.baltazar.core.core.navigation.Home
+import com.example.baltazar.core.core.navigation.Splash
 import com.example.baltazar.feature.auth.core.navigation.authNavGraph
 import com.example.baltazar.feature.explore.core.navigation.exploreNavGraph
 import com.example.baltazar.feature.food.core.navigation.foodNavGraph

@@ -39,15 +39,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.baltazar.core.components.CustomTextButton
-import com.example.baltazar.core.components.RoundedButton
-import com.example.baltazar.core.constants.AppDurations
-import com.example.baltazar.core.constants.BorderRadiuses
-import com.example.baltazar.core.constants.IconSizes
-import com.example.baltazar.core.constants.Paddings
-import com.example.baltazar.core.constants.Spaces
-import com.example.baltazar.core.enums.CornerShape
-import com.example.baltazar.core.navigation.AuthSelection
+import com.example.baltazar.core.core.components.CustomTextButton
+import com.example.baltazar.core.core.components.RoundedButton
+import com.example.baltazar.core.core.constants.AppDurations
+import com.example.baltazar.core.core.constants.BorderRadiuses
+import com.example.baltazar.core.core.constants.IconSizes
+import com.example.baltazar.core.core.constants.Paddings
+import com.example.baltazar.core.core.constants.Spaces
+import com.example.baltazar.core.core.enums.CornerShape
+import com.example.baltazar.core.core.navigation.AuthSelection
 import com.example.baltazar.feature.auth.R
 import com.example.baltazar.feature.auth.core.extensions.dropShadow
 import com.example.baltazar.feature.auth.domain.model.OnboardingModel
@@ -76,7 +76,7 @@ fun OnboardingScreen(
             OnboardingModel(
                 R.string.onboarding_title_3,
                 R.string.onboarding_description_3,
-                R.drawable.onboarding_2
+                R.drawable.onboarding_1
             )
         )
     }
@@ -151,7 +151,12 @@ fun OnboardingScreen(
                     offsetY = -Spaces.ExtraSmall,
                     spread = 0.dp
                 )
-                .clip(RoundedCornerShape(topStart = BorderRadiuses.Huge, topEnd = BorderRadiuses.Huge))
+                .clip(
+                    RoundedCornerShape(
+                        topStart = BorderRadiuses.Huge,
+                        topEnd = BorderRadiuses.Huge
+                    )
+                )
                 .background(MaterialTheme.colorScheme.background)
                 .heightIn(max = 300.dp)
                 .padding(horizontal = Paddings.Medium, vertical = Paddings.Large),
