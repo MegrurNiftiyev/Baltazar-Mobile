@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val IAuthRepository: IAuthRepository
+    private val authRepository: IAuthRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RegisterState())
@@ -57,7 +57,7 @@ class RegisterViewModel @Inject constructor(
             )
         }
         viewModelScope.launch {
-            IAuthRepository.register(name, email, password, phone)
+            authRepository.register(name, email, password, phone)
                 .onSuccess {
                     _state.update { it.copy(isLoading = false) }
                     onSuccess()
@@ -66,7 +66,7 @@ class RegisterViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            generalError = e.message ?: "Xəta baş verdi"
+                            generalError = e.message
                         )
                     }
                 }

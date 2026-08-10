@@ -43,8 +43,8 @@ fun RoundedIconButton(
     inactiveContentColor: Color = contentColor,
     disabledContainerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     disabledContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
-    size: Dp = _root_ide_package_.com.example.baltazar.core.constants.Spaces.Giant,
-    iconSize: Dp = _root_ide_package_.com.example.baltazar.core.constants.IconSizes.Medium,
+    size: Dp = Spaces.Giant,
+    iconSize: Dp = IconSizes.Medium,
     contentDescription: String? = null
 ) {
     val shape: Shape = if (borderRadius != null) {
@@ -95,7 +95,7 @@ fun RoundedIconButton(
                 CircularProgressIndicator(
                     modifier = Modifier.size(iconSize),
                     color = currentContentColor,
-                    strokeWidth = _root_ide_package_.com.example.baltazar.core.constants.Paddings.ExtraMini
+                    strokeWidth = Paddings.ExtraMini
                 )
             } else {
                 Icon(

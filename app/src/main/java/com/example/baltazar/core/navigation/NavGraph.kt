@@ -18,7 +18,6 @@ import com.example.baltazar.feature.rentacar.core.navigation.rentACarNavGraph
 import com.example.baltazar.feature.taxi.core.navigation.taxiNavGraph
 import com.example.baltazar.feature.travel.core.navigation.travelNavGraph
 import com.example.baltazar.ui.screens.home.HomeScreen
-import com.example.baltazar.ui.screens.splash.SplashScreen
 
 @Composable
 fun AppNavGraph(
@@ -54,7 +53,6 @@ fun AppNavGraph(
         }
     ) {
         // App Module Screens
-        composable<Splash> { SplashScreen(navController) }
         composable<Home> { HomeScreen(navController) }
 
         // Modular NavGraphs from Feature Modules
