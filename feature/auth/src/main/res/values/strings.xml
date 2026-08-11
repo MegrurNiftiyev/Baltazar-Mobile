@@ -51,4 +51,7 @@
     <string name="register_auto_detect_info">Region &amp; language settings will be auto-detected based on your location.</string>
     <string name="register_button">Create Account</string>
     <string name="register_back_to_login">← Back to Login</string>
+    <string name="register_already_have_account">Already have an account? </string>
+    <string name="register_login_now">Log In</string>
 </resources>
+

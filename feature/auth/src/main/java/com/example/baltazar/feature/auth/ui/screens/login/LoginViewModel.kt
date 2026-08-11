@@ -2,6 +2,8 @@ package com.example.baltazar.feature.auth.ui.screens.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.baltazar.core.core.constants.CacheKeys
+import com.example.baltazar.core.core.managers.CacheManager
 import com.example.baltazar.core.core.utils.UiText
 import com.example.baltazar.feature.auth.core.extensions.emailError
 import com.example.baltazar.feature.auth.core.extensions.passwordError
@@ -18,11 +20,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authRepository: IAuthRepository
+    private val authRepository: IAuthRepository,
+    private val cacheManager: CacheManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state.asStateFlow()
+
+    fun continueAsGuest() {
+        viewModelScope.launch(IO) {
+            cacheManager.setBoolean(CacheKeys.IS_LOGIN_FINISHED, true)
+        }
+    }
+
 
     fun login(email: String, password: String) {
         if (!validate(email, password) || _state.value.isLoading || _state.value.isSuccess) return
@@ -91,5 +101,15 @@ class LoginViewModel @Inject constructor(
 
         return emailError == null && passwordError == null
     }
+
+    fun setError(message: String) {
+        _state.update {
+            it.copy(
+                isLoading = false,
+                generalError = UiText.DynamicString(message)
+            )
+        }
+    }
 }
+
 

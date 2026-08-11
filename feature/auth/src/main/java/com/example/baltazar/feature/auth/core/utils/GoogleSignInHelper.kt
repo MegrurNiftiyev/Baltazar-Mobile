@@ -1,6 +1,8 @@
 package com.example.baltazar.feature.auth.core.utils
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
@@ -9,6 +11,12 @@ import com.example.baltazar.core.BuildConfig
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import timber.log.Timber
+
+tailrec fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
+}
 
 suspend fun launchGoogleSignIn(
     context: Context,
@@ -22,6 +30,9 @@ suspend fun launchGoogleSignIn(
         return
     }
 
+    val activity = context.findActivity()
+    val targetContext = activity ?: context
+
     try {
         val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
@@ -33,8 +44,8 @@ suspend fun launchGoogleSignIn(
             .addCredentialOption(googleIdOption)
             .build()
 
-        val credentialManager = CredentialManager.create(context)
-        val result = credentialManager.getCredential(context = context, request = request)
+        val credentialManager = CredentialManager.create(targetContext)
+        val result = credentialManager.getCredential(context = targetContext, request = request)
         val credential = result.credential
 
         if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
@@ -51,3 +62,4 @@ suspend fun launchGoogleSignIn(
         onError(e.message ?: "Google sign-in failed")
     }
 }
+

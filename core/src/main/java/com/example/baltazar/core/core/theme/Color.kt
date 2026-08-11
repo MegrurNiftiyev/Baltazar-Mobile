@@ -78,7 +78,13 @@ val OnErrorDark = Color(0xFF690005)
 val ErrorContainerDark = Color(0xFF93000A)
 val OnErrorContainerDark = Color(0xFFFFDAD6)
 
+val WarningLight = Color(0xFFD97706)
+val OnWarningLight = Color(0xFFFFFFFF)
+val WarningDark = Color(0xFFF59E0B)
+val OnWarningDark = Color(0xFF000000)
+
 val OutlineDark = Color(0xFF8A94A0)
+
 val OutlineVariantDark = Color(0xFF3D4750)
 val ScrimDark = Color(0xFF000000)
 

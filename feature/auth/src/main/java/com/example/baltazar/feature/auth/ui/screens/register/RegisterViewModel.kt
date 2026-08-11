@@ -2,8 +2,10 @@ package com.example.baltazar.feature.auth.ui.screens.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.baltazar.core.core.constants.CacheKeys
 import com.example.baltazar.core.core.enums.Language
 import com.example.baltazar.core.core.enums.Region
+import com.example.baltazar.core.core.managers.CacheManager
 import com.example.baltazar.core.core.utils.UiText
 import com.example.baltazar.feature.auth.core.extensions.emailError
 import com.example.baltazar.feature.auth.core.extensions.passwordError
@@ -22,11 +24,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val authRepository: IAuthRepository
+    private val authRepository: IAuthRepository,
+    private val cacheManager: CacheManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RegisterState())
     val state: StateFlow<RegisterState> = _state.asStateFlow()
+
+    fun continueAsGuest() {
+        viewModelScope.launch(IO) {
+            cacheManager.setBoolean(CacheKeys.IS_LOGIN_FINISHED, true)
+        }
+    }
+
 
     fun register(
         name: String,
@@ -101,4 +111,14 @@ class RegisterViewModel @Inject constructor(
 
         return listOf(nameError, emailError, phoneError, passwordError).all { it == null }
     }
+
+    fun setError(message: String) {
+        _state.update {
+            it.copy(
+                isLoading = false,
+                generalError = UiText.DynamicString(message)
+            )
+        }
+    }
 }
+

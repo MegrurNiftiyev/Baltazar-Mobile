@@ -48,12 +48,10 @@ fun AuthSelectionScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = Paddings.Large, vertical = Paddings.Large),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.weight(0.5f))
+        Spacer(modifier = Modifier.weight(0.35f))
 
-        // Center Content: Logo & Titles
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()
@@ -88,9 +86,7 @@ fun AuthSelectionScreen(
             )
         }
 
-        Spacer(modifier = Modifier.weight(1f))
 
-        // Bottom Actions Container
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -112,11 +108,15 @@ fun AuthSelectionScreen(
                     fontWeight = FontWeight.SemiBold
                 ),
                 onClick = {
+                    viewModel.continueAsGuest()
                     navController.navigate(Home) {
                         popUpTo(0) { inclusive = true }
                     }
                 }
             )
         }
+                Spacer(modifier = Modifier.weight(0.65f))
+
     }
 }
+
