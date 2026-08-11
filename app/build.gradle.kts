@@ -1,3 +1,13 @@
+import java.io.FileInputStream
+import java.util.Properties
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        load(FileInputStream(file))
+    }
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,20 +16,43 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.android.secrets)
+    alias(libs.plugins.google.services)
 }
 
 android {
-    namespace = "com.example.baltazar"
+    namespace = "com.baltazar.app"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.baltazar"
+        applicationId = "com.baltazar.app"
         minSdk = 25
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        create("dev") {
+            val keystorePath = localProperties.getProperty("DEV_KEYSTORE_PATH") ?: "baltazar-dev.jks"
+            storeFile = rootProject.file(keystorePath)
+            storePassword = localProperties.getProperty("DEV_KEYSTORE_PASSWORD")
+                ?: System.getenv("DEV_KEYSTORE_PASSWORD")
+            keyAlias = localProperties.getProperty("DEV_KEY_ALIAS")
+                ?: System.getenv("DEV_KEY_ALIAS")
+            keyPassword = localProperties.getProperty("DEV_KEY_PASSWORD")
+                ?: System.getenv("DEV_KEY_PASSWORD")
+        }
+        create("prod") {
+            val keystorePath = localProperties.getProperty("PROD_KEYSTORE_PATH") ?: "baltazar-prod.jks"
+            storeFile = rootProject.file(keystorePath)
+            storePassword = localProperties.getProperty("PROD_KEYSTORE_PASSWORD")
+                ?: System.getenv("PROD_KEYSTORE_PASSWORD")
+            keyAlias = localProperties.getProperty("PROD_KEY_ALIAS")
+                ?: System.getenv("PROD_KEY_ALIAS")
+            keyPassword = localProperties.getProperty("PROD_KEY_PASSWORD")
+                ?: System.getenv("PROD_KEY_PASSWORD")
+        }
     }
 
     buildTypes {
@@ -35,12 +68,42 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+    kotlinOptions { jvmTarget = "11" }
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+
+    flavorDimensions += "environment"
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            signingConfig = signingConfigs.getByName("dev")
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"https://baltazar-backend-kf2f.onrender.com/\""
+            )
+            buildConfigField(
+                "String",
+                "PAYMENT_BASE_URL",
+                "\"https://baltazar-backend-payment.onrender.com/\""
+            )
+        }
+        create("prod") {
+            dimension = "environment"
+            signingConfig = signingConfigs.getByName("prod")
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"https://baltazar-backend-production.onrender.com/\""
+            )
+            buildConfigField(
+                "String",
+                "PAYMENT_BASE_URL",
+                "\"https://baltazar-backend-payment.onrender.com/\""
+            )
+        }
     }
 }
 
@@ -55,16 +118,22 @@ dependencies {
     implementation(project(":feature:profile"))
     implementation(project(":feature:explore"))
     implementation(project(":feature:order"))
-    implementation(libs.androidx.ui.graphics)
 
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.compose.icons.tabler)
+    implementation(libs.compose.shimmer)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.compose.icons.tabler)
-
-    implementation(libs.compose.shimmer)
     debugImplementation(libs.leakcanary.android)
 
     testImplementation(libs.junit)

@@ -8,6 +8,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.baltazar.core.core.navigation.Home
+import com.example.baltazar.core.core.navigation.Splash
 import com.example.baltazar.feature.auth.core.navigation.authNavGraph
 import com.example.baltazar.feature.explore.core.navigation.exploreNavGraph
 import com.example.baltazar.feature.food.core.navigation.foodNavGraph
@@ -19,14 +21,18 @@ import com.example.baltazar.feature.taxi.core.navigation.taxiNavGraph
 import com.example.baltazar.feature.travel.core.navigation.travelNavGraph
 import com.example.baltazar.ui.screens.home.HomeScreen
 
+import androidx.compose.ui.Modifier
+
 @Composable
 fun AppNavGraph(
     startDestination: Any = Splash,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
+        modifier = modifier,
         enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { it },

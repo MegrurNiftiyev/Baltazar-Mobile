@@ -3,10 +3,10 @@ package com.example.baltazar.feature.auth.core.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.example.baltazar.core.navigation.AuthSelection
-import com.example.baltazar.core.navigation.Login
-import com.example.baltazar.core.navigation.Onboarding
-import com.example.baltazar.core.navigation.Register
+import com.example.baltazar.core.core.navigation.AuthSelection
+import com.example.baltazar.core.core.navigation.Login
+import com.example.baltazar.core.core.navigation.Onboarding
+import com.example.baltazar.core.core.navigation.Register
 import com.example.baltazar.feature.auth.ui.screens.auth_selection.AuthSelectionScreen
 import com.example.baltazar.feature.auth.ui.screens.login.LoginScreen
 import com.example.baltazar.feature.auth.ui.screens.onboarding.OnboardingScreen
@@ -18,3 +18,4 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     composable<Login> { LoginScreen(navController) }
     composable<Register> { RegisterScreen(navController) }
 }
+

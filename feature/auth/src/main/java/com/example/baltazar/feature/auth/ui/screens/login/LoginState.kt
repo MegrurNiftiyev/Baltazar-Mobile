@@ -1,10 +1,12 @@
 package com.example.baltazar.feature.auth.ui.screens.login
 
-import com.example.baltazar.feature.auth.core.error.ValidationError
+import com.example.baltazar.core.core.utils.UiText
 
 data class LoginState(
     val isLoading: Boolean = false,
-    val emailError: ValidationError? = null,
-    val passwordError: ValidationError? = null,
-    val generalError: String? = null
+    val isSuccess: Boolean = false,
+    val emailError: UiText? = null,
+    val passwordError: UiText? = null,
+    val generalError: UiText? = null
 )
+

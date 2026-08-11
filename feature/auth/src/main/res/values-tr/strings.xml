@@ -7,7 +7,7 @@
     <string name="onboarding_title_2">Sıradaki Kaçamağınızı Keşfedin</string>
     <string name="onboarding_description_2">Yolculuğunuza özel en iyi otelleri ve küratörlüğünde seyahat paketlerini ayırtın.</string>
     <string name="onboarding_title_3">Yola Koyulun, Kendi Tarzınızla</string>
-    <string name="onboarding_description_3">Seyahatiniz için mükemmel aracı kiralayın esnek teslimat, şeffaf fiyatlandırma, sıfır zahmet.</string>
+    <string name="onboarding_description_3">Seyahatiniz için mükemmel aracı kiralayın esnek teslimat, şeffaf fiyatlandırma.</string>
 
     <string name="error_field_blank">Bu alan boş olamaz</string>
     <string name="error_invalid_format">Geçersiz format</string>
@@ -51,4 +51,7 @@
     <string name="register_auto_detect_info">Bölge ve dil ayarları bulunduğunuz yere göre otomatik olarak belirlenecektir.</string>
     <string name="register_button">Hesap oluştur</string>
     <string name="register_back_to_login">← Girişe dön</string>
+    <string name="register_already_have_account">Hesabınız var mı? </string>
+    <string name="register_login_now">Giriş yapın</string>
 </resources>
+

@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.baltazar.R
+import com.baltazar.app.R
 import com.example.baltazar.core.enums.HomeTab
 import com.example.baltazar.domain.model.BottomTabItem
 import com.example.baltazar.feature.explore.ui.screens.explore.ExploreScreen

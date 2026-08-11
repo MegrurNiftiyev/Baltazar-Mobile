@@ -1,8 +1,7 @@
 package com.example.baltazar
 
-
 import android.app.Application
-import com.squareup.leakcanary.core.BuildConfig
+import com.baltazar.app.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -13,6 +12,5 @@ class BaltazarApplication : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-
     }
 }
