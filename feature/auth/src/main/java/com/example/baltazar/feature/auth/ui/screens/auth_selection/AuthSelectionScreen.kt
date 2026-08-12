@@ -85,6 +85,8 @@ fun AuthSelectionScreen(
                 textAlign = TextAlign.Center
             )
         }
+        
+            Spacer(modifier = Modifier.height(Spaces.Medium))
 
 
         Column(

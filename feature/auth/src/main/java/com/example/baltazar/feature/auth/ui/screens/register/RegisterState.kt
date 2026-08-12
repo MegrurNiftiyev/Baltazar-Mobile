@@ -1,5 +1,6 @@
 package com.example.baltazar.feature.auth.ui.screens.register
 
+import com.example.baltazar.core.core.utils.SnackbarMessage
 import com.example.baltazar.core.core.utils.UiText
 
 data class RegisterState(
@@ -9,6 +10,6 @@ data class RegisterState(
     val emailError: UiText? = null,
     val phoneError: UiText? = null,
     val passwordError: UiText? = null,
-    val generalError: UiText? = null
+    val generalError: UiText? = null,
+    val userMessage: SnackbarMessage? = null
 )
-

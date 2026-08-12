@@ -30,6 +30,21 @@ object Wishlist
 object Profile
 
 @Serializable
+object Cart
+
+@Serializable
+object Notifications
+
+@Serializable
+object Settings
+
+@Serializable
+object About
+
+@Serializable
+object Help
+
+@Serializable
 object RentACarList
 
 @Serializable
@@ -52,6 +67,12 @@ object FoodCompanyList
 
 @Serializable
 data class FoodCompanyDetail(val id: String)
+
+@Serializable
+object FoodList
+
+@Serializable
+data class FoodDetail(val id: String)
 
 @Serializable
 data class OrderFlow(val serviceType: String, val serviceId: String)
