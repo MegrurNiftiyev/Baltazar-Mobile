@@ -6,7 +6,10 @@ import com.example.baltazar.core.core.constants.CacheKeys
 import com.example.baltazar.core.core.enums.Language
 import com.example.baltazar.core.core.enums.Region
 import com.example.baltazar.core.core.managers.CacheManager
+import com.example.baltazar.core.core.utils.SnackbarMessage
+import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.core.core.utils.UiText
+import com.example.baltazar.feature.auth.R
 import com.example.baltazar.feature.auth.core.extensions.emailError
 import com.example.baltazar.feature.auth.core.extensions.passwordError
 import com.example.baltazar.feature.auth.core.extensions.phoneNumberError
@@ -37,7 +40,6 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
-
     fun register(
         name: String,
         email: String,
@@ -58,14 +60,24 @@ class RegisterViewModel @Inject constructor(
 
             authRepository.register(name, email, password, phone, region, language)
                 .onSuccess {
-                    _state.update { it.copy(isLoading = false, isSuccess = true) }
-                }
-                .onFailure { e ->
-                    val error = e.message?.let { UiText.DynamicString(it) }
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            generalError = error
+                            isSuccess = true,
+                            userMessage = SnackbarMessage(
+                                text = UiText.StringResource(R.string.register_success),
+                                type = SnackbarType.SUCCESS
+                            )
+                        )
+                    }
+                }
+                .onFailure { e ->
+                    val errorMsg = e.message?.let { UiText.DynamicString(it) } ?: UiText.StringResource(R.string.error_invalid_format)
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            generalError = errorMsg,
+                            userMessage = SnackbarMessage(text = errorMsg, type = SnackbarType.ERROR)
                         )
                     }
                 }
@@ -80,13 +92,32 @@ class RegisterViewModel @Inject constructor(
 
             authRepository.loginWithGoogle(idToken)
                 .onSuccess {
-                    _state.update { it.copy(isLoading = false, isSuccess = true) }
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            isSuccess = true,
+                            userMessage = SnackbarMessage(
+                                text = UiText.StringResource(R.string.register_success),
+                                type = SnackbarType.SUCCESS
+                            )
+                        )
+                    }
                 }
                 .onFailure { e ->
-                    val error = e.message?.let { UiText.DynamicString(it) }
-                    _state.update { it.copy(isLoading = false, generalError = error) }
+                    val errorMsg = e.message?.let { UiText.DynamicString(it) } ?: UiText.StringResource(R.string.error_invalid_format)
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            generalError = errorMsg,
+                            userMessage = SnackbarMessage(text = errorMsg, type = SnackbarType.ERROR)
+                        )
+                    }
                 }
         }
+    }
+
+    fun onMessageShown() {
+        _state.update { it.copy(userMessage = null) }
     }
 
     private fun validate(
@@ -116,9 +147,9 @@ class RegisterViewModel @Inject constructor(
         _state.update {
             it.copy(
                 isLoading = false,
-                generalError = UiText.DynamicString(message)
+                generalError = UiText.DynamicString(message),
+                userMessage = SnackbarMessage(text = UiText.DynamicString(message), type = SnackbarType.ERROR)
             )
         }
     }
 }
-

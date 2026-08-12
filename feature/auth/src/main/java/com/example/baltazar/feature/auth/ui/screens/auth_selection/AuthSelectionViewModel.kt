@@ -6,6 +6,7 @@ import com.example.baltazar.core.core.constants.CacheKeys
 import com.example.baltazar.core.core.managers.CacheManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,12 +19,9 @@ class AuthSelectionViewModel @Inject constructor(
     private val _state = MutableStateFlow(AuthSelectionState())
     val state: StateFlow<AuthSelectionState> = _state.asStateFlow()
 
-
     fun continueAsGuest() {
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             cacheManager.setBoolean(CacheKeys.IS_LOGIN_FINISHED, true)
-
         }
     }
 }
-

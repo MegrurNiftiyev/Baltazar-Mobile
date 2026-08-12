@@ -37,6 +37,7 @@
     <string name="login_no_account">Don\'t have an account? </string>
     <string name="login_register_now">Register now</string>
     <string name="login_guest">Continue as Guest</string>
+    <string name="login_success">Logged in successfully</string>
 
     <!-- Register -->
     <string name="register_title">Baltazar</string>
@@ -53,5 +54,5 @@
     <string name="register_back_to_login">← Back to Login</string>
     <string name="register_already_have_account">Already have an account? </string>
     <string name="register_login_now">Log In</string>
+    <string name="register_success">Registered successfully</string>
 </resources>
-

@@ -5,6 +5,7 @@ import com.example.baltazar.core.core.interceptors.AuthInterceptor
 import com.example.baltazar.core.core.interceptors.LocalizationInterceptor
 import com.example.baltazar.core.core.interceptors.TokenAuthenticator
 import com.example.baltazar.core.data.datasources.remote.RefreshTokenDataSource
+import com.example.baltazar.core.data.datasources.remote.services.UserApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -113,5 +114,13 @@ object NetworkModule {
         @Named("AuthRetrofit") retrofit: Retrofit
     ): RefreshTokenDataSource {
         return retrofit.create(RefreshTokenDataSource::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserApiService(
+        @Named("AppRetrofit") retrofit: Retrofit
+    ): UserApiService {
+        return retrofit.create(UserApiService::class.java)
     }
 }

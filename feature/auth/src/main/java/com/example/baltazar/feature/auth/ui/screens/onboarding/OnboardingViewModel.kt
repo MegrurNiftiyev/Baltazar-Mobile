@@ -6,6 +6,7 @@ import com.example.baltazar.core.core.constants.CacheKeys
 import com.example.baltazar.core.core.managers.CacheManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,7 +23,7 @@ class OnboardingViewModel @Inject constructor(
     val state: StateFlow<OnboardingState> = _state.asStateFlow()
 
     fun setOnboardingCompleted() {
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             cacheManger.setBoolean(CacheKeys.IS_ONBOARDED, true)
             _state.update { it.copy(isCompleted = true) }
         }
