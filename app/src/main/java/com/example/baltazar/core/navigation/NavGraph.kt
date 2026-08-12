@@ -6,15 +6,33 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.baltazar.core.core.navigation.Home
+import com.example.baltazar.core.core.navigation.Splash
+import com.example.baltazar.feature.auth.core.navigation.authNavGraph
+import com.example.baltazar.feature.explore.core.navigation.exploreNavGraph
+import com.example.baltazar.feature.food.core.navigation.foodNavGraph
+import com.example.baltazar.feature.hotel.core.navigation.hotelNavGraph
+import com.example.baltazar.feature.order.core.navigation.orderNavGraph
+import com.example.baltazar.feature.profile.core.navigation.profileNavGraph
+import com.example.baltazar.feature.rentacar.core.navigation.rentACarNavGraph
+import com.example.baltazar.feature.taxi.core.navigation.taxiNavGraph
+import com.example.baltazar.feature.travel.core.navigation.travelNavGraph
+import com.example.baltazar.ui.screens.home.HomeScreen
+
+import androidx.compose.ui.Modifier
 
 @Composable
 fun AppNavGraph(
-    navController: NavHostController = rememberNavController()
+    startDestination: Any = Splash,
+    navController: NavHostController = rememberNavController(),
+    modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
-        startDestination = Splash,
+        startDestination = startDestination,
+        modifier = modifier,
         enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { it },
@@ -40,40 +58,18 @@ fun AppNavGraph(
             )
         }
     ) {
-//        composable<Splash> { SplashScreen(navController) }
-//        composable<Onboarding> { OnboardingScreen(navController) }
-//
-//        composable<Explore> { ExploreScreen(navController) }
-//        composable<Wishlist> { WishlistScreen(navController) }
-//        composable<Profile> { ProfileScreen(navController) }
-//
-//        composable<RentACarList> { RentACarListScreen(navController) }
-//        composable<RentACarDetail> { backStackEntry ->
-//            val args = backStackEntry.toRoute<RentACaDetail>()
-//            RentACarDetailScreen(args.id, navController)
-//        }
-//
-//        composable<HotelList> { HotelListScreen(navController) }
-//        composable<HotelDetail> { backStackEntry ->
-//            val args = backStackEntry.toRoute<HotelDetail>()
-//            HotelDetailScreen(args.id, navController)
-//        }
-//
-//        composable<TravelList> { TravelListScreen(navController) }
-//        composable<TravelDetail> { backStackEntry ->
-//            val args = backStackEntry.toRoute<TravelDetail>()
-//            TravelDetailScreen(args.id, navController)
-//        }
-//
-//        composable<FoodCompanyList> { FoodCompanyListScreen(navController) }
-//        composable<FoodCompanyDetail> { backStackEntry ->
-//            val args = backStackEntry.toRoute<FoodCompanyDetail>()
-//            FoodCompanyDetailScreen(args.id, navController)
-//        }
-//
-//        composable<OrderFlow> { backStackEntry ->
-//            val args = backStackEntry.toRoute<OrderFlow>()
-//            OrderFlowScreen(args.serviceType, args.serviceId, navController)
-//        }
+        // App Module Screens
+        composable<Home> { HomeScreen(navController) }
+
+        // Modular NavGraphs from Feature Modules
+        authNavGraph(navController)
+        exploreNavGraph(navController)
+        foodNavGraph(navController)
+        hotelNavGraph(navController)
+        travelNavGraph(navController)
+        rentACarNavGraph(navController)
+        taxiNavGraph(navController)
+        profileNavGraph(navController)
+        orderNavGraph(navController)
     }
 }

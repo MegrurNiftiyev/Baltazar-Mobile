@@ -2,12 +2,12 @@
     <string name="onboarding_skip">Skip</string>
     <string name="onboarding_next">Next</string>
     <string name="onboarding_start">Start</string>
-    <string name="onboarding_title_1">Welcome</string>
-    <string name="onboarding_description_1">Discover the features of Baltazar.</string>
-    <string name="onboarding_title_2">Security</string>
-    <string name="onboarding_description_2">Your data is safe and secure.</string>
-    <string name="onboarding_title_3">Fast &amp; Reliable</string>
-    <string name="onboarding_description_3">Get your things done quickly.</string>
+    <string name="onboarding_title_1">Welcome to Baltazar</string>
+    <string name="onboarding_description_1">Your all-in-one app for hotels, travel, car rentals and food everything you need, in one place.</string>
+    <string name="onboarding_title_2">Discover Your Next Escape</string>
+    <string name="onboarding_description_2">Book the best hotels and curated travel packages tailored to your journey.</string>
+    <string name="onboarding_title_3">Hit the Road, Your Way</string>
+    <string name="onboarding_description_3">Rent the perfect car for your trip flexible pickup, transparent pricing.</string>
 
     <string name="error_field_blank">Field cannot be blank</string>
     <string name="error_invalid_format">Invalid format</string>
@@ -16,4 +16,42 @@
     <string name="error_missing_digit">At least 1 digit required</string>
     <string name="error_missing_uppercase">At least 1 uppercase letter required</string>
     <string name="error_missing_special_char">At least 1 special character required</string>
+
+    <!-- Auth Selection -->
+    <string name="auth_selection_title">Baltazar</string>
+    <string name="auth_selection_subtitle">Your lifestyle companion for\nseamless everyday logistics.</string>
+    <string name="auth_selection_login">Login</string>
+    <string name="auth_selection_register">Register</string>
+    <string name="auth_selection_guest">Continue as Guest</string>
+
+    <!-- Login -->
+    <string name="login_title">Baltazar</string>
+    <string name="login_email_label">Email</string>
+    <string name="login_email_placeholder">Email Address</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_password_placeholder">Password</string>
+    <string name="login_forgot_password">Forgot password?</string>
+    <string name="login_button">Log In</string>
+    <string name="login_or">OR</string>
+    <string name="login_google">Continue with Google</string>
+    <string name="login_no_account">Don\'t have an account? </string>
+    <string name="login_register_now">Register now</string>
+    <string name="login_guest">Continue as Guest</string>
+
+    <!-- Register -->
+    <string name="register_title">Baltazar</string>
+    <string name="register_subtitle">Create your account to get started.</string>
+    <string name="register_name_label">Full Name</string>
+    <string name="register_name_placeholder">John Doe</string>
+    <string name="register_email_label">Email Address</string>
+    <string name="register_email_placeholder">john@example.com</string>
+    <string name="register_phone_label">Phone Number</string>
+    <string name="register_phone_placeholder">+1 (555) 000-0000</string>
+    <string name="register_password_label">Password</string>
+    <string name="register_auto_detect_info">Region &amp; language settings will be auto-detected based on your location.</string>
+    <string name="register_button">Create Account</string>
+    <string name="register_back_to_login">← Back to Login</string>
+    <string name="register_already_have_account">Already have an account? </string>
+    <string name="register_login_now">Log In</string>
 </resources>
+

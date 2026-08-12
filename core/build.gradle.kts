@@ -1,3 +1,13 @@
+import java.io.FileInputStream
+import java.util.Properties
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        load(FileInputStream(file))
+    }
+}
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -12,8 +22,24 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 25
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "WEB_CLIENT_ID", "\"${localProperties.getProperty("WEB_CLIENT_ID") ?: ""}\"")
+        buildConfigField("String", "BASE_URL", "\"${localProperties.getProperty("DEV_BASE_URL") ?: "https://baltazar-backend-kf2f.onrender.com/"}\"")
+    }
+
+    flavorDimensions += "environment"
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            val devUrl = localProperties.getProperty("DEV_BASE_URL") ?: "https://baltazar-backend-kf2f.onrender.com/"
+            buildConfigField("String", "BASE_URL", "\"$devUrl\"")
+        }
+        create("prod") {
+            dimension = "environment"
+            val prodUrl = localProperties.getProperty("PROD_BASE_URL") ?: "https://baltazar-backend-production.onrender.com/"
+            buildConfigField("String", "BASE_URL", "\"$prodUrl\"")
+        }
     }
 
     compileOptions {
@@ -49,6 +75,9 @@ dependencies {
     api(libs.androidx.compose.foundation.layout)
     api(libs.androidx.compose.animation.core)
     api(libs.androidx.compose.runtime)
+    api(libs.androidx.icons.extended)
+    api(libs.compose.icons.tabler)
+
 
     // Navigation
     api(libs.androidx.navigation.compose)
@@ -57,6 +86,7 @@ dependencies {
     // Dependency Injection
     api(libs.hilt.android)
     implementation(libs.androidx.compose.material3.lint)
+    implementation(libs.compose.material3)
     ksp(libs.hilt.android.compiler)
 
     // Networking

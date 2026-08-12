@@ -2,8 +2,8 @@ package com.example.baltazar.feature.auth.ui.screens.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.baltazar.feature.auth.R
-import com.example.baltazar.feature.auth.domain.model.OnboardingModel
+import com.example.baltazar.core.core.constants.CacheKeys
+import com.example.baltazar.core.core.managers.CacheManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,32 +13,17 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class OnboardingViewModel @Inject constructor() : ViewModel() {
+class OnboardingViewModel @Inject constructor(
+    private val cacheManger: CacheManager
+) : ViewModel() {
     private val _state = MutableStateFlow(
-        OnboardingState(
-            pages = listOf(
-                OnboardingModel(
-                    title = R.string.onboarding_title_1,
-                    description = R.string.onboarding_description_1,
-                    imageSource = R.drawable.ic_launcher_foreground
-                ),
-                OnboardingModel(
-                    title = R.string.onboarding_title_2,
-                    description = R.string.onboarding_description_2,
-                    imageSource = R.drawable.ic_launcher_foreground
-                ),
-                OnboardingModel(
-                    title = R.string.onboarding_title_3,
-                    description = R.string.onboarding_description_3,
-                    imageSource = R.drawable.ic_launcher_foreground
-                )
-            )
-        )
+        OnboardingState()
     )
     val state: StateFlow<OnboardingState> = _state.asStateFlow()
 
     fun setOnboardingCompleted() {
         viewModelScope.launch {
+            cacheManger.setBoolean(CacheKeys.IS_ONBOARDED, true)
             _state.update { it.copy(isCompleted = true) }
         }
     }

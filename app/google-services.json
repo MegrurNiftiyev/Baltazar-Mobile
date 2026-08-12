@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "921423261724",
+    "project_id": "baltazar-a28a4",
+    "storage_bucket": "baltazar-a28a4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921423261724:android:4445ed062eac4c98f3afd9",
+        "android_client_info": {
+          "package_name": "com.baltazar.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "921423261724-0m5ss36fpj84k8qsrbf8nt7dl0ileqre.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.baltazar.app",
+            "certificate_hash": "3b06b580e0f31ec9bec8f8b8f0895f8d394c108d"
+          }
+        },
+        {
+          "client_id": "921423261724-91e5afpj1b7iienssrpg7o8u9428e3s0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.baltazar.app",
+            "certificate_hash": "aea492acb14b2ac3714fc617a3b2427129b6df10"
+          }
+        },
+        {
+          "client_id": "921423261724-b0p4pc62jup4368h1mhdoe7fquk26mf1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxgGsttXFDUAA0ibEOEXeyUXVpQ2TdTlQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "921423261724-b0p4pc62jup4368h1mhdoe7fquk26mf1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
