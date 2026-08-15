@@ -1,11 +1,14 @@
 package com.example.baltazar.core.data.datasources.remote
 
+import com.example.baltazar.core.data.datasources.remote.services.RefreshTokenApiService
 import com.example.baltazar.core.data.model.request.RefreshTokenRequest
 import com.example.baltazar.core.data.model.response.RefreshTokenResponse
-import retrofit2.http.Body
-import retrofit2.http.POST
+import javax.inject.Inject
 
-interface RefreshTokenDataSource {
-    @POST("api/auth/refresh-token")
-    suspend fun refresh(@Body request: RefreshTokenRequest): RefreshTokenResponse
+class RefreshTokenDataSource @Inject constructor(
+    private val apiService: RefreshTokenApiService
+) {
+    suspend fun refresh(request: RefreshTokenRequest): RefreshTokenResponse {
+        return apiService.refresh(request)
+    }
 }

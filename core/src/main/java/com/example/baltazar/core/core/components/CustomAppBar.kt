@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -14,14 +17,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.enums.TitleAlignment
+import compose.icons.TablerIcons
+import compose.icons.tablericons.ArrowLeft
 
 @Composable
 fun CustomAppBar(
     title: String,
     modifier: Modifier = Modifier,
     alignment: TitleAlignment = TitleAlignment.START,
+    onBackClick: (() -> Unit)? = null,
     leadingContent: (@Composable () -> Unit)? = null,
     trailingContent: (@Composable () -> Unit)? = null
 ) {
@@ -36,12 +43,24 @@ fun CustomAppBar(
                 .fillMaxSize()
                 .padding(horizontal = Paddings.Large)
         ) {
-            if (leadingContent != null) {
+            val hasLeading = onBackClick != null || leadingContent != null
+
+            if (hasLeading) {
                 Row(
                     modifier = Modifier.align(Alignment.CenterStart),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    leadingContent()
+                    if (onBackClick != null) {
+                        IconButton(onClick = onBackClick) {
+                            Icon(
+                                imageVector = TablerIcons.ArrowLeft,
+                                contentDescription = null,
+                                modifier = Modifier.size(IconSizes.ExtraLarge),
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                    leadingContent?.invoke()
                 }
             }
 
@@ -51,7 +70,7 @@ fun CustomAppBar(
                 TitleAlignment.END -> Alignment.CenterEnd
             }
 
-            val titlePadding = if (alignment == TitleAlignment.START && leadingContent != null) {
+            val titlePadding = if (alignment == TitleAlignment.START && hasLeading) {
                 Modifier.padding(start = 48.dp)
             } else if (alignment == TitleAlignment.END && trailingContent != null) {
                 Modifier.padding(end = 48.dp)

@@ -11,21 +11,18 @@ import javax.inject.Singleton
 class SessionManager @Inject constructor() {
 
     companion object {
-        const val DEFAULT_GUEST_AVATAR = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80"
-        const val DEFAULT_GUEST_NAME = "Qonaq İstifadəçi"
-
         val DEFAULT_GUEST_USER = User(
             id = "guest",
-            name = DEFAULT_GUEST_NAME,
+            name = "",
             email = "",
             role = "GUEST",
             phone = null,
             region = null,
             language = "az",
-            avatarUrl = DEFAULT_GUEST_AVATAR,
-            personalInfo = false,
-            driverLicense = false,
-            passport = false,
+            avatarUrl = null,
+            personalInfoCompleted = false,
+            driverLicenseCompleted = false,
+            passportCompleted = false,
             createdAt = ""
         )
     }
@@ -33,14 +30,21 @@ class SessionManager @Inject constructor() {
     private val _user = MutableStateFlow<User>(DEFAULT_GUEST_USER)
     val user: StateFlow<User> = _user.asStateFlow()
 
+    private val _isLoadingUser = MutableStateFlow(false)
+    val isLoadingUser: StateFlow<Boolean> = _isLoadingUser.asStateFlow()
+
+    fun setLoading(isLoading: Boolean) {
+        _isLoadingUser.value = isLoading
+    }
+
     fun set(user: User) {
-        val name = user.name.ifBlank { DEFAULT_GUEST_NAME }
-        val avatarUrl = if (user.avatarUrl.isNullOrBlank()) DEFAULT_GUEST_AVATAR else user.avatarUrl
-        _user.value = user.copy(name = name, avatarUrl = avatarUrl)
+        _user.value = user
+        _isLoadingUser.value = false
     }
 
     fun clear() {
         _user.value = DEFAULT_GUEST_USER
+        _isLoadingUser.value = false
     }
 
     fun update(block: (User) -> User) {

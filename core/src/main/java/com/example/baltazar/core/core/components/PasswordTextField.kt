@@ -20,6 +20,9 @@ import androidx.compose.ui.unit.Dp
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.enums.CornerShape
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Eye
+import compose.icons.tablericons.EyeOff
 
 @Composable
 fun PasswordTextField(
@@ -33,8 +36,8 @@ fun PasswordTextField(
     shape: CornerShape = CornerShape.Rounded,
     borderRadius: Dp = BorderRadiuses.Medium,
     leadingIcon: @Composable (() -> Unit)? = null,
-    visibleIcon: ImageVector,
-    hiddenIcon: ImageVector,
+    visibleIcon: ImageVector = TablerIcons.Eye,
+    hiddenIcon: ImageVector = TablerIcons.EyeOff,
     trailingIconSize: Dp = IconSizes.Small,
     trailingIconTint: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
