@@ -1,7 +1,5 @@
 package com.example.baltazar.feature.food.data.model.dto
 
-import com.example.baltazar.core.data.model.dto.PaginationDto
-import com.example.baltazar.core.domain.model.PaginatedList
 import com.example.baltazar.feature.food.domain.model.FoodItem
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -9,36 +7,36 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FoodItemDto(
     @SerialName("id") val id: String,
-    @SerialName("companyId") val companyId: String,
-    @SerialName("title") val title: String,
+    @SerialName("companyId") val companyId: String? = null,
+    @SerialName("title") val title: String? = null,
+    @SerialName("name") val name: String? = null,
+    @SerialName("category") val category: String? = null,
     @SerialName("categories") val categories: List<String> = emptyList(),
-    @SerialName("price") val price: Double,
-    @SerialName("priceSuffix") val priceSuffix: String,
+    @SerialName("price") val price: Double = 0.0,
+    @SerialName("priceSuffix") val priceSuffix: String? = "",
     @SerialName("rating") val rating: Double = 0.0,
     @SerialName("reviewCount") val reviewCount: Int = 0,
-    @SerialName("image") val image: String
+    @SerialName("image") val image: String? = null
 ) {
-    fun toDomain(): FoodItem = FoodItem(
-        id = id,
-        companyId = companyId,
-        title = title,
-        categories = categories,
-        price = price,
-        priceSuffix = priceSuffix,
-        rating = rating,
-        reviewCount = reviewCount,
-        image = image
-    )
-}
+    fun toDomain(): FoodItem {
+        val resolvedCategories = if (categories.isNotEmpty()) {
+            categories
+        } else if (!category.isNullOrBlank()) {
+            listOf(category)
+        } else {
+            emptyList()
+        }
 
-@Serializable
-data class FoodListResponseDto(
-    @SerialName("success") val success: Boolean,
-    @SerialName("data") val data: List<FoodItemDto> = emptyList(),
-    @SerialName("pagination") val pagination: PaginationDto
-) {
-    fun toDomain(): PaginatedList<FoodItem> = PaginatedList(
-        items = data.map { it.toDomain() },
-        pagination = pagination.toDomain()
-    )
+        return FoodItem(
+            id = id,
+            companyId = companyId.orEmpty(),
+            title = title ?: name.orEmpty(),
+            categories = resolvedCategories,
+            price = price,
+            priceSuffix = priceSuffix ?: "",
+            rating = rating,
+            reviewCount = reviewCount,
+            image = image.orEmpty()
+        )
+    }
 }
