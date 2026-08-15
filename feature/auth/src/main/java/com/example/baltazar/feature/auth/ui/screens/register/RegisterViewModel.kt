@@ -9,6 +9,7 @@ import com.example.baltazar.core.core.managers.CacheManager
 import com.example.baltazar.core.core.utils.SnackbarMessage
 import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.core.core.utils.UiText
+import com.example.baltazar.core.domain.repository.IUserRepository
 import com.example.baltazar.feature.auth.R
 import com.example.baltazar.feature.auth.core.extensions.emailError
 import com.example.baltazar.feature.auth.core.extensions.passwordError
@@ -28,6 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val authRepository: IAuthRepository,
+    private val userRepository: IUserRepository,
     private val cacheManager: CacheManager
 ) : ViewModel() {
 
@@ -48,7 +50,7 @@ class RegisterViewModel @Inject constructor(
         region: Region = Region.AZ,
         language: Language = Language.AZ
     ) {
-        if (!validate(name, email, phone, password) || _state.value.isLoading || _state.value.isSuccess) return
+        if (!validate(name, email, phone, password) || _state.value.isLoading || _state.value.isSuccess || _state.value.isAuthenticationComplete) return
 
         viewModelScope.launch(IO) {
             _state.update {
@@ -60,10 +62,12 @@ class RegisterViewModel @Inject constructor(
 
             authRepository.register(name, email, password, phone, region, language)
                 .onSuccess {
+                    userRepository.getCurrentUser()
                     _state.update {
                         it.copy(
                             isLoading = false,
                             isSuccess = true,
+                            isAuthenticationComplete = true,
                             userMessage = SnackbarMessage(
                                 text = UiText.StringResource(R.string.register_success),
                                 type = SnackbarType.SUCCESS
@@ -85,17 +89,19 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun loginWithGoogle(idToken: String) {
-        if (_state.value.isLoading || _state.value.isSuccess) return
+        if (_state.value.isLoading || _state.value.isSuccess || _state.value.isAuthenticationComplete) return
 
         viewModelScope.launch(IO) {
             _state.update { it.copy(isLoading = true, generalError = null) }
 
             authRepository.loginWithGoogle(idToken)
                 .onSuccess {
+                    userRepository.getCurrentUser()
                     _state.update {
                         it.copy(
                             isLoading = false,
                             isSuccess = true,
+                            isAuthenticationComplete = true,
                             userMessage = SnackbarMessage(
                                 text = UiText.StringResource(R.string.register_success),
                                 type = SnackbarType.SUCCESS
