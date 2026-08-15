@@ -36,6 +36,11 @@ class ExploreViewModel @Inject constructor(
                 _state.update { it.copy(user = sessionUser) }
             }
         }
+        viewModelScope.launch {
+            sessionManager.isLoadingUser.collect { isLoading ->
+                _state.update { it.copy(isUserLoading = isLoading) }
+            }
+        }
     }
 
     fun loadExploreData() {

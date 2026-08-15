@@ -1,6 +1,6 @@
 package com.example.baltazar.feature.explore.domain.model
 
-import com.example.baltazar.core.enums.ServiceType
+import com.example.baltazar.core.core.enums.ServiceType
 
 data class BannerItem(
     val id: String,
