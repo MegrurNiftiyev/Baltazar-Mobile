@@ -1,4 +1,4 @@
-package com.example.baltazar.feature.hotel.di
+package com.example.baltazar.feature.hotel.core.di
 
 import com.example.baltazar.feature.hotel.data.repository.HotelRepository
 import com.example.baltazar.feature.hotel.domain.repository.IHotelRepository
