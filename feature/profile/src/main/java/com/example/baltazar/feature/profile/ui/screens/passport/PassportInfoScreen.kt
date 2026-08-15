@@ -1,4 +1,4 @@
-package com.example.baltazar.feature.profile.ui.screens.driver_license
+package com.example.baltazar.feature.profile.ui.screens.passport
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,9 +37,9 @@ import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
 
 @Composable
-fun DriverLicenseScreen(
+fun PassportInfoScreen(
     navController: NavHostController,
-    viewModel: DriverLicenseViewModel = hiltViewModel()
+    viewModel: PassportInfoViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
@@ -64,7 +64,7 @@ fun DriverLicenseScreen(
     Scaffold(
         topBar = {
             CustomAppBar(
-                title = stringResource(R.string.driver_license_title),
+                title = stringResource(R.string.passport_title),
                 alignment = TitleAlignment.CENTER,
                 onBackClick = { navController.popBackStack() }
             )
@@ -86,11 +86,11 @@ fun DriverLicenseScreen(
             )
 
             OutlinedTextField(
-                value = state.licenseNumber,
-                onValueChange = viewModel::onLicenseNumberChange,
-                label = { Text(text = stringResource(R.string.license_number)) },
-                isError = state.licenseNumberError != null,
-                supportingText = state.licenseNumberError?.let { err ->
+                value = state.passportNumber,
+                onValueChange = viewModel::onPassportNumberChange,
+                label = { Text(text = stringResource(R.string.passport_number)) },
+                isError = state.passportNumberError != null,
+                supportingText = state.passportNumberError?.let { err ->
                     { Text(text = err.asString(context), color = MaterialTheme.colorScheme.error) }
                 },
                 modifier = Modifier.fillMaxWidth(),
