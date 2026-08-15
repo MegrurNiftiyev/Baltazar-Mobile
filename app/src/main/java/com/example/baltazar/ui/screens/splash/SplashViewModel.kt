@@ -37,7 +37,8 @@ class SplashViewModel @Inject constructor(
                 cacheManager.getBoolean(CacheKeys.IS_LOGIN_FINISHED, false).first()
 
             if (isLoginFinished) {
-                val userResult = userRepository.getUser()
+                sessionManager.setLoading(true)
+                val userResult = userRepository.getCurrentUser()
                 userResult.fold(
                     onSuccess = { user ->
                         sessionManager.set(user)
