@@ -1,6 +1,7 @@
 package com.example.baltazar.feature.rentacar.domain.repository
 
 import com.example.baltazar.core.domain.model.PaginatedList
+import com.example.baltazar.feature.rentacar.domain.model.CarDetail
 import com.example.baltazar.feature.rentacar.domain.model.CarItem
 
 interface IRentACarRepository {
@@ -16,4 +17,6 @@ interface IRentACarRepository {
         limit: Int? = 20,
         cursor: String? = null
     ): Result<PaginatedList<CarItem>>
+
+    suspend fun getCarDetail(id: String): Result<CarDetail>
 }

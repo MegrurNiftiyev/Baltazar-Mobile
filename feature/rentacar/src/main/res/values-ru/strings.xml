@@ -1,0 +1,7 @@
+<resources>
+    <string name="rentacar_title">Аренда авто</string>
+    <string name="rentacar_search_hint">Поиск авто или марок...</string>
+    <string name="rentacar_popular">Доступные автомобили</string>
+    <string name="rentacar_details">Детали авто</string>
+    <string name="rentacar_rent_now">Арендовать</string>
+</resources>
