@@ -1,4 +1,4 @@
-package com.example.baltazar.feature.order.ui.screens.address
+package com.example.baltazar.feature.order.ui.screens.address_selection
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -10,9 +10,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 
 @Composable
-fun AddressScreen(
+fun AddressSelectionScreen(
     navController: NavHostController,
-    viewModel: AddressViewModel = hiltViewModel()
+    viewModel: AddressSelectionViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
 
