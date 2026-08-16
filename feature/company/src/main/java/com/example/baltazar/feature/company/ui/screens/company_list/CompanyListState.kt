@@ -5,7 +5,7 @@ import com.example.baltazar.feature.company.domain.model.Company
 
 data class CompanyListState(
     val companies: List<Company> = emptyList(),
-    val serviceType: ServiceType = ServiceType.FOOD,
+    val serviceType: ServiceType? = null,
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
     val isLoadingMore: Boolean = false,

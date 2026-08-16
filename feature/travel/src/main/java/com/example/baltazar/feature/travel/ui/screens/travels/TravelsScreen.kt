@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -13,6 +14,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -28,13 +31,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.baltazar.core.core.components.CustomAppBar
+import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
 import com.example.baltazar.core.core.enums.CardViewMode
 import com.example.baltazar.core.core.enums.TitleAlignment
+import com.example.baltazar.core.core.navigation.CompanyList
 import com.example.baltazar.core.core.navigation.TravelDetail
 import com.example.baltazar.feature.travel.R
 import com.example.baltazar.feature.travel.ui.components.TourCard
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Building
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +70,19 @@ fun TravelsScreen(
             CustomAppBar(
                 title = stringResource(id = R.string.travel_title),
                 alignment = TitleAlignment.CENTER,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                trailingContent = {
+                    IconButton(
+                        onClick = { navController.navigate(CompanyList(serviceType = "TRAVEL")) }
+                    ) {
+                        Icon(
+                            imageVector = TablerIcons.Building,
+                            contentDescription = null,
+                            modifier = Modifier.size(IconSizes.Large),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
             )
         },
         containerColor = MaterialTheme.colorScheme.background

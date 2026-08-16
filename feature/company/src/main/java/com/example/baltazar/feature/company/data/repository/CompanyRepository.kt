@@ -18,12 +18,12 @@ class CompanyRepository @Inject constructor(
 ) : ICompanyRepository {
 
     override suspend fun getCompanies(
-        serviceType: ServiceType,
+        serviceType: ServiceType?,
         cursor: String?,
         limit: Int
     ): Result<PaginatedList<Company>> {
         return try {
-            val response = remoteDataSource.getCompanies(serviceType.name, limit, cursor)
+            val response = remoteDataSource.getCompanies(serviceType?.name, limit, cursor)
             if (response.success) {
                 val companies = response.data.map { it.toDomain() }
                 val pagination = response.pagination?.toDomain()

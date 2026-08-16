@@ -73,7 +73,7 @@ object FoodCompanyList
 data class FoodCompanyDetail(val id: String)
 
 @Serializable
-object CompanyList
+data class CompanyList(val serviceType: String? = null)
 
 @Serializable
 data class CompanyDetail(val id: String)

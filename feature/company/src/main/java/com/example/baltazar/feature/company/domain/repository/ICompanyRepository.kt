@@ -8,7 +8,7 @@ import com.example.baltazar.feature.company.domain.model.RelatedItem
 
 interface ICompanyRepository {
     suspend fun getCompanies(
-        serviceType: ServiceType,
+        serviceType: ServiceType? = null,
         cursor: String? = null,
         limit: Int = 20
     ): Result<PaginatedList<Company>>

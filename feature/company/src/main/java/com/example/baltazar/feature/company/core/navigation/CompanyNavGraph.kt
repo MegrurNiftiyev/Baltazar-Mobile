@@ -10,7 +10,10 @@ import com.example.baltazar.feature.company.ui.screens.company_detail.CompanyDet
 import com.example.baltazar.feature.company.ui.screens.company_list.CompanyListScreen
 
 fun NavGraphBuilder.companyNavGraph(navController: NavHostController) {
-    composable<CompanyList> { CompanyListScreen(navController) }
+    composable<CompanyList> { backStackEntry ->
+        val args = backStackEntry.toRoute<CompanyList>()
+        CompanyListScreen(navController = navController)
+    }
     composable<CompanyDetail> { backStackEntry ->
         val args = backStackEntry.toRoute<CompanyDetail>()
         CompanyDetailScreen(navController = navController)

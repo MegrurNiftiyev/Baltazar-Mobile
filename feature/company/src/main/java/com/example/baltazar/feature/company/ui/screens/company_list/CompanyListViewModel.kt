@@ -21,10 +21,10 @@ class CompanyListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val serviceTypeString: String? = savedStateHandle["serviceType"]
-    private val initialServiceType: ServiceType = try {
-        serviceTypeString?.let { ServiceType.valueOf(it.uppercase()) } ?: ServiceType.FOOD
+    private val initialServiceType: ServiceType? = try {
+        serviceTypeString?.takeIf { it.isNotBlank() }?.let { ServiceType.valueOf(it.uppercase()) }
     } catch (_: Exception) {
-        ServiceType.FOOD
+        null
     }
 
     private val _state = MutableStateFlow(CompanyListState(serviceType = initialServiceType))
