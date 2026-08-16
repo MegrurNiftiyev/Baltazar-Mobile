@@ -1,4 +1,4 @@
-package com.example.baltazar.feature.food.di
+package com.example.baltazar.feature.food.core.di
 
 import com.example.baltazar.feature.food.data.repository.FoodRepository
 import com.example.baltazar.feature.food.domain.repository.IFoodRepository
@@ -11,6 +11,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class FoodRepositoryModule {
+
     @Binds
     @Singleton
     abstract fun bindFoodRepository(

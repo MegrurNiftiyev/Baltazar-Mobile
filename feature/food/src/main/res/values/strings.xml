@@ -1,2 +1,8 @@
 <resources>
+    <string name="food_title">Food</string>
+    <string name="food_search_hint">Search meals or restaurants...</string>
+    <string name="food_categories">Categories</string>
+    <string name="food_popular_dishes">Popular Dishes</string>
+    <string name="food_add_to_cart">Add to Cart</string>
+    <string name="food_details">Dish Details</string>
 </resources>
