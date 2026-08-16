@@ -65,9 +65,12 @@ fun RegisterScreen(
     var phone by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    val isButtonsEnabled = !state.isLoading && !state.isAuthenticationComplete && !state.isSuccess
+
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
-            navController.navigate(Home) { popUpTo(0) { inclusive = true } }
+            kotlinx.coroutines.delay(1000L)
+            navController.navigate(Home()) { popUpTo(0) { inclusive = true } }
         }
     }
 
@@ -177,6 +180,7 @@ fun RegisterScreen(
 
             RoundedButton(
                 text = stringResource(R.string.register_button),
+                enabled = isButtonsEnabled,
                 isLoading = state.isLoading,
                 onClick = {
                     viewModel.register(name, email, phone, password)
@@ -193,6 +197,7 @@ fun RegisterScreen(
                 SocialIconButton(
                     icon = TablerIcons.BrandGoogle,
                     contentDescription = "Google Sign In",
+                    enabled = isButtonsEnabled,
                     onClick = {
                         coroutineScope.launch {
                             launchGoogleSignIn(
@@ -211,6 +216,7 @@ fun RegisterScreen(
                 SocialIconButton(
                     icon = TablerIcons.BrandApple,
                     contentDescription = "Apple Sign In",
+                    enabled = isButtonsEnabled,
                     onClick = {
                         coroutineScope.launch {
                             launchGoogleSignIn(
@@ -229,6 +235,7 @@ fun RegisterScreen(
                 SocialIconButton(
                     icon = TablerIcons.BrandFacebook,
                     contentDescription = "Facebook Sign In",
+                    enabled = isButtonsEnabled,
                     onClick = {
                         coroutineScope.launch {
                             launchGoogleSignIn(
@@ -247,9 +254,10 @@ fun RegisterScreen(
                 SocialIconButton(
                     icon = TablerIcons.User,
                     contentDescription = "Continue as Guest",
+                    enabled = isButtonsEnabled,
                     onClick = {
                         viewModel.continueAsGuest()
-                        navController.navigate(Home) {
+                        navController.navigate(Home()) {
                             popUpTo(0) { inclusive = true }
                         }
                     }
@@ -268,7 +276,10 @@ fun RegisterScreen(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                TextButton(onClick = { navController.popBackStack() }) {
+                TextButton(
+                    enabled = isButtonsEnabled,
+                    onClick = { navController.popBackStack() }
+                ) {
                     Text(
                         text = stringResource(R.string.register_login_now),
                         color = MaterialTheme.colorScheme.primary,

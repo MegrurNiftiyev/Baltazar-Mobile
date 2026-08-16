@@ -7,7 +7,7 @@ import com.example.baltazar.core.core.managers.CacheManager
 import com.example.baltazar.core.core.managers.EncryptedCacheManager
 import com.example.baltazar.feature.auth.core.exception.AuthException
 import com.example.baltazar.feature.auth.data.datasources.remote.datasources.AuthRemoteDataSource
-import com.example.baltazar.feature.auth.domain.model.User
+import com.example.baltazar.core.domain.model.User
 import com.example.baltazar.feature.auth.domain.repository.IAuthRepository
 import javax.inject.Inject
 import javax.inject.Singleton
