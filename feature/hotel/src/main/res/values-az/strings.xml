@@ -1,0 +1,7 @@
+<resources>
+    <string name="hotel_title">Otellər</string>
+    <string name="hotel_search_hint">Otel və ya məkan axtarın...</string>
+    <string name="hotel_popular">Məşhur Otellər</string>
+    <string name="hotel_details">Otel Təfərrüatları</string>
+    <string name="hotel_book_now">İndi Bənd Et</string>
+</resources>
