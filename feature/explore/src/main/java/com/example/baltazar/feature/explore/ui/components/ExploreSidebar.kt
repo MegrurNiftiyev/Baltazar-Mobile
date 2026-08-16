@@ -33,6 +33,7 @@ import compose.icons.tablericons.ShoppingCart
 @Composable
 fun ExploreSidebar(
     user: User,
+    isUserLoading: Boolean = false,
     onPageClick: (Any) -> Unit,
     onUserClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -49,9 +50,8 @@ fun ExploreSidebar(
                 .padding(horizontal = Paddings.Medium, vertical = Paddings.Small)
         ) {
             UserTile(
-                userName = user.name,
-                imageUrl = user.avatarUrl.orEmpty(),
-                isGuest = user.role == "GUEST",
+                user = user,
+                isLoading = isUserLoading,
                 onClick = onUserClick
             )
 
@@ -68,7 +68,7 @@ fun ExploreSidebar(
                     icon = TablerIcons.ShoppingCart,
                     onClick = { onPageClick(Cart) }
                 )
-                
+
                 PageTile(
                     title = stringResource(R.string.sidebar_notifications),
                     icon = TablerIcons.Bell,

@@ -14,5 +14,6 @@ data class ExploreState(
     val banners: List<BannerItem> = emptyList(),
     val sections: List<ExploreSection> = emptyList(),
     val user: User = SessionManager.DEFAULT_GUEST_USER,
+    val isUserLoading: Boolean = false,
     val userMessage: SnackbarMessage? = null
 )

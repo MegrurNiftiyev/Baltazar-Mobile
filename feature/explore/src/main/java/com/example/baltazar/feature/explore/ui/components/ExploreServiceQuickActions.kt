@@ -8,21 +8,25 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.baltazar.core.R
 import com.example.baltazar.core.core.components.RoundedIconButton
+import com.example.baltazar.core.core.components.ShimmerWrapper
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
-import com.example.baltazar.core.core.extensions.autoShimmer
-import com.example.baltazar.core.enums.ServiceType
+import com.example.baltazar.core.core.enums.ServiceType
 import com.example.baltazar.feature.explore.domain.model.QuickActionItem
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Bed
@@ -46,35 +50,49 @@ fun ExploreServiceQuickActions(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = Paddings.Large),
-        horizontalArrangement = Arrangement.SpaceBetween,
+            .padding(horizontal = Paddings.Medium),
+        horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
         items.forEach { item ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
+                    .weight(1f)
                     .clickable(enabled = !isLoading) { onServiceClick(item.serviceType) }
-                    .padding(Spaces.ExtraSmall)
+                    .padding(vertical = Spaces.ExtraSmall)
             ) {
-                RoundedIconButton(
-                    icon = item.icon,
-                    onClick = { onServiceClick(item.serviceType) },
-                    size = 64.dp,
-                    borderRadius = 20.dp,
-                    containerColor = if (isLoading) Color.Transparent else MaterialTheme.colorScheme.surfaceContainerHigh,
-                    contentColor = if (isLoading) Color.Transparent else MaterialTheme.colorScheme.onSurface,
-                    iconSize = 28.dp,
-                    modifier = Modifier.autoShimmer(isLoading)
-                )
+                ShimmerWrapper(
+                    isLoading = isLoading,
+                    modifier = Modifier.size(60.dp).clip(RoundedCornerShape(18.dp))
+                ) {
+                    RoundedIconButton(
+                        icon = item.icon,
+                        onClick = { onServiceClick(item.serviceType) },
+                        size = 60.dp,
+                        borderRadius = 18.dp,
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        contentColor = MaterialTheme.colorScheme.onSurface,
+                        iconSize = 26.dp
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(Spaces.Small))
-                Text(
-                    text = if (isLoading) "Loading" else stringResource(item.titleRes),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = if (isLoading) Color.Transparent else MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.autoShimmer(isLoading)
-                )
+
+                ShimmerWrapper(
+                    isLoading = isLoading,
+                    modifier = Modifier.width(56.dp).height(14.dp)
+                ) {
+                    Text(
+                        text = stringResource(item.titleRes),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.Center,
+                        maxLines = 1,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }

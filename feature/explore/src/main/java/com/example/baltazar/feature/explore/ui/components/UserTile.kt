@@ -16,47 +16,58 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.baltazar.core.R
-import com.example.baltazar.core.core.components.CircularImage
+import com.example.baltazar.core.core.components.ShimmerWrapper
+import com.example.baltazar.core.core.components.UserAvatar.UserAvatar
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
+import com.example.baltazar.core.domain.model.User
 
 @Composable
 fun UserTile(
-    userName: String,
-    imageUrl: String,
+    user: User,
     modifier: Modifier = Modifier,
-    isGuest: Boolean = true,
+    isLoading: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
-    Row(
+    val isGuest = user.role == "GUEST"
+
+    ShimmerWrapper(
+        isLoading = isLoading,
         modifier = modifier
             .fillMaxWidth()
             .then(
-                if (onClick != null) Modifier.clickable { onClick() } else Modifier
+                if (onClick != null && !isLoading) Modifier.clickable { onClick() } else Modifier
             )
-            .padding(vertical = Paddings.Small, horizontal = Paddings.Medium),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(vertical = Paddings.Small, horizontal = Paddings.Medium)
     ) {
-        CircularImage(
-            imageUrl = imageUrl,
-            size = 48.dp,
-            borderWidth = 1.5.dp,
-            borderColor = MaterialTheme.colorScheme.primary
-        )
-        Spacer(modifier = Modifier.width(Spaces.Medium))
-        Column {
-            Text(
-                text = userName,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            UserAvatar(
+                user = user,
+                size = 48.dp
             )
-            if (isGuest) {
+            Spacer(modifier = Modifier.width(Spaces.Medium))
+            Column {
                 Text(
-                    text = stringResource(R.string.sidebar_guest_user),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text = if (isGuest) stringResource(R.string.guest_user) else user.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold
                 )
+                if (isGuest) {
+                    Text(
+                        text = stringResource(R.string.sidebar_guest_user),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                } else if (user.email.isNotBlank()) {
+                    Text(
+                        text = user.email,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }
