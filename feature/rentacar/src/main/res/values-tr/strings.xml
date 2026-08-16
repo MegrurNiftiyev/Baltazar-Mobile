@@ -1,0 +1,7 @@
+<resources>
+    <string name="rentacar_title">Araç Kiralama</string>
+    <string name="rentacar_search_hint">Araç veya marka ara...</string>
+    <string name="rentacar_popular">Mevcut Araçlar</string>
+    <string name="rentacar_details">Araç Detayları</string>
+    <string name="rentacar_rent_now">Hemen Kirala</string>
+</resources>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="rentacar_title">Rent a Car</string>
+    <string name="rentacar_search_hint">Avtomobil və ya marka axtarın...</string>
+    <string name="rentacar_popular">Mövcud Avtomobillər</string>
+    <string name="rentacar_details">Avtomobil Təfərrüatları</string>
+    <string name="rentacar_rent_now">İndi İcarəyə Götür</string>
+</resources>
