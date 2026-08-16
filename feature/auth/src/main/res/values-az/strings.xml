@@ -1,0 +1,57 @@
+<resources>
+    <string name="onboarding_skip">Ötür</string>
+    <string name="onboarding_next">Növbəti</string>
+    <string name="onboarding_start">Başla</string>
+    <string name="onboarding_title_1">Baltazara Xoş Gəlmisiniz</string>
+    <string name="onboarding_description_1">Otellər, səyahətlər, avtomobil icarəsi və yemək üçün hamısı bir yerdə tətbiq ehtiyacınız olan hər şey bir məkanda.</string>
+    <string name="onboarding_title_2">Növbəti Macəranızı Kəşf Edin</string>
+    <string name="onboarding_description_2">Səyahətinizə özəl ən yaxşı otelləri və seçilmiş səyahət paketlərini sifariş edin.</string>
+    <string name="onboarding_title_3">Yola Çıxın, Öz Üslubunuzda</string>
+    <string name="onboarding_description_3">Səfəriniz üçün mükəmməl avtomobili icarəyə götürün çevik çatdırılma, şəffaf qiymətlər..</string>
+
+    <string name="error_field_blank">Bu sahə boş ola bilməz</string>
+    <string name="error_invalid_format">Format düzgün deyil</string>
+    <string name="error_too_short">Çox qısadır</string>
+    <string name="error_too_long">Çox uzundur</string>
+    <string name="error_missing_digit">Ən azı 1 rəqəm lazımdır</string>
+    <string name="error_missing_uppercase">Ən azı 1 böyük hərf lazımdır</string>
+    <string name="error_missing_special_char">Ən azı 1 xüsusi simvol lazımdır</string>
+
+    <!-- Auth Selection -->
+    <string name="auth_selection_title">Baltazar</string>
+    <string name="auth_selection_subtitle">Gündəlik logistikanın rahatlığı üçün\nsizin həyat tərzi yoldaşınız.</string>
+    <string name="auth_selection_login">Giriş</string>
+    <string name="auth_selection_register">Qeydiyyat</string>
+    <string name="auth_selection_guest">Qonaq olaraq davam et</string>
+
+    <!-- Login -->
+    <string name="login_title">Baltazar</string>
+    <string name="login_email_label">E-poçt</string>
+    <string name="login_email_placeholder">E-poçt ünvanı</string>
+    <string name="login_password_label">Şifrə</string>
+    <string name="login_password_placeholder">Şifrə</string>
+    <string name="login_forgot_password">Şifrəni unutmusunuz?</string>
+    <string name="login_button">Giriş</string>
+    <string name="login_or">VƏ YA</string>
+    <string name="login_google">Google ilə davam et</string>
+    <string name="login_no_account">Hesabınız yoxdur? </string>
+    <string name="login_register_now">İndi qeydiyyatdan keçin</string>
+    <string name="login_guest">Qonaq olaraq davam et</string>
+
+    <!-- Register -->
+    <string name="register_title">Baltazar</string>
+    <string name="register_subtitle">Başlamaq üçün hesabınızı yaradın.</string>
+    <string name="register_name_label">Tam ad</string>
+    <string name="register_name_placeholder">John Doe</string>
+    <string name="register_email_label">E-poçt ünvanı</string>
+    <string name="register_email_placeholder">john@example.com</string>
+    <string name="register_phone_label">Telefon nömrəsi</string>
+    <string name="register_phone_placeholder">+1 (555) 000-0000</string>
+    <string name="register_password_label">Şifrə</string>
+    <string name="register_auto_detect_info">Region və dil parametrləri yerləşdiyiniz yerə əsasən avtomatik təyin ediləcək.</string>
+    <string name="register_button">Hesab yarat</string>
+    <string name="register_back_to_login">← Girişə qayıt</string>
+    <string name="register_already_have_account">Hesabınız var? </string>
+    <string name="register_login_now">Daxil olun</string>
+</resources>
+

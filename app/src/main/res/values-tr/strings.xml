@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Baltazar</string>
+    <string name="bottom_nav_explore">Keşfet</string>
+    <string name="bottom_nav_orders">Siparişler</string>
+    <string name="bottom_nav_wishlist">Favoriler</string>
+    <string name="bottom_nav_profile">Profil</string>
+</resources>

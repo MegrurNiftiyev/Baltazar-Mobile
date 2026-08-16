@@ -1,0 +1,7 @@
+<resources>
+    <string name="travel_title">Travels</string>
+    <string name="travel_search_hint">Search tours or destinations...</string>
+    <string name="travel_popular">Popular Tours</string>
+    <string name="travel_details">Tour Details</string>
+    <string name="travel_book_now">Book Now</string>
+</resources>

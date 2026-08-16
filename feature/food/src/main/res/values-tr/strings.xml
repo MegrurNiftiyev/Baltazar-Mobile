@@ -1,0 +1,8 @@
+<resources>
+    <string name="food_title">Yemek</string>
+    <string name="food_search_hint">Yemek veya restoran ara...</string>
+    <string name="food_categories">Kategoriler</string>
+    <string name="food_popular_dishes">Popüler Yemekler</string>
+    <string name="food_add_to_cart">Sepete Ekle</string>
+    <string name="food_details">Yemek Detayları</string>
+</resources>

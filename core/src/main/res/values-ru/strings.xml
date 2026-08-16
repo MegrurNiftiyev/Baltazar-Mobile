@@ -1,0 +1,91 @@
+<resources>
+    <string name="guest_user">Гость</string>
+    <string name="sidebar_guest_user">Гость</string>
+    <string name="sidebar_cart">Корзина</string>
+    <string name="sidebar_notifications">Уведомления</string>
+    <string name="sidebar_settings">Настройки</string>
+    <string name="sidebar_about">О нас</string>
+    <string name="sidebar_help">Помощь и поддержка</string>
+
+    <!-- Services -->
+    <string name="service_hotel">Отель</string>
+    <string name="service_travel">Путешествия</string>
+    <string name="service_rent_a_car">Аренда авто</string>
+    <string name="service_food">Еда</string>
+
+    <!-- Explore Fallback -->
+    <string name="explore_error_title">Не удалось загрузить данные</string>
+    <string name="explore_error_subtitle">Проверьте подключение к интернету и повторите попытку</string>
+    <string name="explore_retry">Повторить</string>
+
+    <!-- Orders -->
+    <string name="orders_title">Мои заказы</string>
+    <string name="orders_empty_message">У вас пока нет заказов</string>
+
+    <!-- Wishlist -->
+    <string name="wishlist_title">Список желаний</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Профиль</string>
+    <string name="edit_profile_title">Редактировать профиль</string>
+    <string name="passport_title">Данные паспорта</string>
+    <string name="driver_license_title">Водительские права</string>
+    <string name="personal_info_title">Личная информация</string>
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отмена</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="passport_number">Номер паспорта</string>
+    <string name="license_number">Номер удостоверения</string>
+    <string name="expiry_date">Срок действия (ГГГГ-ММ-ДД)</string>
+    <string name="name_label">Имя</string>
+    <string name="phone_label">Телефон</string>
+    <string name="region_label">Регион</string>
+    <string name="language_label">Язык</string>
+    <string name="date_of_birth_label">Дата рождения (ГГГГ-ММ-ДД)</string>
+    <string name="address_label">Адрес</string>
+    <string name="id_number_label">Номер удостоверения личности</string>
+    <string name="status_completed">Завершено</string>
+    <string name="status_not_completed">Не завершено</string>
+    <string name="overwrite_warning">Примечание: Новые данные перезапишут существующие.</string>
+    <string name="validation_fill_all_fields">Пожалуйста, заполните все поля</string>
+
+    <!-- Profile & Settings Refactor Strings -->
+    <string name="profile_section_profile">Профиль</string>
+    <string name="profile_section_settings">Настройки</string>
+    <string name="profile_wishlist">Избранное</string>
+    <string name="profile_personal_info">Личная информация</string>
+    <string name="profile_passport">Данные паспорта</string>
+    <string name="profile_driver_license">Водительские права</string>
+    <string name="profile_theme_mode">Светлая/Темная тема</string>
+    <string name="profile_language">Язык</string>
+    <string name="profile_region">Регион</string>
+    <string name="profile_card_style">Стиль карточек</string>
+    <string name="profile_about">О приложении</string>
+    <string name="profile_logout">Выйти</string>
+    <string name="profile_logout_dialog_title">Выход</string>
+    <string name="profile_logout_dialog_subtitle">Вы уверены, что хотите выйти из учетной записи?</string>
+
+    <string name="profile_banner_guest_title">Войти / Регистрация</string>
+    <string name="profile_banner_guest_subtitle">Продолжить с аккаунтом</string>
+
+    <string name="card_style_grid">Сетка</string>
+    <string name="card_style_list">Список</string>
+
+    <!-- About Screen Strings -->
+    <string name="about_title">О приложении</string>
+    <string name="app_version_format">Версия %s</string>
+    <string name="about_description">Этот проект разработан Мегруром Нифтиевым для портфолио. Мобильное приложение создано на Kotlin (Jetpack Compose), бэкенд на Node.js, а база данных — Firebase.</string>
+    <string name="about_developer_title">Разработчик</string>
+    <string name="about_developer_name">Мегрур Нифтиев</string>
+    <string name="about_tech_title">Технологии</string>
+    <string name="about_tech_mobile">Мобильное приложение: Kotlin &amp; Jetpack Compose</string>
+    <string name="about_tech_backend">Бэкенд: Node.js</string>
+    <string name="about_tech_database">База данных: Firebase</string>
+
+    <!-- Help Screen Strings -->
+    <string name="help_title">Помощь и поддержка</string>
+    <string name="help_subtitle">Если у вас есть вопросы или предложения, свяжитесь с нами.</string>
+    <string name="help_email_label">Электронная почта</string>
+    <string name="help_email_value">megrurnftiyev@gmail.com</string>
+    <string name="help_send_email">Написать на почту</string>
+</resources>

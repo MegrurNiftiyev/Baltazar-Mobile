@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Baltazar</string>
+    <string name="bottom_nav_explore">Explore</string>
+    <string name="bottom_nav_orders">Orders</string>
+    <string name="bottom_nav_wishlist">Wishlist</string>
+    <string name="bottom_nav_profile">Profile</string>
 </resources>

@@ -1,0 +1,145 @@
+<resources>
+    <string name="guest_user">Qonaq İstifadəçi</string>
+    <string name="sidebar_guest_user">Qonaq İstifadəçi</string>
+    <string name="sidebar_cart">Səbət</string>
+    <string name="sidebar_notifications">Bildirişlər</string>
+    <string name="sidebar_settings">Tənzimləmələr</string>
+    <string name="sidebar_about">Haqqımızda</string>
+    <string name="sidebar_help">Kömək və Dəstək</string>
+
+    <!-- Services -->
+    <string name="service_hotel">Otel</string>
+    <string name="service_travel">Səyahət</string>
+    <string name="service_rent_a_car">Rent a Car</string>
+    <string name="service_food">Yemək</string>
+
+    <!-- Explore Fallback -->
+    <string name="explore_error_title">Məlumatlar yüklənə bilmədi</string>
+    <string name="explore_error_subtitle">İnternet bağlantınızı yoxlayın və yenidən cəhd edin</string>
+    <string name="explore_retry">Yenidən cəhd et</string>
+
+    <!-- Orders -->
+    <string name="orders_title">Sifarişlərim</string>
+    <string name="orders_empty_message">Hələ ki heç bir sifarişiniz yoxdur</string>
+
+    <!-- Wishlist -->
+    <string name="wishlist_title">İstək siyahısı</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Profil</string>
+    <string name="edit_profile_title">Profili redaktə et</string>
+    <string name="passport_title">Pasport məlumatları</string>
+    <string name="driver_license_title">Sürücülük vəsiqəsi</string>
+    <string name="personal_info_title">Şəxsi məlumatlar</string>
+    <string name="save">Yadda saxla</string>
+    <string name="passport_number">Pasport nömrəsi</string>
+    <string name="license_number">Vəsiqə nömrəsi</string>
+    <string name="expiry_date">Bitmə tarixi (YYYY-MM-DD)</string>
+    <string name="name_label">Ad</string>
+    <string name="phone_label">Telefon</string>
+    <string name="region_label">Region</string>
+    <string name="language_label">Dil</string>
+    <string name="date_of_birth_label">Doğum tarixi (YYYY-MM-DD)</string>
+    <string name="address_label">Ünvan</string>
+    <string name="id_number_label">Şəxsiyyət vəsiqəsinin nömrəsi</string>
+    <string name="status_completed">Tamamlanıb</string>
+    <string name="status_not_completed">Tamamlanmayıb</string>
+    <string name="overwrite_warning">Qeyd: Yeni məlumatlar mövcud məlumatların üzərinə yazılacaq.</string>
+    <string name="validation_fill_all_fields">Zəhmət olmasa bütün xanaları doldurun</string>
+
+    <!-- Profile & Settings Refactor Strings -->
+    <string name="profile_section_profile">Profil</string>
+    <string name="profile_section_settings">Ayarlar</string>
+    <string name="profile_wishlist">Bəyənilənlər</string>
+    <string name="profile_theme_mode">Açıq/Qaranlıq rejim</string>
+    <string name="profile_language">Dil</string>
+    <string name="profile_region">Region</string>
+    <string name="profile_card_style">Kart stili</string>
+    <string name="profile_about">Haqqında</string>
+    <string name="profile_logout">Çıxış</string>
+
+    <string name="profile_banner_guest_title">Daxil ol / Qeydiyyat</string>
+    <string name="profile_banner_guest_subtitle">Hesabınızla davam edin</string>
+
+    <string name="card_style_grid">Grid</string>
+    <string name="card_style_list">Siyahı</string>
+
+    <!-- About Screen Strings -->
+    <string name="about_title">Haqqımızda</string>
+    <string name="app_version_format">Versiya %s</string>
+    <string name="about_description">Bu layihə portfel məqsədilə Məğrur Niftiyev tərəfindən hazırlanmışdır. Mobil tətbiqdə Kotlin və Jetpack Compose, backend-də Node.js və verilənlər bazası olaraq Firebase istifadə olunmuşdur.</string>
+    <string name="about_developer_title">Tərtibatçı</string>
+    <string name="about_developer_name">Məğrur Niftiyev</string>
+    <string name="about_tech_title">Texnologiyalar</string>
+    <string name="about_tech_mobile">Mobil: Kotlin &amp; Jetpack Compose</string>
+    <string name="about_tech_backend">Backend: Node.js</string>
+    <string name="about_tech_database">Verilənlər bazası: Firebase</string>
+
+    <string name="cancel">Ləğv et</string>
+    <string name="confirm">Təsdiq et</string>
+    <string name="profile_personal_info">Şəxsi məlumatlar</string>
+    <string name="profile_passport">Pasport məlumatları</string>
+    <string name="profile_driver_license">Sürücülük vəsiqəsi</string>
+    <string name="profile_logout_dialog_title">Çıxış</string>
+    <string name="profile_logout_dialog_subtitle">Hesabınızdan çıxış etmək istədiyinizdən əminsiniz?</string>
+
+    <!-- Help Screen Strings -->
+    <string name="help_title">Yardım və Dəstək</string>
+    <string name="help_subtitle">Hər hansı bir sualınız və ya təklifiniz varsa, bizimlə əlaqə saxlayın.</string>
+    <string name="help_email_label">E-poçt ünvanı</string>
+    <string name="help_email_value">megrurnftiyev@gmail.com</string>
+    <string name="help_send_email">E-poçt göndər</string>
+
+    <!-- Detail Screens & Components Strings -->
+    <string name="reviews_title">Rəylər</string>
+    <string name="write_review">Rəy yaz</string>
+    <string name="reviews_ineligible_notice">Rəy bildirmək üçün bu xidməti sifariş etmiş olmalısınız.</string>
+    <string name="no_reviews_yet">Hələ ki rəy bildirilməyib.</string>
+    <string name="write_review_dialog_title">Rəy yazın</string>
+    <string name="rate_service_label">Xidməti qiymətləndirin:</string>
+    <string name="your_thoughts_label">Fikirləriniz</string>
+    <string name="share_experience_placeholder">Təcrübənizi bölüşün...</string>
+    <string name="send">Göndər</string>
+    <string name="review_submitted_success">Rəyiniz uğurla əlavə olundu</string>
+    <string name="read_more">Daha çox oxu</string>
+    <string name="show_less">Daha az göstər</string>
+    <string name="amount_label">MƏBLƏĞ</string>
+    <string name="added_to_cart_format">%s səbətə əlavə olundu</string>
+    <string name="add_to_cart">Səbətə at</string>
+    <string name="reserve">Rezerv et</string>
+    <string name="rent">Kirayələ</string>
+    <string name="join_tour">Tura qoşul</string>
+    <string name="order_now">Sifariş et</string>
+    <string name="order_coming_soon">Sifariş prosesi tezliklə əlavə olunacaq</string>
+    <string name="rooms_title">Otaqlar</string>
+    <string name="transmission_label">Transmissiya</string>
+    <string name="fuel_label">Yanacaq</string>
+    <string name="seats_label">Oturacaq</string>
+    <string name="year_label">İl</string>
+    <string name="seats_format">%d yer</string>
+    <string name="duration_label">Müddət</string>
+    <string name="date_label">Tarix</string>
+    <string name="included_title">Daxildir</string>
+    <string name="ingredients_title">Tərkibi</string>
+    <string name="features_title">Xüsusiyyətlər</string>
+    <string name="about_service_title">Haqqında</string>
+    <string name="description_title">Təsvir</string>
+    <string name="calories_label">Kalori</string>
+    <string name="protein_label">Zülal</string>
+    <string name="fat_label">Yağ</string>
+    <string name="carb_label">Karbohidrat</string>
+    <string name="kcal_suffix">kcal</string>
+    <string name="gram_suffix">q</string>
+    <string name="generic_error">Xəta baş verdi</string>
+    <string name="data_load_failed">Məlumat yüklənmədi</string>
+    <string name="reservation_coming_soon">Rezervasiya prosesi tezliklə əlavə olunacaq</string>
+    <string name="rental_coming_soon">Kirayələmə prosesi tezliklə əlavə olunacaq</string>
+    <string name="tour_coming_soon">Tura qoşulmaq tezliklə əlavə olunacaq</string>
+    <string name="view_on_map">Xəritədə bax</string>
+    <string name="tour_roadmap_title">Tur Marşrutu</string>
+    <string name="map_api_key_missing_title">Google Maps açarı tapılmadı</string>
+    <string name="map_api_key_missing_subtitle">Xəritəni aktivləşdirmək üçün local.properties faylında MAPS_API_KEY təyin edin.</string>
+    <string name="map_points_count_format">%d məntəqə</string>
+    <string name="price_label">QIYMƏT</string>
+    <string name="read_less">Daha az oxu</string>
+</resources>

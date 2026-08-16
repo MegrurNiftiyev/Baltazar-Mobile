@@ -13,3 +13,16 @@
 .externalNativeBuild
 .cxx
 local.properties
+keystore.md
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.crt
+*.der
+.kotlin/
+
+plan.md
+mobile_plan.md  
+.agents/

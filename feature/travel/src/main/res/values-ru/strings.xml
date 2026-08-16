@@ -1,0 +1,7 @@
+<resources>
+    <string name="travel_title">Туры</string>
+    <string name="travel_search_hint">Поиск туров или направлений...</string>
+    <string name="travel_popular">Популярные туры</string>
+    <string name="travel_details">Детали тура</string>
+    <string name="travel_book_now">Забронировать</string>
+</resources>

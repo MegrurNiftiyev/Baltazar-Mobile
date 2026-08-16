@@ -1,0 +1,58 @@
+<resources>
+    <string name="onboarding_skip">Atla</string>
+    <string name="onboarding_next">Sonraki</string>
+    <string name="onboarding_start">Başla</string>
+    <string name="onboarding_title_1">Baltazar\'a Hoş Geldiniz</string>
+    <string name="onboarding_description_1">Oteller, seyahat, araç kiralama ve yemek için hepsi bir arada uygulama ihtiyacınız olan her şey tek bir yerde.</string>
+    <string name="onboarding_title_2">Sıradaki Kaçamağınızı Keşfedin</string>
+    <string name="onboarding_description_2">Yolculuğunuza özel en iyi otelleri ve küratörlüğünde seyahat paketlerini ayırtın.</string>
+    <string name="onboarding_title_3">Yola Koyulun, Kendi Tarzınızla</string>
+    <string name="onboarding_description_3">Seyahatiniz için mükemmel aracı kiralayın esnek teslimat, şeffaf fiyatlandırma.</string>
+
+    <string name="error_field_blank">Bu alan boş olamaz</string>
+    <string name="error_invalid_format">Geçersiz format</string>
+    <string name="error_too_short">Çok kısa</string>
+    <string name="error_too_long">Çok uzun</string>
+    <string name="error_missing_digit">En az 1 rakam gereklidir</string>
+    <string name="error_missing_uppercase">En az 1 büyük harf gereklidir</string>
+    <string name="error_missing_special_char">En az 1 özel karakter gereklidir</string>
+
+    <!-- Auth Selection -->
+    <string name="auth_selection_title">Baltazar</string>
+    <string name="auth_selection_subtitle">Günlük lojistiğin kolaylığı için\nyaşam tarzı arkadaşınız.</string>
+    <string name="auth_selection_login">Giriş Yap</string>
+    <string name="auth_selection_register">Kayıt Ol</string>
+    <string name="auth_selection_guest">Misafir olarak devam et</string>
+
+    <!-- Login -->
+    <string name="login_title">Baltazar</string>
+    <string name="login_email_label">E-posta</string>
+    <string name="login_email_placeholder">E-posta Adresi</string>
+    <string name="login_password_label">Şifre</string>
+    <string name="login_password_placeholder">Şifre</string>
+    <string name="login_forgot_password">Şifrenizi mi unuttunuz?</string>
+    <string name="login_button">Giriş Yap</string>
+    <string name="login_or">VEYA</string>
+    <string name="login_google">Google ile devam et</string>
+    <string name="login_no_account">Hesabınız yok mu? </string>
+    <string name="login_register_now">Şimdi kaydolun</string>
+    <string name="login_guest">Misafir olarak devam et</string>
+    <string name="login_success">Başarıyla giriş yapıldı</string>
+
+    <!-- Register -->
+    <string name="register_title">Baltazar</string>
+    <string name="register_subtitle">Başlamak için hesabınızı oluşturun.</string>
+    <string name="register_name_label">Tam ad</string>
+    <string name="register_name_placeholder">John Doe</string>
+    <string name="register_email_label">E-posta Adresi</string>
+    <string name="register_email_placeholder">john@example.com</string>
+    <string name="register_phone_label">Telefon Numarası</string>
+    <string name="register_phone_placeholder">+1 (555) 000-0000</string>
+    <string name="register_password_label">Şifre</string>
+    <string name="register_auto_detect_info">Bölge ve dil ayarları bulunduğunuz yere göre otomatik olarak belirlenecektir.</string>
+    <string name="register_button">Hesap oluştur</string>
+    <string name="register_back_to_login">← Girişe dön</string>
+    <string name="register_already_have_account">Hesabınız var mı? </string>
+    <string name="register_login_now">Giriş yapın</string>
+    <string name="register_success">Başarıyla kayıt olundu</string>
+</resources>
