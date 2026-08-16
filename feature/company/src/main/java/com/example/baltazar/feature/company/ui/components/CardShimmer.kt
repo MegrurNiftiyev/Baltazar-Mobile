@@ -17,7 +17,7 @@ import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
 
 @Composable
-fun CompanyCardShimmer(
+fun CardShimmer(
     modifier: Modifier = Modifier
 ) {
     Card(

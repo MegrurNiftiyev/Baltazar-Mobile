@@ -22,7 +22,7 @@ import compose.icons.tablericons.Phone
 import compose.icons.tablericons.Star
 
 @Composable
-fun CompanyHeaderSection(
+fun HeaderSection(
     name: String,
     category: String,
     rating: Double,

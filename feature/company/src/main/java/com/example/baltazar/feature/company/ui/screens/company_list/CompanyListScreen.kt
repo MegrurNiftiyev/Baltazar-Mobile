@@ -32,8 +32,8 @@ import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
 import com.example.baltazar.core.core.enums.TitleAlignment
 import com.example.baltazar.core.core.navigation.CompanyDetail
+import com.example.baltazar.feature.company.ui.components.CardShimmer
 import com.example.baltazar.feature.company.ui.components.CompanyCard
-import com.example.baltazar.feature.company.ui.components.CompanyCardShimmer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,7 +96,7 @@ fun CompanyListScreen(
                 ) {
                     if (state.isLoading && state.companies.isEmpty()) {
                         items(5) {
-                            CompanyCardShimmer()
+                            CardShimmer()
                         }
                     } else {
                         items(

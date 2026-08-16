@@ -11,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.baltazar.core.R
 import com.example.baltazar.core.core.components.SectionTitle
 import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Spaces
@@ -18,7 +20,7 @@ import compose.icons.TablerIcons
 import compose.icons.tablericons.Star
 
 @Composable
-fun CompanyReviewsSection(
+fun ReviewsSection(
     rating: Double,
     reviewCount: Int,
     modifier: Modifier = Modifier
@@ -27,7 +29,7 @@ fun CompanyReviewsSection(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(Spaces.Small)
     ) {
-        SectionTitle(title = "Rəylər və Qiymətləndirmə")
+        SectionTitle(title = stringResource(id = R.string.company_reviews_title))
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -41,13 +43,13 @@ fun CompanyReviewsSection(
             )
 
             Text(
-                text = String.format("%.1f / 5.0", rating),
+                text = stringResource(id = R.string.company_reviews_score, rating),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "($reviewCount rəy)",
+                text = stringResource(id = R.string.company_reviews_count, reviewCount),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

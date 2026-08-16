@@ -13,15 +13,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.baltazar.core.R
 import com.example.baltazar.core.core.components.SectionTitle
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
 
 @Composable
-fun CompanyGallerySection(
+fun GallerySection(
     images: List<String>,
     modifier: Modifier = Modifier
 ) {
@@ -31,9 +33,7 @@ fun CompanyGallerySection(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(Spaces.Small)
     ) {
-        // TODO: "Qalereya" hazırda hardcode-dur — CompanyReviewsSection və
-        // CompanyItemsSection-dakı başlıqlar kimi strings.xml-ə köçürülməlidir.
-        SectionTitle(title = "Qalereya")
+        SectionTitle(title = stringResource(id = R.string.company_gallery_title))
 
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(Spaces.Medium),

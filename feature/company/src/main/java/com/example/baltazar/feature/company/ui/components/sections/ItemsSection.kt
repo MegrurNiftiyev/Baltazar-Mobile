@@ -8,7 +8,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.baltazar.core.R
 import com.example.baltazar.core.core.components.SectionTitle
 import com.example.baltazar.core.core.components.StandardItemCard
 import com.example.baltazar.core.core.constants.Spaces
@@ -16,7 +18,7 @@ import com.example.baltazar.core.core.enums.CardViewMode
 import com.example.baltazar.feature.company.domain.model.RelatedItem
 
 @Composable
-fun CompanyItemsSection(
+fun ItemsSection(
     items: List<RelatedItem>,
     modifier: Modifier = Modifier,
     onItemClick: ((RelatedItem) -> Unit)? = null
@@ -27,7 +29,7 @@ fun CompanyItemsSection(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(Spaces.Small)
     ) {
-        SectionTitle(title = "Təkliflər / Məhsullar")
+        SectionTitle(title = stringResource(id = R.string.company_offers_title))
 
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(Spaces.Medium)

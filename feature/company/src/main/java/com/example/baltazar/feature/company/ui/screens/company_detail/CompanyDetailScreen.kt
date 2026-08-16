@@ -29,21 +29,21 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.baltazar.core.R
+import com.example.baltazar.core.core.components.ErrorBox
 import com.example.baltazar.core.core.components.DetailTopBarOverlay
 import com.example.baltazar.core.core.components.DetailTopImageCarousel
-import com.example.baltazar.core.core.components.ErrorBox
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
 import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.feature.company.domain.model.CompanySectionType
-import com.example.baltazar.feature.company.ui.components.CompanyDetailShimmer
-import com.example.baltazar.feature.company.ui.components.sections.CompanyAboutSectionComponent
-import com.example.baltazar.feature.company.ui.components.sections.CompanyGallerySection
-import com.example.baltazar.feature.company.ui.components.sections.CompanyHeaderSection
-import com.example.baltazar.feature.company.ui.components.sections.CompanyItemsSection
-import com.example.baltazar.feature.company.ui.components.sections.CompanyReviewsSection
+import com.example.baltazar.feature.company.ui.components.DetailShimmer
+import com.example.baltazar.feature.company.ui.components.sections.AboutSectionComponent
+import com.example.baltazar.feature.company.ui.components.sections.GallerySection
+import com.example.baltazar.feature.company.ui.components.sections.HeaderSection
+import com.example.baltazar.feature.company.ui.components.sections.ItemsSection
+import com.example.baltazar.feature.company.ui.components.sections.ReviewsSection
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,7 +70,7 @@ fun CompanyDetailScreen(
         containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         if (state.isLoading && state.company == null) {
-            CompanyDetailShimmer(modifier = Modifier.padding(paddingValues))
+            DetailShimmer(modifier = Modifier.padding(paddingValues))
         } else if (state.error != null && state.company == null) {
             Box(
                 modifier = Modifier
@@ -120,7 +120,7 @@ fun CompanyDetailScreen(
                                 company.sectionOrder.forEach { sectionType ->
                                     when (sectionType) {
                                         CompanySectionType.HEADER -> {
-                                            CompanyHeaderSection(
+                                            HeaderSection(
                                                 name = company.name,
                                                 category = company.category,
                                                 rating = company.rating,
@@ -132,22 +132,22 @@ fun CompanyDetailScreen(
                                             )
                                         }
                                         CompanySectionType.ABOUT -> {
-                                            CompanyAboutSectionComponent(
-                                                about = company.about
+                                            AboutSectionComponent(
+                                                aboutText = company.about
                                             )
                                         }
                                         CompanySectionType.GALLERY -> {
-                                            CompanyGallerySection(
+                                            GallerySection(
                                                 images = company.images
                                             )
                                         }
                                         CompanySectionType.ITEMS -> {
-                                            CompanyItemsSection(
+                                            ItemsSection(
                                                 items = state.relatedItems
                                             )
                                         }
                                         CompanySectionType.REVIEWS -> {
-                                            CompanyReviewsSection(
+                                            ReviewsSection(
                                                 rating = company.rating,
                                                 reviewCount = company.reviewCount
                                             )
