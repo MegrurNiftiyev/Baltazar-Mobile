@@ -2,7 +2,6 @@ package com.example.baltazar.core.core.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -14,8 +13,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
+import com.example.baltazar.core.core.components.internal.FieldErrorText
 import com.example.baltazar.core.core.constants.BorderRadiuses
-import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.enums.CornerShape
 import com.example.baltazar.core.core.extensions.toShape
 
@@ -71,13 +70,6 @@ fun CustomTextField(
             )
         )
 
-        if (isError) {
-            Text(
-                text = errorText,
-                style = MaterialTheme.typography.bodySmall,
-                color = errorBorderColor,
-                modifier = Modifier.padding(start = Paddings.Medium, top = Paddings.ExtraMini)
-            )
-        }
+        FieldErrorText(errorText = errorText, errorColor = errorBorderColor)
     }
 }

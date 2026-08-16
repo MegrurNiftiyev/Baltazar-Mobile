@@ -1,10 +1,8 @@
 package com.example.baltazar.core.core.components
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,48 +44,9 @@ fun DetailAboutSection(
 
         if (isLoading) {
             Column(verticalArrangement = Arrangement.spacedBy(Spaces.ExtraMini)) {
-                ShimmerWrapper(
-                    isLoading = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(Spaces.MediumMinus)
-                        .clip(RoundedCornerShape(BorderRadiuses.ExtraMini))
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(Spaces.MediumMinus)
-                            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                    )
-                }
-                ShimmerWrapper(
-                    isLoading = true,
-                    modifier = Modifier
-                        .fillMaxWidth(0.9f)
-                        .height(Spaces.MediumMinus)
-                        .clip(RoundedCornerShape(BorderRadiuses.ExtraMini))
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(Spaces.MediumMinus)
-                            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                    )
-                }
-                ShimmerWrapper(
-                    isLoading = true,
-                    modifier = Modifier
-                        .fillMaxWidth(0.6f)
-                        .height(Spaces.MediumMinus)
-                        .clip(RoundedCornerShape(BorderRadiuses.ExtraMini))
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(Spaces.MediumMinus)
-                            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                    )
-                }
+                ShimmerLine(widthFraction = 1.0f)
+                ShimmerLine(widthFraction = 0.9f)
+                ShimmerLine(widthFraction = 0.6f)
             }
         } else {
             Column(modifier = Modifier.animateContentSize()) {

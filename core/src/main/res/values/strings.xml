@@ -12,6 +12,8 @@
     <string name="service_travel">Səyahət</string>
     <string name="service_rent_a_car">Rent a Car</string>
     <string name="service_food">Yemək</string>
+    <string name="companies_title">Şirkətlər</string>
+    <string name="company_detail">Şirkət Haqqında</string>
 
     <!-- Explore Fallback -->
     <string name="explore_error_title">Məlumatlar yüklənə bilmədi</string>

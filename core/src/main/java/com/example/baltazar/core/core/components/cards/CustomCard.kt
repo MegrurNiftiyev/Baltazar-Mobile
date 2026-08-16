@@ -20,20 +20,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
 import com.example.baltazar.core.core.constants.BorderRadiuses
+import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
 
 @Composable
-fun CustomLargeCard(
-    title: String,
-    subtitle: String,
+fun CustomCard(
+    label: String,
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
+    value: String? = null,
     onClick: (() -> Unit)? = null,
-    trailingContent: (@Composable () -> Unit)? = null
+    trailingIcon: ImageVector? = null,
+    trailingContent: (@Composable () -> Unit)? = null,
+    iconSize: Dp = IconSizes.Small,
+    labelStyle: TextStyle = MaterialTheme.typography.labelMedium,
+    valueStyle: TextStyle = MaterialTheme.typography.bodyLarge
 ) {
     Card(
         modifier = modifier
@@ -51,36 +57,45 @@ fun CustomLargeCard(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f, fill = false)
             ) {
                 if (icon != null) {
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(36.dp)
+                        modifier = Modifier.size(iconSize)
                     )
-                    Spacer(modifier = Modifier.width(Spaces.Medium))
+                    Spacer(modifier = Modifier.width(Spaces.Small))
                 }
 
                 Column {
                     Text(
-                        text = title,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(modifier = Modifier.height(Spaces.ExtraMini))
-                    Text(
-                        text = subtitle,
-                        style = MaterialTheme.typography.bodySmall,
+                        text = label,
+                        style = labelStyle,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                    if (!value.isNullOrBlank()) {
+                        Spacer(modifier = Modifier.height(Spaces.ExtraMini))
+                        Text(
+                            text = value,
+                            style = valueStyle,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
                 }
             }
 
             if (trailingContent != null) {
                 trailingContent()
+            } else if (trailingIcon != null) {
+                Icon(
+                    imageVector = trailingIcon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(IconSizes.Small)
+                )
             }
         }
     }

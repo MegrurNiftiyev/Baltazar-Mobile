@@ -120,7 +120,7 @@ fun StandardItemCard(
                                     .padding(4.dp)
                                     .size(34.dp)
                                     .clip(CircleShape)
-                                    .background(Color.Black.copy(alpha = 0.35f))
+                                    .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.35f))
                                     .clickable {
                                         localFavorite = !localFavorite
                                         onFavoriteClick?.invoke(localFavorite)
@@ -130,7 +130,7 @@ fun StandardItemCard(
                                 Icon(
                                     imageVector = TablerIcons.Heart,
                                     contentDescription = "Favorite",
-                                    tint = if (localFavorite) Color(0xFFEF4444) else Color.White,
+                                    tint = if (localFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.surface,
                                     modifier = Modifier.size(18.dp)
                                 )
                             }
@@ -307,7 +307,7 @@ fun StandardItemCard(
                                     Icon(
                                         imageVector = TablerIcons.Heart,
                                         contentDescription = "Favorite",
-                                        tint = if (localFavorite) Color(0xFFEF4444) else MaterialTheme.colorScheme.onSurfaceVariant,
+                                        tint = if (localFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = Modifier.size(18.dp)
                                     )
                                 }
