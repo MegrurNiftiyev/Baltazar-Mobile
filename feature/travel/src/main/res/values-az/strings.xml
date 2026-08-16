@@ -1,2 +1,7 @@
 <resources>
+    <string name="travel_title">Səyahət</string>
+    <string name="travel_search_hint">Tur və ya məkan axtarın...</string>
+    <string name="travel_popular">Məşhur Turlar</string>
+    <string name="travel_details">Tur Təfərrüatları</string>
+    <string name="travel_book_now">İndi Bənd Et</string>
 </resources>

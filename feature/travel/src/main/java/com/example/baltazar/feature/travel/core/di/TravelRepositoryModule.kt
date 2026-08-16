@@ -1,4 +1,4 @@
-package com.example.baltazar.feature.travel.di
+package com.example.baltazar.feature.travel.core.di
 
 import com.example.baltazar.feature.travel.data.repository.TravelRepository
 import com.example.baltazar.feature.travel.domain.repository.ITravelRepository
@@ -11,6 +11,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class TravelRepositoryModule {
+
     @Binds
     @Singleton
     abstract fun bindTravelRepository(
