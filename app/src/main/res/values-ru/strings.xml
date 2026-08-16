@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Baltazar</string>
+    <string name="bottom_nav_explore">Главная</string>
+    <string name="bottom_nav_orders">Заказы</string>
+    <string name="bottom_nav_wishlist">Избранное</string>
+    <string name="bottom_nav_profile">Профиль</string>
+</resources>

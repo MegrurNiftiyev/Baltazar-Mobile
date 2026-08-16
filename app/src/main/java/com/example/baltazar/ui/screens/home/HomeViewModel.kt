@@ -12,4 +12,5 @@ class HomeViewModel @Inject constructor(
     sessionManager: SessionManager
 ) : ViewModel() {
     val user: StateFlow<User> = sessionManager.user
+    val isUserLoading: StateFlow<Boolean> = sessionManager.isLoadingUser
 }

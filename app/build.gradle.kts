@@ -30,11 +30,13 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders["MAPS_API_KEY"] = localProperties.getProperty("MAPS_API_KEY") ?: ""
     }
 
     signingConfigs {
         create("dev") {
-            val keystorePath = localProperties.getProperty("DEV_KEYSTORE_PATH") ?: "baltazar-dev.jks"
+            val keystorePath =
+                localProperties.getProperty("DEV_KEYSTORE_PATH") ?: "baltazar-dev.jks"
             storeFile = rootProject.file(keystorePath)
             storePassword = localProperties.getProperty("DEV_KEYSTORE_PASSWORD")
                 ?: System.getenv("DEV_KEYSTORE_PASSWORD")
@@ -44,7 +46,8 @@ android {
                 ?: System.getenv("DEV_KEY_PASSWORD")
         }
         create("prod") {
-            val keystorePath = localProperties.getProperty("PROD_KEYSTORE_PATH") ?: "baltazar-prod.jks"
+            val keystorePath =
+                localProperties.getProperty("PROD_KEYSTORE_PATH") ?: "baltazar-prod.jks"
             storeFile = rootProject.file(keystorePath)
             storePassword = localProperties.getProperty("PROD_KEYSTORE_PASSWORD")
                 ?: System.getenv("PROD_KEYSTORE_PASSWORD")
@@ -111,7 +114,6 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:food"))
-    implementation(project(":feature:taxi"))
     implementation(project(":feature:travel"))
     implementation(project(":feature:rentacar"))
     implementation(project(":feature:hotel"))
@@ -122,7 +124,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.compose.icons.tabler)
-    implementation(libs.compose.shimmer)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
