@@ -2,7 +2,7 @@ package com.example.baltazar.core.data.model.dto
 
 import com.example.baltazar.core.domain.model.WishlistItem
 import com.example.baltazar.core.domain.model.WishlistPage
-import com.example.baltazar.core.enums.ServiceType
+import com.example.baltazar.core.core.enums.ServiceType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

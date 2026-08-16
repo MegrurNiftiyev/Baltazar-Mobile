@@ -22,7 +22,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Baltazar"
 include(":app")
-include(":feature:taxi")
 include(":feature:travel")
 include(":feature:auth")
 include(":feature:food")

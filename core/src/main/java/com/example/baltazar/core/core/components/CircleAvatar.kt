@@ -13,12 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
-import com.example.baltazar.core.core.constants.CircileRadiuses
+import com.example.baltazar.core.core.constants.BorderRadiuses
 
 @Composable
 fun CircleAvatar(
     modifier: Modifier = Modifier,
-    size: Dp = CircileRadiuses.Medium,
+    size: Dp = BorderRadiuses.Medium,
     backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     content: @Composable BoxScope.() -> Unit
 ) {

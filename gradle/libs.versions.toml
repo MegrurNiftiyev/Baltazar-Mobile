@@ -28,7 +28,6 @@ okhttpLoggingInterceptor = "4.12.0"
 animationCore = "1.11.3"
 leakcanary = "2.14"
 coilCompose = "2.6.0"
-composeShimmer = "1.3.1"
 runtime = "1.11.3"
 secretsPlugin = "2.0.1"
 composeIcons = "1.1.1"
@@ -46,6 +45,8 @@ credentials = "1.2.2"
 googleid = "1.1.0"
 firebaseBom = "33.5.1"
 googleServices = "4.4.2"
+mapsCompose = "6.4.1"
+playServicesMaps = "19.0.0"
 
 
 [libraries]
@@ -87,7 +88,6 @@ androidx-compose-animation-core = { group = "androidx.compose.animation", name =
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 leakcanary-android = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
-compose-shimmer = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version.ref = "composeShimmer" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
 runner = { group = "com.android.support.test", name = "runner", version.ref = "runner" }
 espresso-core = { group = "com.android.support.test.espresso", name = "espresso-core", version.ref = "espressoCoreVersion" }
@@ -107,6 +107,8 @@ googleid = { group = "com.google.android.libraries.identity.googleid", name = "g
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "mapsCompose" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

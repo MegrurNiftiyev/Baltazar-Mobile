@@ -19,7 +19,6 @@
             <option value="$PROJECT_DIR$/feature/order" />
             <option value="$PROJECT_DIR$/feature/profile" />
             <option value="$PROJECT_DIR$/feature/rentacar" />
-            <option value="$PROJECT_DIR$/feature/taxi" />
             <option value="$PROJECT_DIR$/feature/travel" />
           </set>
         </option>

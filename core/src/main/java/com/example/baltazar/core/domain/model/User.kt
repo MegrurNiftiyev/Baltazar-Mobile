@@ -9,8 +9,12 @@ data class User(
     val region: String? = null,
     val language: String = "en",
     val avatarUrl: String? = null,
-    val personalInfo: Boolean = false,
-    val driverLicense: Boolean = false,
-    val passport: Boolean = false,
+    val personalInfoCompleted: Boolean = false,
+    val driverLicenseCompleted: Boolean = false,
+    val passportCompleted: Boolean = false,
     val createdAt: String
-)
+) {
+    val personalInfo: Boolean get() = personalInfoCompleted
+    val driverLicense: Boolean get() = driverLicenseCompleted
+    val passport: Boolean get() = passportCompleted
+}

@@ -37,9 +37,9 @@ data class UserDto(
             region = region,
             language = language,
             avatarUrl = avatarUrl,
-            personalInfo = personalInfo ?: profileCompleteness?.personalInfo ?: false,
-            driverLicense = driverLicense ?: profileCompleteness?.driverLicense ?: false,
-            passport = passport ?: profileCompleteness?.passport ?: false,
+            personalInfoCompleted = personalInfo ?: profileCompleteness?.personalInfo ?: false,
+            driverLicenseCompleted = driverLicense ?: profileCompleteness?.driverLicense ?: false,
+            passportCompleted = passport ?: profileCompleteness?.passport ?: false,
             createdAt = createdAt
         )
     }

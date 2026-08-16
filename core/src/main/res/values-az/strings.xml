@@ -1,2 +1,91 @@
 <resources>
+    <string name="guest_user">Qonaq İstifadəçi</string>
+    <string name="sidebar_guest_user">Qonaq İstifadəçi</string>
+    <string name="sidebar_cart">Səbət</string>
+    <string name="sidebar_notifications">Bildirişlər</string>
+    <string name="sidebar_settings">Tənzimləmələr</string>
+    <string name="sidebar_about">Haqqımızda</string>
+    <string name="sidebar_help">Kömək və Dəstək</string>
+
+    <!-- Services -->
+    <string name="service_hotel">Otel</string>
+    <string name="service_travel">Səyahət</string>
+    <string name="service_rent_a_car">Rent a Car</string>
+    <string name="service_food">Yemək</string>
+
+    <!-- Explore Fallback -->
+    <string name="explore_error_title">Məlumatlar yüklənə bilmədi</string>
+    <string name="explore_error_subtitle">İnternet bağlantınızı yoxlayın və yenidən cəhd edin</string>
+    <string name="explore_retry">Yenidən cəhd et</string>
+
+    <!-- Orders -->
+    <string name="orders_title">Sifarişlərim</string>
+    <string name="orders_empty_message">Hələ ki heç bir sifarişiniz yoxdur</string>
+
+    <!-- Wishlist -->
+    <string name="wishlist_title">İstək siyahısı</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Profil</string>
+    <string name="edit_profile_title">Profili redaktə et</string>
+    <string name="passport_title">Pasport məlumatları</string>
+    <string name="driver_license_title">Sürücülük vəsiqəsi</string>
+    <string name="personal_info_title">Şəxsi məlumatlar</string>
+    <string name="save">Yadda saxla</string>
+    <string name="cancel">Ləğv et</string>
+    <string name="confirm">Təsdiq et</string>
+    <string name="passport_number">Pasport nömrəsi</string>
+    <string name="license_number">Vəsiqə nömrəsi</string>
+    <string name="expiry_date">Bitmə tarixi (YYYY-MM-DD)</string>
+    <string name="name_label">Ad</string>
+    <string name="phone_label">Telefon</string>
+    <string name="region_label">Region</string>
+    <string name="language_label">Dil</string>
+    <string name="date_of_birth_label">Doğum tarixi (YYYY-MM-DD)</string>
+    <string name="address_label">Ünvan</string>
+    <string name="id_number_label">Şəxsiyyət vəsiqəsinin nömrəsi</string>
+    <string name="status_completed">Tamamlanıb</string>
+    <string name="status_not_completed">Tamamlanmayıb</string>
+    <string name="overwrite_warning">Qeyd: Yeni məlumatlar mövcud məlumatların üzərinə yazılacaq.</string>
+    <string name="validation_fill_all_fields">Zəhmət olmasa bütün xanaları doldurun</string>
+
+    <!-- Profile & Settings Refactor Strings -->
+    <string name="profile_section_profile">Profil</string>
+    <string name="profile_section_settings">Ayarlar</string>
+    <string name="profile_wishlist">Bəyənilənlər</string>
+    <string name="profile_personal_info">Şəxsi məlumatlar</string>
+    <string name="profile_passport">Pasport məlumatları</string>
+    <string name="profile_driver_license">Sürücülük vəsiqəsi</string>
+    <string name="profile_theme_mode">Açıq/Qaranlıq rejim</string>
+    <string name="profile_language">Dil</string>
+    <string name="profile_region">Region</string>
+    <string name="profile_card_style">Kart stili</string>
+    <string name="profile_about">Haqqında</string>
+    <string name="profile_logout">Çıxış</string>
+    <string name="profile_logout_dialog_title">Çıxış</string>
+    <string name="profile_logout_dialog_subtitle">Hesabınızdan çıxış etmək istədiyinizdən əminsiniz?</string>
+
+    <string name="profile_banner_guest_title">Daxil ol / Qeydiyyat</string>
+    <string name="profile_banner_guest_subtitle">Hesabınızla davam edin</string>
+
+    <string name="card_style_grid">Grid</string>
+    <string name="card_style_list">Siyahı</string>
+
+    <!-- About Screen Strings -->
+    <string name="about_title">Haqqımızda</string>
+    <string name="app_version_format">Versiya %s</string>
+    <string name="about_description">Bu layihə portfel məqsədilə Məğrur Niftiyev tərəfindən hazırlanmışdır. Mobil tətbiqdə Kotlin və Jetpack Compose, backend-də Node.js və verilənlər bazası olaraq Firebase istifadə olunmuşdur.</string>
+    <string name="about_developer_title">Tərtibatçı</string>
+    <string name="about_developer_name">Məğrur Niftiyev</string>
+    <string name="about_tech_title">Texnologiyalar</string>
+    <string name="about_tech_mobile">Mobil: Kotlin &amp; Jetpack Compose</string>
+    <string name="about_tech_backend">Backend: Node.js</string>
+    <string name="about_tech_database">Verilənlər bazası: Firebase</string>
+
+    <!-- Help Screen Strings -->
+    <string name="help_title">Yardım və Dəstək</string>
+    <string name="help_subtitle">Hər hansı bir sualınız və ya təklifiniz varsa, bizimlə əlaqə saxlayın.</string>
+    <string name="help_email_label">E-poçt ünvanı</string>
+    <string name="help_email_value">megrurnftiyev@gmail.com</string>
+    <string name="help_send_email">E-poçt göndər</string>
 </resources>

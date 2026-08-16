@@ -4,8 +4,9 @@ import com.example.baltazar.core.BuildConfig
 import com.example.baltazar.core.core.interceptors.AuthInterceptor
 import com.example.baltazar.core.core.interceptors.LocalizationInterceptor
 import com.example.baltazar.core.core.interceptors.TokenAuthenticator
-import com.example.baltazar.core.data.datasources.remote.RefreshTokenDataSource
+import com.example.baltazar.core.data.datasources.remote.services.RefreshTokenApiService
 import com.example.baltazar.core.data.datasources.remote.services.UserApiService
+import com.example.baltazar.core.data.datasources.remote.services.WishlistApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -110,10 +111,10 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRefreshTokenDataSource(
+    fun provideRefreshTokenApiService(
         @Named("AuthRetrofit") retrofit: Retrofit
-    ): RefreshTokenDataSource {
-        return retrofit.create(RefreshTokenDataSource::class.java)
+    ): RefreshTokenApiService {
+        return retrofit.create(RefreshTokenApiService::class.java)
     }
 
     @Provides
@@ -122,5 +123,29 @@ object NetworkModule {
         @Named("AppRetrofit") retrofit: Retrofit
     ): UserApiService {
         return retrofit.create(UserApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWishlistApiService(
+        @Named("AppRetrofit") retrofit: Retrofit
+    ): WishlistApiService {
+        return retrofit.create(WishlistApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideReviewApiService(
+        @Named("AppRetrofit") retrofit: Retrofit
+    ): com.example.baltazar.core.data.datasources.remote.services.ReviewApiService {
+        return retrofit.create(com.example.baltazar.core.data.datasources.remote.services.ReviewApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideIncludedServiceApiService(
+        @Named("AppRetrofit") retrofit: Retrofit
+    ): com.example.baltazar.core.data.datasources.remote.services.IncludedServiceApiService {
+        return retrofit.create(com.example.baltazar.core.data.datasources.remote.services.IncludedServiceApiService::class.java)
     }
 }
