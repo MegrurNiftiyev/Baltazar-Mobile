@@ -1,4 +1,4 @@
-package com.example.baltazar.feature.profile.ui.screens.personal_info
+package com.example.baltazar.feature.profile.ui.screens.passport
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,56 +17,43 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PersonalInfoViewModel @Inject constructor(
+class PassportInfoViewModel @Inject constructor(
     private val userRepository: IUserRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(PersonalInfoState())
-    val state: StateFlow<PersonalInfoState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(PassportInfoState())
+    val state: StateFlow<PassportInfoState> = _state.asStateFlow()
 
-    fun onDateOfBirthChange(dateOfBirth: String) = _state.update { it.copy(dateOfBirth = dateOfBirth, dateOfBirthError = null) }
-    fun onAddressChange(address: String) = _state.update { it.copy(address = address, addressError = null) }
-    fun onIdNumberChange(idNumber: String) = _state.update { it.copy(idNumber = idNumber, idNumberError = null) }
+    fun onPassportNumberChange(passportNumber: String) = _state.update { it.copy(passportNumber = passportNumber, passportNumberError = null) }
+    fun onExpiryDateChange(expiryDate: String) = _state.update { it.copy(expiryDate = expiryDate, expiryDateError = null) }
     fun onMessageShown() = _state.update { it.copy(userMessage = null) }
 
     fun save() {
         if (_state.value.isLoading) return
         val current = _state.value
         var hasError = false
-        var dobErr: UiText? = null
-        var addrErr: UiText? = null
-        var idErr: UiText? = null
+        var pNumErr: UiText? = null
+        var expErr: UiText? = null
 
-        if (current.dateOfBirth.isBlank()) {
-            dobErr = UiText.StringResource(R.string.validation_fill_all_fields)
+        if (current.passportNumber.isBlank()) {
+            pNumErr = UiText.StringResource(R.string.validation_fill_all_fields)
             hasError = true
         }
-        if (current.address.isBlank()) {
-            addrErr = UiText.StringResource(R.string.validation_fill_all_fields)
-            hasError = true
-        }
-        if (current.idNumber.isBlank()) {
-            idErr = UiText.StringResource(R.string.validation_fill_all_fields)
+        if (current.expiryDate.isBlank()) {
+            expErr = UiText.StringResource(R.string.validation_fill_all_fields)
             hasError = true
         }
 
         if (hasError) {
-            _state.update {
-                it.copy(
-                    dateOfBirthError = dobErr,
-                    addressError = addrErr,
-                    idNumberError = idErr
-                )
-            }
+            _state.update { it.copy(passportNumberError = pNumErr, expiryDateError = expErr) }
             return
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            _state.update { it.copy(isLoading = true, dateOfBirthError = null, addressError = null, idNumberError = null) }
-            userRepository.updatePersonalInfo(
-                dateOfBirth = current.dateOfBirth.trim(),
-                address = current.address.trim(),
-                idNumber = current.idNumber.trim()
+            _state.update { it.copy(isLoading = true, passportNumberError = null, expiryDateError = null) }
+            userRepository.updatePassport(
+                passportNumber = current.passportNumber.trim(),
+                expiryDate = current.expiryDate.trim()
             ).onSuccess {
                 _state.update { it.copy(isLoading = false, isSuccess = true) }
             }.onFailure { error ->
