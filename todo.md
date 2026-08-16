@@ -11,19 +11,25 @@
 
 ## 🚧 Növbəti Addımlar (Sabah Davam Ediləcəklər)
 
-### 1. Detail Ekranlarının Karusel Və Şəkil Overlay Yenilənməsi (`DetailTopImageCarousel` / `DetailBox`)
+### 1. Hər Modulun NavGraph-ına Şirkətlər Marşrutunun Qoşulması
+- [ ] `travelNavGraph`, `rentACarNavGraph`, `foodNavGraph`, `hotelNavGraph` daxilində müvafiq servisin şirkətlər siyahısı və detail keçidlərinin (`composable<TravelCompanies>`, `composable<TravelCompanyDetail>` və s.) birbaşa `:feature:company` ekranlarına bağlanması.
+
+### 2. List Və Detail Ekranlarında Refresh İndikatorlarının Düzəldilməsi
+- [ ] Servislərin siyahı ekranlarında və detail ekranlarında `PullToRefresh` (yenilənmə indikatoru) işləməsinin auditi və indikatorun düzgün göstərilməsinin təmin edilməsi.
+
+### 3. Detail Ekranlarının Karusel Və Şəkil Overlay Yenilənməsi (`DetailTopImageCarousel` / `DetailBox`)
 - [ ] **Karusel Nöqtələri (Dots):** Karusel indikator nöqtələrinin ölçüləri kiçildilməli və daha səliqəli, mütənasib görünüşə gətirilməlidir.
 - [ ] **Konteynin Küncləri Və Üst-Üstə Düşməsi (Border Radius & Overlap):** Detail box-un border radius-u 2 qat artırılmalı (`32.dp` / `BorderRadiuses.ExtraLarge`) və konteyner bir qədər yuxarı qaldırılaraq örtük şəkillərinin üstünə səliqəli şəkildə keçirilməlidir (`overlap/offset`).
 
-### 2. Rəy Və Reytinq Yazma Komponenti (`ReviewSubmissionComponent`)
+### 4. Rəy Və Reytinq Yazma Komponenti (`ReviewSubmissionComponent`)
 - [ ] **Yeni Komponent:** Rəy yazmaq icazəsi olan yerlərdə (istifadəçi sifariş verdikdən / icazə verildikdən sonra) həm `CompanyDetail`, həm də digər servis detail ekranları üçün ulduzlu reytinq vermə + rəy yazma komponenti/dialoqu hazırlanmalıdır.
 
-### 3. Favori (Ürək) Düyməsinin Yenilənməsi (`StandardItemCard` / `FavoriteButton`)
+### 5. Favori (Ürək) Düyməsinin Yenilənməsi (`StandardItemCard` / `FavoriteButton`)
 - [ ] **İkon Dəyişikliyi:** Favori olunduqda içi dolu ürək ikonu (`IconHeartFilled` / `HeartFilled`), olmadıqda isə kontur ikon istifadə edilməli.
 - [ ] **Rəng Düzəlişi:** Detail ekranındakı kimi favori olunduqda qırmızı rəng (`MaterialTheme.colorScheme.error`) ilə seçilməli.
 
-### 4. Food Detail Ekranının Bədcləri Və Xüsusi Rəngləri (`FoodDetailScreen`)
+### 6. Food Detail Ekranının Bədcləri Və Xüsusi Rəngləri (`FoodDetailScreen`)
 - [ ] Kalori, zülal, karbohidrat və yağ göstəriciləri üçün xüsusi göstərici rənglərinin (qırmızı, sarı, yaşıl və s.) bərpası.
 
-### 5. Detail Ekranlarının Lokallaşdırılması (`strings.xml`)
+### 7. Detail Ekranlarının Lokallaşdırılması (`strings.xml`)
 - [ ] Bütün Detail ekranlarındakı ("Haqqında", "Rəylər", "Tərkibi", "Xüsusiyyətlər" və s.) sabit statik mətnlərin auditi və `:core` `strings.xml` resursuna köçürülməsi.
