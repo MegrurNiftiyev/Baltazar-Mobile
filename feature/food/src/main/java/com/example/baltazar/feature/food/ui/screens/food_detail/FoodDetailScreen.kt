@@ -56,6 +56,8 @@ import com.example.baltazar.core.core.navigation.NavResultKeys
 import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.feature.food.ui.components.NutritionChart
+import com.example.baltazar.core.core.components.cards.CompanyDetailCard
+import com.example.baltazar.core.core.navigation.FoodCompanyDetail
 import kotlinx.coroutines.launch
 
 @Composable
@@ -246,11 +248,11 @@ fun FoodDetailScreen(
                         }
 
                         if (!state.isLoading && state.food.companyName.isNotBlank() && state.food.companyId.isNotBlank()) {
-                            com.example.baltazar.core.core.components.cards.CompanyDetailCard(
+                            CompanyDetailCard(
                                 companyName = state.food.companyName,
                                 companyProfilePhoto = state.food.companyProfilePhoto,
                                 onClick = {
-                                    navController.navigate(com.example.baltazar.core.core.navigation.FoodCompanyDetail(id = state.food.companyId))
+                                    navController.navigate(FoodCompanyDetail(id = state.food.companyId))
                                 }
                             )
                         }

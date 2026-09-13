@@ -3,16 +3,20 @@ package com.example.baltazar.feature.company.ui.screens.company_detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.baltazar.core.core.enums.ServiceType
+import com.example.baltazar.core.core.managers.SessionManager
 import com.example.baltazar.core.domain.repository.IReviewRepository
 import com.example.baltazar.core.domain.repository.IWishlistRepository
 import com.example.baltazar.feature.company.domain.repository.ICompanyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,6 +24,7 @@ class CompanyDetailViewModel @Inject constructor(
     private val companyRepository: ICompanyRepository,
     private val reviewRepository: IReviewRepository,
     private val wishlistRepository: IWishlistRepository,
+    private val sessionManager: SessionManager,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -95,11 +100,16 @@ class CompanyDetailViewModel @Inject constructor(
     }
 
     fun toggleFavorite(isFav: Boolean) {
+        if (sessionManager.user.value.isGuest) {
+            sessionManager.requireLogin(allowReturnToPrevious = true)
+            return
+        }
+
         _state.update { it.copy(isFavorite = isFav) }
         viewModelScope.launch(Dispatchers.IO) {
-            kotlinx.coroutines.withContext(kotlinx.coroutines.NonCancellable) {
+            withContext(NonCancellable) {
                 if (isFav) {
-                    wishlistRepository.addToWishlist(serviceId = companyId, serviceType = com.example.baltazar.core.core.enums.ServiceType.FOOD)
+                    wishlistRepository.addToWishlist(serviceId = companyId, serviceType = ServiceType.FOOD)
                 } else {
                     wishlistRepository.removeFromWishlist(id = companyId)
                 }
@@ -108,6 +118,11 @@ class CompanyDetailViewModel @Inject constructor(
     }
 
     fun toggleRelatedItemFavorite(itemId: String, isFav: Boolean) {
+        if (sessionManager.user.value.isGuest) {
+            sessionManager.requireLogin(allowReturnToPrevious = true)
+            return
+        }
+
         _state.update { currentState ->
             val updated = currentState.relatedItems.map { item ->
                 if (item.id == itemId) item.copy(isLiked = isFav) else item
@@ -116,13 +131,8 @@ class CompanyDetailViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             val target = _state.value.relatedItems.firstOrNull { it.id == itemId }
-            val serviceType = when (target?.category?.uppercase()) {
-                "HOTEL", "OTEL" -> com.example.baltazar.core.core.enums.ServiceType.HOTEL
-                "RENT_A_CAR", "RENT A CAR", "AVTO", "CAR" -> com.example.baltazar.core.core.enums.ServiceType.RENT_A_CAR
-                "TRAVEL", "TUR", "TOUR", "SƏYAHƏT" -> com.example.baltazar.core.core.enums.ServiceType.TRAVEL
-                else -> com.example.baltazar.core.core.enums.ServiceType.FOOD
-            }
-            kotlinx.coroutines.withContext(kotlinx.coroutines.NonCancellable) {
+            val serviceType = target?.serviceType ?: ServiceType.FOOD
+            withContext(NonCancellable) {
                 if (isFav) {
                     wishlistRepository.addToWishlist(serviceId = itemId, serviceType = serviceType)
                 } else {
@@ -132,3 +142,4 @@ class CompanyDetailViewModel @Inject constructor(
         }
     }
 }
+

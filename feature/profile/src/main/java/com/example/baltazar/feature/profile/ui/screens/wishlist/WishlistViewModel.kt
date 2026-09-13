@@ -7,11 +7,15 @@ import com.example.baltazar.core.core.managers.SessionManager
 import com.example.baltazar.core.domain.model.ServiceCardItem
 import com.example.baltazar.core.domain.repository.IWishlistRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +26,8 @@ class WishlistViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(WishlistState())
     val state: StateFlow<WishlistState> = _state.asStateFlow()
+
+    private val pendingRemovals = ConcurrentHashMap.newKeySet<String>()
 
     init {
         observeUserSession()
@@ -53,13 +59,14 @@ class WishlistViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             _state.update { it.copy(isLoading = true, error = null) }
             wishlistRepository.getWishlist()
                 .onSuccess { wishlistItems ->
+                    val filteredItems = wishlistItems.filter { it.id !in pendingRemovals }
                     _state.update {
                         it.copy(
-                            items = wishlistItems,
+                            items = filteredItems,
                             isLoading = false,
                             isRefreshing = false,
                             error = null
@@ -85,13 +92,14 @@ class WishlistViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             _state.update { it.copy(isRefreshing = true, error = null) }
             wishlistRepository.getWishlist()
                 .onSuccess { wishlistItems ->
+                    val filteredItems = wishlistItems.filter { it.id !in pendingRemovals }
                     _state.update {
                         it.copy(
-                            items = wishlistItems,
+                            items = filteredItems,
                             isRefreshing = false,
                             isLoading = false,
                             error = null
@@ -120,28 +128,39 @@ class WishlistViewModel @Inject constructor(
 
     fun toggleFavoriteById(itemId: String, isFav: Boolean) {
         if (!isFav) {
+            pendingRemovals.add(itemId)
             _state.update { state ->
                 state.copy(items = state.items.filter { it.id != itemId })
             }
+        } else {
+            pendingRemovals.remove(itemId)
         }
     }
 
     fun toggleFavorite(item: ServiceCardItem, isFav: Boolean) {
-        viewModelScope.launch {
-            kotlinx.coroutines.withContext(kotlinx.coroutines.NonCancellable) {
+        if (sessionManager.user.value.isGuest) {
+            sessionManager.requireLogin(allowReturnToPrevious = true)
+            return
+        }
+
+        viewModelScope.launch(IO) {
+            withContext(NonCancellable) {
                 if (!isFav) {
+                    pendingRemovals.add(item.id)
                     // Optimistically remove from list
                     _state.update { state ->
                         state.copy(items = state.items.filter { it.id != item.id })
                     }
                     val result = wishlistRepository.removeFromWishlist(item.id)
                     if (result.isFailure) {
+                        pendingRemovals.remove(item.id)
                         // Revert if API call fails
                         _state.update { state ->
                             state.copy(items = state.items + item)
                         }
                     }
                 } else {
+                    pendingRemovals.remove(item.id)
                     wishlistRepository.addToWishlist(item.id, item.serviceType)
                 }
             }

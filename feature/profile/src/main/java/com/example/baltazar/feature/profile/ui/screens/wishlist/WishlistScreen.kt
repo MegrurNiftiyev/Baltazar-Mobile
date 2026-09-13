@@ -110,7 +110,7 @@ fun WishlistScreen(
                             title = stringResource(R.string.wishlist_guest_title),
                             subtitle = stringResource(R.string.wishlist_guest_subtitle),
                             actionButtonText = stringResource(R.string.login),
-                            onActionClick = { navController.navigate(Login) }
+                            onActionClick = { navController.navigate(Login(isBackPrevious = true)) }
                         )
                     }
                 }

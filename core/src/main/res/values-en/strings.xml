@@ -105,7 +105,8 @@
     <string name="reservation_coming_soon">Reservation process coming soon</string>
     <string name="reserve">Book Now</string>
     <string name="review_submitted_success">Review submitted successfully</string>
-    <string name="reviews_ineligible_notice">You must order this service to leave a review.</string>
+    <string name="reviews_ineligible_notice">You must use this service to write a review</string>
+    <string name="reviews_already_submitted">You have already submitted a review for this service</string>
     <string name="reviews_title">Reviews</string>
     <string name="room_capacity_format">%d guests</string>
     <string name="rooms_title">Rooms</string>
@@ -132,6 +133,9 @@
     <string name="transmission_label">Transmission</string>
     <string name="validation_fill_all_fields">Please fill in all fields</string>
     <string name="view_on_map">View on Map</string>
+    <string name="wishlist_guest_title">Log in to view your wishlist</string>
+    <string name="wishlist_guest_subtitle">Save the services you like and view them anytime</string>
+    <string name="wishlist_guest_error">You must be logged in to add to wishlist</string>
     <string name="wishlist_empty_subtitle">Add services you like to your wishlist</string>
     <string name="wishlist_empty_title">Your wishlist is empty</string>
     <string name="wishlist_title">Wishlist</string>

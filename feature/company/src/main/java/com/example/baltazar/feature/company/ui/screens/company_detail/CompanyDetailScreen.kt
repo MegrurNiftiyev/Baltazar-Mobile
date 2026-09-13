@@ -45,6 +45,7 @@ import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
+import com.example.baltazar.core.core.extensions.navigateToServiceDetail
 import com.example.baltazar.core.core.extensions.setPreviousResult
 import com.example.baltazar.core.core.navigation.LikeResult
 import com.example.baltazar.core.core.navigation.NavResultKeys
@@ -197,6 +198,9 @@ fun CompanyDetailScreen(
                                 CompanySectionType.ITEMS -> {
                                     ItemsSection(
                                         items = state.relatedItems,
+                                        onItemClick = { item ->
+                                            navController.navigateToServiceDetail(item.serviceType, item.id)
+                                        },
                                         onFavoriteClick = { item, isFav ->
                                             viewModel.toggleRelatedItemFavorite(item.id, isFav)
                                             navController.setPreviousResult(

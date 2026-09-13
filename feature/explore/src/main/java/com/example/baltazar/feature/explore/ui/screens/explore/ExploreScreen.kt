@@ -75,7 +75,7 @@ fun ExploreScreen(
 
     LaunchedEffect(Unit) {
         viewModel.navigateToLoginEvent.collect {
-            navController.navigate(Login)
+            navController.navigate(Login(isBackPrevious = true))
         }
     }
 

@@ -35,4 +35,3 @@ data class ServiceCardItemDto(
         isLiked = isLiked
     )
 }
-

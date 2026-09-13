@@ -105,7 +105,8 @@
     <string name="reservation_coming_soon">Бронирование скоро будет доступно</string>
     <string name="reserve">Забронировать</string>
     <string name="review_submitted_success">Отзыв успешно добавлен</string>
-    <string name="reviews_ineligible_notice">Чтобы оставить отзыв, вы должны заказать эту услугу.</string>
+    <string name="reviews_ineligible_notice">Вы должны воспользоваться этой услугой, чтобы написать отзыв</string>
+    <string name="reviews_already_submitted">Вы уже оставили отзыв об этой услуге</string>
     <string name="reviews_title">Отзывы</string>
     <string name="room_capacity_format">%d-местный</string>
     <string name="rooms_title">Номера</string>
@@ -132,6 +133,9 @@
     <string name="transmission_label">Трансмиссия</string>
     <string name="validation_fill_all_fields">Пожалуйста, заполните все поля</string>
     <string name="view_on_map">Посмотреть на карте</string>
+    <string name="wishlist_guest_title">Войдите, чтобы просмотреть избранное</string>
+    <string name="wishlist_guest_subtitle">Сохраняйте понравившиеся услуги и просматривайте их в любое время</string>
+    <string name="wishlist_guest_error">Вы должны войти в систему, чтобы добавить в избранное</string>
     <string name="wishlist_empty_subtitle">Добавляйте понравившиеся услуги в избранное</string>
     <string name="wishlist_empty_title">Список избранного пуст</string>
     <string name="wishlist_title">Избранное</string>

@@ -16,16 +16,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.baltazar.core.R
+import com.example.baltazar.core.core.components.cards.WriteReviewCard
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
@@ -43,13 +39,9 @@ fun ReviewSection(
     isSubmittingReview: Boolean = false,
     onSubmitReview: (Int, String) -> Unit
 ) {
-    var showWriteDialog by remember { mutableStateOf(false) }
-
     Column(modifier = modifier.fillMaxWidth()) {
         SectionTitle(
-            title = if (reviewCount > 0) "${stringResource(R.string.reviews_title)} ($reviewCount)" else stringResource(R.string.reviews_title),
-            actionText = if (reviewEligibility?.canSubmit == true) stringResource(R.string.write_review) else null,
-            onActionClick = { showWriteDialog = true }
+            title = if (reviewCount > 0) "${stringResource(R.string.reviews_title)} ($reviewCount)" else stringResource(R.string.reviews_title)
         )
 
         Spacer(modifier = Modifier.height(Spaces.Small))
@@ -96,20 +88,24 @@ fun ReviewSection(
             )
         }
 
-        if (reviewEligibility != null && !reviewEligibility.canSubmit && !reviewEligibility.alreadyReviewed && !isLoading) {
-            Spacer(modifier = Modifier.height(Spaces.Small))
-            ReviewIneligibleNotice()
-        }
-    }
-
-    if (showWriteDialog) {
-        WriteReviewDialog(
-            isSubmitting = isSubmittingReview,
-            onDismiss = { showWriteDialog = false },
-            onSubmit = { score, comment ->
-                onSubmitReview(score, comment)
-                showWriteDialog = false
+        if (!isLoading) {
+            if (reviewEligibility?.canSubmit == true) {
+                Spacer(modifier = Modifier.height(Spaces.Medium))
+                WriteReviewCard(
+                    isSubmitting = isSubmittingReview,
+                    onSubmit = onSubmitReview
+                )
+            } else if (reviewEligibility?.alreadyReviewed == true) {
+                Spacer(modifier = Modifier.height(Spaces.Small))
+                ReviewIneligibleNotice(
+                    text = stringResource(R.string.reviews_already_submitted)
+                )
+            } else if (reviewEligibility != null && !reviewEligibility.canSubmit) {
+                Spacer(modifier = Modifier.height(Spaces.Small))
+                ReviewIneligibleNotice(
+                    text = stringResource(R.string.reviews_ineligible_notice)
+                )
             }
-        )
+        }
     }
 }

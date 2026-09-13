@@ -13,10 +13,10 @@ object Onboarding
 data class Home(val initialTab: HomeTab = HomeTab.Explore)
 
 @Serializable
-object Login
+data class Login(val isBackPrevious: Boolean = false)
 
 @Serializable
-object Register
+data class Register(val isBackPrevious: Boolean = false)
 
 @Serializable
 object AuthSelection

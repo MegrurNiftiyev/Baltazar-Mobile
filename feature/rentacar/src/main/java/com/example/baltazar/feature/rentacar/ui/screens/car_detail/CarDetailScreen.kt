@@ -57,6 +57,9 @@ import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.feature.rentacar.ui.components.CarSpecsGrid
 import kotlinx.coroutines.launch
 
+import com.example.baltazar.core.core.components.cards.CompanyDetailCard
+import com.example.baltazar.core.core.navigation.RentACarCompanyDetail
+
 @Composable
 fun CarDetailScreen(
     navController: NavController,
@@ -235,11 +238,11 @@ fun CarDetailScreen(
                         }
 
                         if (!state.isLoading && state.car.companyName.isNotBlank() && state.car.companyId.isNotBlank()) {
-                            com.example.baltazar.core.core.components.cards.CompanyDetailCard(
+                            CompanyDetailCard(
                                 companyName = state.car.companyName,
                                 companyProfilePhoto = state.car.companyProfilePhoto,
                                 onClick = {
-                                    navController.navigate(com.example.baltazar.core.core.navigation.RentACarCompanyDetail(id = state.car.companyId))
+                                    navController.navigate(RentACarCompanyDetail(id = state.car.companyId))
                                 }
                             )
                         }

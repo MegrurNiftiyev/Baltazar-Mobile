@@ -96,7 +96,7 @@ fun AuthSelectionScreen(
         ) {
             RoundedButton(
                 text = stringResource(R.string.auth_selection_login),
-                onClick = { navController.navigate(Login) },
+                onClick = { navController.navigate(Login()) },
                 modifier = Modifier.fillMaxWidth()
             )
 

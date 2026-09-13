@@ -54,9 +54,11 @@ import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
 import com.example.baltazar.core.core.enums.ServiceType
 import com.example.baltazar.core.core.extensions.setPreviousResult
+import com.example.baltazar.core.core.components.cards.CompanyDetailCard
 import com.example.baltazar.core.core.navigation.LikeResult
 import com.example.baltazar.core.core.navigation.NavResultKeys
 import com.example.baltazar.core.core.navigation.TourRoadmap
+import com.example.baltazar.core.core.navigation.TravelCompanyDetail
 import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.feature.travel.ui.components.TourRoadmapTimeline
@@ -320,11 +322,11 @@ fun TravelDetailScreen(
                         }
 
                         if (!state.isLoading && state.tour.companyName.isNotBlank() && state.tour.companyId.isNotBlank()) {
-                            com.example.baltazar.core.core.components.cards.CompanyDetailCard(
+                            CompanyDetailCard(
                                 companyName = state.tour.companyName,
                                 companyProfilePhoto = state.tour.companyProfilePhoto,
                                 onClick = {
-                                    navController.navigate(com.example.baltazar.core.core.navigation.TravelCompanyDetail(id = state.tour.companyId))
+                                    navController.navigate(TravelCompanyDetail(id = state.tour.companyId))
                                 }
                             )
                         }

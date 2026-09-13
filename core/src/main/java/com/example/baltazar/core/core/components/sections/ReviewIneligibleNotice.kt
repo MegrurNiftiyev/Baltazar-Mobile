@@ -26,7 +26,8 @@ import compose.icons.tablericons.InfoCircle
 
 @Composable
 fun ReviewIneligibleNotice(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    text: String = stringResource(R.string.reviews_ineligible_notice)
 ) {
     Row(
         modifier = modifier
@@ -44,7 +45,7 @@ fun ReviewIneligibleNotice(
         )
         Spacer(modifier = Modifier.width(Spaces.Small))
         Text(
-            text = stringResource(R.string.reviews_ineligible_notice),
+            text = text,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

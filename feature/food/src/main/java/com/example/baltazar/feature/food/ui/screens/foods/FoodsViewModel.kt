@@ -3,6 +3,7 @@ package com.example.baltazar.feature.food.ui.screens.foods
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.baltazar.core.core.enums.ServiceType
+import com.example.baltazar.core.core.managers.SessionManager
 import com.example.baltazar.core.domain.repository.ISettingsRepository
 import com.example.baltazar.core.domain.repository.IWishlistRepository
 import com.example.baltazar.feature.food.domain.repository.IFoodRepository
@@ -21,7 +22,8 @@ import javax.inject.Inject
 class FoodsViewModel @Inject constructor(
     private val foodRepository: IFoodRepository,
     private val wishlistRepository: IWishlistRepository,
-    private val settingsRepository: ISettingsRepository
+    private val settingsRepository: ISettingsRepository,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
     private val _state = MutableStateFlow(FoodsState())
     val state: StateFlow<FoodsState> = _state.asStateFlow()
@@ -32,6 +34,11 @@ class FoodsViewModel @Inject constructor(
     }
 
     fun toggleFavorite(foodId: String, isFav: Boolean) {
+        if (sessionManager.user.value.isGuest) {
+            sessionManager.requireLogin(allowReturnToPrevious = true)
+            return
+        }
+
         _state.update { currentState ->
             val updatedItems = currentState.items.map { item ->
                 if (item.id == foodId) item.copy(isLiked = isFav) else item

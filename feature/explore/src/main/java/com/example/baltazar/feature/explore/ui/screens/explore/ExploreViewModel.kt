@@ -43,8 +43,14 @@ class ExploreViewModel @Inject constructor(
 
     private fun observeSessionUser() {
         viewModelScope.launch {
+            var previousUserId: String? = null
             sessionManager.user.collect { sessionUser ->
+                val userChanged = previousUserId != null && previousUserId != sessionUser.id
+                previousUserId = sessionUser.id
                 _state.update { it.copy(user = sessionUser) }
+                if (userChanged) {
+                    loadExploreData()
+                }
             }
         }
         viewModelScope.launch {
@@ -123,22 +129,8 @@ class ExploreViewModel @Inject constructor(
     val navigateToLoginEvent: SharedFlow<Unit> = _navigateToLoginEvent.asSharedFlow()
 
     fun toggleFavorite(itemId: String, serviceType: ServiceType, isFav: Boolean) {
-        val currentUser = _state.value.user
-        val isGuest = currentUser.isGuest
-
-        if (isGuest) {
-            _state.update {
-                it.copy(
-                    userMessage = SnackbarMessage(
-                        UiText.StringResource(R.string.wishlist_guest_error),
-                        SnackbarType.ERROR
-                    )
-                )
-            }
-            viewModelScope.launch {
-                delay(3000L)
-                _navigateToLoginEvent.emit(Unit)
-            }
+        if (sessionManager.user.value.isGuest) {
+            sessionManager.requireLogin(allowReturnToPrevious = true)
             return
         }
 

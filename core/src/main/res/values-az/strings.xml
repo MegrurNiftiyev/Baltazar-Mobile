@@ -105,7 +105,8 @@
     <string name="reservation_coming_soon">Rezervasiya prosesi tezliklə əlavə olunacaq</string>
     <string name="reserve">Rezerv et</string>
     <string name="review_submitted_success">Rəyiniz uğurla əlavə olundu</string>
-    <string name="reviews_ineligible_notice">Rəy bildirmək üçün bu xidməti sifariş etmiş olmalısınız.</string>
+    <string name="reviews_ineligible_notice">Rəy yazmaq üçün bu xidmətdən istifadə etməlisiniz</string>
+    <string name="reviews_already_submitted">Siz artıq bu xidmət üçün rəy yazmısınız</string>
     <string name="reviews_title">Rəylər</string>
     <string name="room_capacity_format">%d nəfərlik</string>
     <string name="rooms_title">Otaqlar</string>
@@ -132,6 +133,9 @@
     <string name="transmission_label">Transmissiya</string>
     <string name="validation_fill_all_fields">Zəhmət olmasa bütün xanaları doldurun</string>
     <string name="view_on_map">Xəritədə bax</string>
+    <string name="wishlist_guest_title">Bəyəndiklərinizə baxmaq üçün daxil olun</string>
+    <string name="wishlist_guest_subtitle">Bəyəndiyiniz xidmətləri saxlayıb istənilən vaxt baxa bilərsiniz</string>
+    <string name="wishlist_guest_error">Favoritlərə əlavə etmək üçün hesabınıza daxil olmalısınız</string>
     <string name="wishlist_empty_subtitle">Bəyəndiyiniz xidmətləri favoritlərinizə əlavə edin</string>
     <string name="wishlist_empty_title">İstək siyahınız boşdur</string>
     <string name="wishlist_title">İstək siyahısı</string>

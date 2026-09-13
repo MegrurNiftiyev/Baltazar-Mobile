@@ -1,6 +1,6 @@
 package com.example.baltazar.core.data.datasources.remote.services
 
-import com.example.baltazar.core.data.model.dto.ServiceCardItemDto
+import com.example.baltazar.core.data.model.dto.WishlistItemDto
 import com.example.baltazar.core.data.model.request.AddToWishlistRequest
 import com.example.baltazar.core.data.model.response.ApiResponse
 import com.example.baltazar.core.data.model.response.PaginatedResponse
@@ -16,7 +16,7 @@ interface WishlistApiService {
     suspend fun getWishlist(
         @Query("limit") limit: Int = 20,
         @Query("cursor") cursor: String? = null
-    ): PaginatedResponse<ServiceCardItemDto>
+    ): PaginatedResponse<WishlistItemDto>
 
     @POST("api/user/wishlist")
     suspend fun addToWishlist(

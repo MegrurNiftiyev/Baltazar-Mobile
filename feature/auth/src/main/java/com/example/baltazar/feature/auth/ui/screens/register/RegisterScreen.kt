@@ -55,6 +55,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun RegisterScreen(
     navController: NavHostController,
+    isBackPrevious: Boolean = false,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -69,8 +70,13 @@ fun RegisterScreen(
 
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
-            kotlinx.coroutines.delay(1000L)
-            navController.navigate(Home()) { popUpTo(0) { inclusive = true } }
+            if (isBackPrevious) {
+                navController.popBackStack()
+            } else {
+                navController.navigate(Home()) {
+                    popUpTo(navController.graph.id) { inclusive = true }
+                }
+            }
         }
     }
 

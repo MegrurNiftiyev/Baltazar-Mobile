@@ -1,5 +1,6 @@
 package com.example.baltazar.feature.company.data.model.dto
 
+import com.example.baltazar.core.core.enums.ServiceType
 import com.example.baltazar.feature.company.domain.model.RelatedItem
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -34,8 +35,10 @@ data class RelatedItemDto(
             priceSuffix = priceSuffix,
             currency = currency ?: "AZN",
             reviewCount = ratingCount ?: reviewCount ?: 0,
-            isLiked = isLiked
+            isLiked = isLiked,
+            serviceType = ServiceType.fromRaw(serviceType, category)
         )
     }
 }
+
 

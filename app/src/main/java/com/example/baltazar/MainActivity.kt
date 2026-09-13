@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.baltazar.core.core.components.AppSnackbarHost
+import com.example.baltazar.core.core.managers.SessionManager
 import com.example.baltazar.core.core.navigation.Home
 import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.navigation.Onboarding
@@ -31,6 +32,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var settingsRepository: ISettingsRepository
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     val splashViewModel: SplashViewModel by viewModels()
 
@@ -56,7 +60,7 @@ class MainActivity : ComponentActivity() {
                 if (!state.isLoading) {
                     val startDest: Any = when {
                         !state.isOnboarded -> Onboarding
-                        !state.isLoginFinished -> Login
+                        !state.isLoginFinished -> Login()
                         else -> Home()
                     }
 
@@ -65,6 +69,7 @@ class MainActivity : ComponentActivity() {
                         snackbarHost = { AppSnackbarHost(snackbarHostState) }
                     ) { _ ->
                         AppNavGraph(
+                            sessionManager = sessionManager,
                             startDestination = startDest
                         )
                     }

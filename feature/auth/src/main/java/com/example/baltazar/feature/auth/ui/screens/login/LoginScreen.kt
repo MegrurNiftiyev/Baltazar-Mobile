@@ -55,6 +55,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     navController: NavHostController,
+    isBackPrevious: Boolean = false,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -67,8 +68,13 @@ fun LoginScreen(
 
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
-            kotlinx.coroutines.delay(1000L)
-            navController.navigate(Home()) { popUpTo(0) { inclusive = true } }
+            if (isBackPrevious) {
+                navController.popBackStack()
+            } else {
+                navController.navigate(Home()) {
+                    popUpTo(navController.graph.id) { inclusive = true }
+                }
+            }
         }
     }
 
@@ -244,7 +250,7 @@ fun LoginScreen(
                 )
                 TextButton(
                     enabled = isButtonsEnabled,
-                    onClick = { navController.navigate(Register) }
+                    onClick = { navController.navigate(Register(isBackPrevious = isBackPrevious)) }
                 ) {
                     Text(
                         stringResource(R.string.login_register_now),

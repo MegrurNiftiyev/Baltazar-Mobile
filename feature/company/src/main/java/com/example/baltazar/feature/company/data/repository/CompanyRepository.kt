@@ -61,7 +61,7 @@ class CompanyRepository @Inject constructor(
                 Result.success(emptyList())
             }
         } catch (e: Exception) {
-            Result.failure(e)
+            Result.success(emptyList())
         }
     }
 }

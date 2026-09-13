@@ -1,9 +1,10 @@
 package com.example.baltazar.core.core.interceptors
 
 import com.example.baltazar.core.core.constants.CacheKeys
+import com.example.baltazar.core.core.managers.EncryptedCacheManager
+import com.example.baltazar.core.core.managers.SessionManager
 import com.example.baltazar.core.data.datasources.remote.RefreshTokenDataSource
 import com.example.baltazar.core.data.model.request.RefreshTokenRequest
-import com.example.baltazar.core.core.managers.EncryptedCacheManager
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
@@ -16,11 +17,13 @@ import javax.inject.Singleton
 @Singleton
 class TokenAuthenticator @Inject constructor(
     private val refreshTokenDataSource: Provider<RefreshTokenDataSource>,
-    private val encryptedCacheManager: EncryptedCacheManager
+    private val encryptedCacheManager: EncryptedCacheManager,
+    private val sessionManager: SessionManager
 ) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
         if (getRetryCount(response) >= 2) {
+            sessionManager.requireLogin(allowReturnToPrevious = true)
             return null
         }
 
@@ -34,12 +37,20 @@ class TokenAuthenticator @Inject constructor(
                     .build()
             }
 
-            val refreshToken = encryptedCacheManager.getSecureString(CacheKeys.REFRESH_TOKEN) ?: return null
+            val refreshToken = encryptedCacheManager.getSecureString(CacheKeys.REFRESH_TOKEN)
+            if (refreshToken == null) {
+                sessionManager.requireLogin(allowReturnToPrevious = true)
+                return null
+            }
 
             return runBlocking {
                 try {
                     val refreshResponse = refreshTokenDataSource.get().refresh(RefreshTokenRequest(refreshToken))
-                    val tokenData = refreshResponse.data ?: return@runBlocking null
+                    val tokenData = refreshResponse.data
+                    if (tokenData == null) {
+                        sessionManager.requireLogin(allowReturnToPrevious = true)
+                        return@runBlocking null
+                    }
 
                     encryptedCacheManager.saveSecureString(CacheKeys.ACCESS_TOKEN, tokenData.accessToken)
                     encryptedCacheManager.saveSecureString(CacheKeys.REFRESH_TOKEN, tokenData.refreshToken)
@@ -50,6 +61,7 @@ class TokenAuthenticator @Inject constructor(
                 } catch (e: Exception) {
                     encryptedCacheManager.removeSecureKey(CacheKeys.ACCESS_TOKEN)
                     encryptedCacheManager.removeSecureKey(CacheKeys.REFRESH_TOKEN)
+                    sessionManager.requireLogin(allowReturnToPrevious = true)
                     null
                 }
             }
@@ -66,4 +78,3 @@ class TokenAuthenticator @Inject constructor(
         return count
     }
 }
-

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.baltazar.core.core.enums.ServiceType
+import com.example.baltazar.core.core.managers.SessionManager
 import com.example.baltazar.core.core.utils.SnackbarMessage
 import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.core.core.utils.UiText
@@ -28,6 +29,7 @@ class TravelDetailViewModel @Inject constructor(
     private val reviewRepository: IReviewRepository,
     private val wishlistRepository: IWishlistRepository,
     private val includedServiceRepository: IIncludedServiceRepository,
+    private val sessionManager: SessionManager,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -79,6 +81,11 @@ class TravelDetailViewModel @Inject constructor(
     }
 
     fun toggleFavorite(isFav: Boolean) {
+        if (sessionManager.user.value.isGuest) {
+            sessionManager.requireLogin(allowReturnToPrevious = true)
+            return
+        }
+
         _state.update { it.copy(isFavorite = isFav) }
         viewModelScope.launch(Dispatchers.IO) {
             withContext(NonCancellable) {
@@ -92,6 +99,11 @@ class TravelDetailViewModel @Inject constructor(
     }
 
     fun submitReview(rating: Int, comment: String) {
+        if (sessionManager.user.value.isGuest) {
+            sessionManager.requireLogin(allowReturnToPrevious = true)
+            return
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isSubmittingReview = true) }
             reviewRepository.createReview(
