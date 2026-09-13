@@ -130,7 +130,7 @@ class ExploreViewModel @Inject constructor(
 
     fun toggleFavorite(itemId: String, serviceType: ServiceType, isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin(allowReturnToPrevious = true)
+            sessionManager.requireLogin()
             return
         }
 

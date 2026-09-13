@@ -136,6 +136,8 @@
     <string name="wishlist_guest_title">Войдите, чтобы просмотреть избранное</string>
     <string name="wishlist_guest_subtitle">Сохраняйте понравившиеся услуги и просматривайте их в любое время</string>
     <string name="wishlist_guest_error">Вы должны войти в систему, чтобы добавить в избранное</string>
+    <string name="orders_guest_title">Войдите, чтобы просмотреть заказы</string>
+    <string name="orders_guest_subtitle">Войдите, чтобы отслеживать и управлять своими заказами</string>
     <string name="wishlist_empty_subtitle">Добавляйте понравившиеся услуги в избранное</string>
     <string name="wishlist_empty_title">Список избранного пуст</string>
     <string name="wishlist_title">Избранное</string>

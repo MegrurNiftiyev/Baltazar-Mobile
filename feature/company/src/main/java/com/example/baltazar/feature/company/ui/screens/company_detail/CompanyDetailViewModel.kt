@@ -3,6 +3,7 @@ package com.example.baltazar.feature.company.ui.screens.company_detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.baltazar.core.core.enums.ReviewTargetType
 import com.example.baltazar.core.core.enums.ServiceType
 import com.example.baltazar.core.core.managers.SessionManager
 import com.example.baltazar.core.domain.repository.IReviewRepository
@@ -89,7 +90,7 @@ class CompanyDetailViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isReviewsLoading = true) }
-            reviewRepository.getReviews(targetType = "COMPANY", targetId = companyId)
+            reviewRepository.getReviews(targetType = ReviewTargetType.COMPANY.name, targetId = companyId)
                 .onSuccess { paginatedList ->
                     _state.update { it.copy(reviews = paginatedList.items, isReviewsLoading = false) }
                 }
@@ -101,7 +102,7 @@ class CompanyDetailViewModel @Inject constructor(
 
     fun toggleFavorite(isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin(allowReturnToPrevious = true)
+            sessionManager.requireLogin()
             return
         }
 
@@ -119,7 +120,7 @@ class CompanyDetailViewModel @Inject constructor(
 
     fun toggleRelatedItemFavorite(itemId: String, isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin(allowReturnToPrevious = true)
+            sessionManager.requireLogin()
             return
         }
 

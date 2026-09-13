@@ -26,11 +26,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
+import com.example.baltazar.core.core.enums.ServiceType
+import com.example.baltazar.core.core.enums.getDisplayNameResId
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Building
 import compose.icons.tablericons.ChevronRight
@@ -108,8 +111,9 @@ fun CompanyCard(
                 )
 
                 if (category.isNotBlank()) {
+                    val serviceType = ServiceType.fromRaw(category)
                     Text(
-                        text = category,
+                        text = stringResource(id = serviceType.getDisplayNameResId()),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.primary

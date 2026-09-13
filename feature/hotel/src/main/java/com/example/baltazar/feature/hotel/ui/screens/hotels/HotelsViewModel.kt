@@ -35,7 +35,7 @@ class HotelsViewModel @Inject constructor(
 
     fun toggleFavorite(hotelId: String, isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin(allowReturnToPrevious = true)
+            sessionManager.requireLogin()
             return
         }
 

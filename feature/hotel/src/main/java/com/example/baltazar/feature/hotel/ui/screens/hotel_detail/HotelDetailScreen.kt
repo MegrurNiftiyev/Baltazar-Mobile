@@ -56,7 +56,9 @@ import com.example.baltazar.core.core.constants.Spaces
 import com.example.baltazar.core.core.enums.ServiceType
 import com.example.baltazar.core.core.extensions.setPreviousResult
 import com.example.baltazar.core.core.navigation.LikeResult
+import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.navigation.NavResultKeys
+import com.example.baltazar.core.core.navigation.OrderFlow
 import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.feature.hotel.ui.components.HotelRoomCard
@@ -73,7 +75,6 @@ fun HotelDetailScreen(
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val reservationSoonMsg = stringResource(R.string.reservation_coming_soon)
 
     LaunchedEffect(state.userMessage) {
         state.userMessage?.let { userMsg ->
@@ -96,8 +97,15 @@ fun HotelDetailScreen(
                 actionButtonText = stringResource(R.string.reserve),
                 isLoading = state.isLoading,
                 onActionClick = {
-                    coroutineScope.launch {
-                        AppSnackbar.success(reservationSoonMsg)
+                    if (viewModel.isGuest()) {
+                        navController.navigate(Login(isPopStack = true))
+                    } else {
+                        navController.navigate(
+                            OrderFlow(
+                                serviceType = ServiceType.HOTEL.name,
+                                serviceId = state.hotel.id
+                            )
+                        )
                     }
                 }
             )

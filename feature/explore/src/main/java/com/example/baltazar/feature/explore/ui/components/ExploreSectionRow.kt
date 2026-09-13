@@ -18,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.example.baltazar.core.R
 import com.example.baltazar.core.core.components.CustomTextButton
 import com.example.baltazar.core.core.components.ServiceItemCard
 import com.example.baltazar.core.core.components.ShimmerWrapper
@@ -57,7 +59,7 @@ fun ExploreSectionRow(
             
             if (!isLoading) {
                 CustomTextButton(
-                    text = androidx.compose.ui.res.stringResource(com.example.baltazar.core.R.string.read_more),
+                    text = stringResource(R.string.read_more),
                     onClick = onSeeAllClick
                 )
             }

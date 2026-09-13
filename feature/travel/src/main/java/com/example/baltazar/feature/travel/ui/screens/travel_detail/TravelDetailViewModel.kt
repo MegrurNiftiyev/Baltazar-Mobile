@@ -3,6 +3,7 @@ package com.example.baltazar.feature.travel.ui.screens.travel_detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.baltazar.core.R
 import com.example.baltazar.core.core.enums.ServiceType
 import com.example.baltazar.core.core.managers.SessionManager
 import com.example.baltazar.core.core.utils.SnackbarMessage
@@ -70,7 +71,7 @@ class TravelDetailViewModel @Inject constructor(
     private fun loadReviews() {
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isReviewsLoading = true) }
-            reviewRepository.getReviews(targetType = "TRAVEL", targetId = tourId)
+            reviewRepository.getReviews(targetType = ServiceType.TRAVEL.name, targetId = tourId)
                 .onSuccess { paginatedList ->
                     _state.update { it.copy(reviews = paginatedList.items, isReviewsLoading = false) }
                 }
@@ -82,7 +83,7 @@ class TravelDetailViewModel @Inject constructor(
 
     fun toggleFavorite(isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin(allowReturnToPrevious = true)
+            sessionManager.requireLogin()
             return
         }
 
@@ -100,14 +101,14 @@ class TravelDetailViewModel @Inject constructor(
 
     fun submitReview(rating: Int, comment: String) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin(allowReturnToPrevious = true)
+            sessionManager.requireLogin()
             return
         }
 
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isSubmittingReview = true) }
             reviewRepository.createReview(
-                targetType = "TRAVEL",
+                targetType = ServiceType.TRAVEL.name,
                 targetId = tourId,
                 rating = rating,
                 comment = comment
@@ -116,7 +117,7 @@ class TravelDetailViewModel @Inject constructor(
                     it.copy(
                         isSubmittingReview = false,
                         userMessage = SnackbarMessage(
-                            text = UiText.DynamicString("Rəyiniz uğurla əlavə olundu"),
+                            text = UiText.StringResource(R.string.review_submitted_success),
                             type = SnackbarType.SUCCESS
                         )
                     )
@@ -135,4 +136,6 @@ class TravelDetailViewModel @Inject constructor(
             }
         }
     }
+
+    fun isGuest(): Boolean = sessionManager.user.value.isGuest
 }

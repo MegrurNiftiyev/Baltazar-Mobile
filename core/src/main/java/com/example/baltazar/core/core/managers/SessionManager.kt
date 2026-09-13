@@ -12,7 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 sealed interface AuthEvent {
-    data class RequireLogin(val allowReturnToPrevious: Boolean = false) : AuthEvent
+    data object RequireLogin : AuthEvent
 }
 
 @Singleton
@@ -44,8 +44,8 @@ class SessionManager @Inject constructor() {
     private val _isLoadingUser = MutableStateFlow(false)
     val isLoadingUser: StateFlow<Boolean> = _isLoadingUser.asStateFlow()
 
-    fun requireLogin(allowReturnToPrevious: Boolean = false) {
-        _authEvents.tryEmit(AuthEvent.RequireLogin(allowReturnToPrevious))
+    fun requireLogin() {
+        _authEvents.tryEmit(AuthEvent.RequireLogin)
     }
 
     fun setLoading(isLoading: Boolean) {

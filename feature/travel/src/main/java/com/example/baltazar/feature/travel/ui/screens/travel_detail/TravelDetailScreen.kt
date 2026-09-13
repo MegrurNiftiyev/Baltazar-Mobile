@@ -56,7 +56,9 @@ import com.example.baltazar.core.core.enums.ServiceType
 import com.example.baltazar.core.core.extensions.setPreviousResult
 import com.example.baltazar.core.core.components.cards.CompanyDetailCard
 import com.example.baltazar.core.core.navigation.LikeResult
+import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.navigation.NavResultKeys
+import com.example.baltazar.core.core.navigation.OrderFlow
 import com.example.baltazar.core.core.navigation.TourRoadmap
 import com.example.baltazar.core.core.navigation.TravelCompanyDetail
 import com.example.baltazar.core.core.utils.AppSnackbar
@@ -76,7 +78,6 @@ fun TravelDetailScreen(
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val tourSoonMsg = stringResource(R.string.tour_coming_soon)
 
     LaunchedEffect(state.userMessage) {
         state.userMessage?.let { userMsg ->
@@ -112,8 +113,15 @@ fun TravelDetailScreen(
                 actionButtonText = stringResource(R.string.join_tour),
                 isLoading = state.isLoading,
                 onActionClick = {
-                    coroutineScope.launch {
-                        AppSnackbar.success(tourSoonMsg)
+                    if (viewModel.isGuest()) {
+                        navController.navigate(Login(isPopStack = true))
+                    } else {
+                        navController.navigate(
+                            OrderFlow(
+                                serviceType = ServiceType.TRAVEL.name,
+                                serviceId = state.tour.id
+                            )
+                        )
                     }
                 }
             )

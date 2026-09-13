@@ -35,7 +35,7 @@ class TravelsViewModel @Inject constructor(
 
     fun toggleFavorite(tourId: String, isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin(allowReturnToPrevious = true)
+            sessionManager.requireLogin()
             return
         }
 

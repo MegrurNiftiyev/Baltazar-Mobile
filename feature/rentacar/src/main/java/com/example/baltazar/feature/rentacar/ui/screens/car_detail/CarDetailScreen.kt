@@ -51,7 +51,9 @@ import com.example.baltazar.core.core.constants.Spaces
 import com.example.baltazar.core.core.enums.ServiceType
 import com.example.baltazar.core.core.extensions.setPreviousResult
 import com.example.baltazar.core.core.navigation.LikeResult
+import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.navigation.NavResultKeys
+import com.example.baltazar.core.core.navigation.OrderFlow
 import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.feature.rentacar.ui.components.CarSpecsGrid
@@ -68,7 +70,6 @@ fun CarDetailScreen(
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val rentalSoonMsg = stringResource(R.string.rental_coming_soon)
 
     LaunchedEffect(state.userMessage) {
         state.userMessage?.let { userMsg ->
@@ -91,8 +92,15 @@ fun CarDetailScreen(
                 actionButtonText = stringResource(R.string.rent),
                 isLoading = state.isLoading,
                 onActionClick = {
-                    coroutineScope.launch {
-                        AppSnackbar.success(rentalSoonMsg)
+                    if (viewModel.isGuest()) {
+                        navController.navigate(Login(isPopStack = true))
+                    } else {
+                        navController.navigate(
+                            OrderFlow(
+                                serviceType = ServiceType.RENT_A_CAR.name,
+                                serviceId = state.car.id
+                            )
+                        )
                     }
                 }
             )

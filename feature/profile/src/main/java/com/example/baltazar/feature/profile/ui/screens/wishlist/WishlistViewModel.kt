@@ -35,19 +35,19 @@ class WishlistViewModel @Inject constructor(
 
     private fun observeUserSession() {
         viewModelScope.launch {
+            sessionManager.isLoadingUser.collect { isLoading ->
+                _state.update { it.copy(isUserLoading = isLoading) }
+            }
+        }
+        viewModelScope.launch {
             sessionManager.user.collect { user ->
                 val isLoggedIn = !user.isGuest
                 _state.update { it.copy(user = user) }
                 if (isLoggedIn) {
                     loadWishlist()
-                } else {
+                } else if (!sessionManager.isLoadingUser.value) {
                     _state.update { it.copy(items = emptyList(), isLoading = false) }
                 }
-            }
-        }
-        viewModelScope.launch {
-            sessionManager.isLoadingUser.collect { isLoading ->
-                _state.update { it.copy(isUserLoading = isLoading) }
             }
         }
     }
@@ -93,13 +93,13 @@ class WishlistViewModel @Inject constructor(
         }
 
         viewModelScope.launch(IO) {
+            pendingRemovals.clear()
             _state.update { it.copy(isRefreshing = true, error = null) }
             wishlistRepository.getWishlist()
                 .onSuccess { wishlistItems ->
-                    val filteredItems = wishlistItems.filter { it.id !in pendingRemovals }
                     _state.update {
                         it.copy(
-                            items = filteredItems,
+                            items = wishlistItems,
                             isRefreshing = false,
                             isLoading = false,
                             error = null
@@ -139,7 +139,7 @@ class WishlistViewModel @Inject constructor(
 
     fun toggleFavorite(item: ServiceCardItem, isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin(allowReturnToPrevious = true)
+            sessionManager.requireLogin()
             return
         }
 

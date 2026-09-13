@@ -7,8 +7,8 @@
 
     <!-- Əgər xəritədə istifadəçinin cari yerini (mavi nöqtə) göstərəcəksinizsə, 
          bu icazələrə də ehtiyacınız olacaq. Hələlik lazım deyilsə, belə qala bilər. -->
-    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name="com.example.baltazar.BaltazarApplication"

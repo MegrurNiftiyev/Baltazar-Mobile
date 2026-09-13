@@ -136,6 +136,8 @@
     <string name="wishlist_guest_title">Bəyəndiklərinizə baxmaq üçün daxil olun</string>
     <string name="wishlist_guest_subtitle">Bəyəndiyiniz xidmətləri saxlayıb istənilən vaxt baxa bilərsiniz</string>
     <string name="wishlist_guest_error">Favoritlərə əlavə etmək üçün hesabınıza daxil olmalısınız</string>
+    <string name="orders_guest_title">Sifarişlərinizə baxmaq üçün daxil olun</string>
+    <string name="orders_guest_subtitle">Etdiyiniz sifarişləri izləmək və idarə etmək üçün hesabınıza daxil olun</string>
     <string name="wishlist_empty_subtitle">Bəyəndiyiniz xidmətləri favoritlərinizə əlavə edin</string>
     <string name="wishlist_empty_title">İstək siyahınız boşdur</string>
     <string name="wishlist_title">İstək siyahısı</string>

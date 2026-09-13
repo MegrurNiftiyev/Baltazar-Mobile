@@ -136,6 +136,8 @@
     <string name="wishlist_guest_title">Log in to view your wishlist</string>
     <string name="wishlist_guest_subtitle">Save the services you like and view them anytime</string>
     <string name="wishlist_guest_error">You must be logged in to add to wishlist</string>
+    <string name="orders_guest_title">Log in to view your orders</string>
+    <string name="orders_guest_subtitle">Log in to track and manage your orders</string>
     <string name="wishlist_empty_subtitle">Add services you like to your wishlist</string>
     <string name="wishlist_empty_title">Your wishlist is empty</string>
     <string name="wishlist_title">Wishlist</string>

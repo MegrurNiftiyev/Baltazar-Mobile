@@ -35,8 +35,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import com.example.baltazar.core.core.components.RatingBadge
 import com.example.baltazar.core.core.components.ShimmerWrapper
+import com.example.baltazar.core.core.components.buttons.FavoriteButton
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
@@ -96,26 +99,18 @@ fun TourCard(
                         }
 
                         if (!isLoading) {
-                            Box(
+                            FavoriteButton(
+                                isSelected = localFavorite,
+                                selectedIcon = Icons.Filled.Favorite,
+                                unselectedIcon = TablerIcons.Heart,
+                                onToggle = {
+                                    localFavorite = it
+                                    onFavoriteClick?.invoke(it)
+                                },
                                 modifier = Modifier
                                     .align(Alignment.TopEnd)
-                                    .padding(Paddings.Mini)
-                                    .size(34.dp)
-                                    .clip(CircleShape)
-                                    .background(Color.Black.copy(alpha = 0.35f))
-                                    .clickable {
-                                        localFavorite = !localFavorite
-                                        onFavoriteClick?.invoke(localFavorite)
-                                    },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = TablerIcons.Heart,
-                                    contentDescription = "Favorite",
-                                    tint = if (localFavorite) Color(0xFFEF4444) else Color.White,
-                                    modifier = Modifier.size(18.dp)
-                                )
-                            }
+                                    .padding(4.dp)
+                            )
                         }
                     }
                 }
@@ -254,24 +249,15 @@ fun TourCard(
                             }
 
                             if (!isLoading) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(32.dp)
-                                        .clip(CircleShape)
-                                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                                        .clickable {
-                                            localFavorite = !localFavorite
-                                            onFavoriteClick?.invoke(localFavorite)
-                                        },
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Icon(
-                                        imageVector = TablerIcons.Heart,
-                                        contentDescription = "Favorite",
-                                        tint = if (localFavorite) Color(0xFFEF4444) else MaterialTheme.colorScheme.onSurfaceVariant,
-                                        modifier = Modifier.size(18.dp)
-                                    )
-                                }
+                                FavoriteButton(
+                                    isSelected = localFavorite,
+                                    selectedIcon = Icons.Filled.Favorite,
+                                    unselectedIcon = TablerIcons.Heart,
+                                    onToggle = {
+                                        localFavorite = it
+                                        onFavoriteClick?.invoke(it)
+                                    }
+                                )
                             }
                         }
 

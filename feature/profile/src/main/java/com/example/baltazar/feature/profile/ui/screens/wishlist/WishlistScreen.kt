@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -79,8 +81,8 @@ fun WishlistScreen(
                 .padding(paddingValues)
         ) {
             when {
-                // Case 1: Loading user session or loading initial wishlist items
-                state.isUserLoading || (state.isLoading && state.items.isEmpty()) -> {
+                // Case 1: Loading user session or loading wishlist items
+                state.isUserLoading || state.isLoading -> {
                     val columnCount = if (state.cardViewMode == CardViewMode.GRID) 2 else 1
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(columnCount),
@@ -102,7 +104,9 @@ fun WishlistScreen(
                 // Case 2: User is Guest (not logged in)
                 isGuest -> {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState()),
                         contentAlignment = Alignment.Center
                     ) {
                         EmptyStateView(
@@ -110,7 +114,7 @@ fun WishlistScreen(
                             title = stringResource(R.string.wishlist_guest_title),
                             subtitle = stringResource(R.string.wishlist_guest_subtitle),
                             actionButtonText = stringResource(R.string.login),
-                            onActionClick = { navController.navigate(Login(isBackPrevious = true)) }
+                            onActionClick = { navController.navigate(Login(isPopStack = true)) }
                         )
                     }
                 }
@@ -118,7 +122,9 @@ fun WishlistScreen(
                 // Case 3: Empty wishlist
                 state.items.isEmpty() -> {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState()),
                         contentAlignment = Alignment.Center
                     ) {
                         EmptyStateView(

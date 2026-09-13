@@ -35,7 +35,7 @@ class FoodsViewModel @Inject constructor(
 
     fun toggleFavorite(foodId: String, isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin(allowReturnToPrevious = true)
+            sessionManager.requireLogin()
             return
         }
 

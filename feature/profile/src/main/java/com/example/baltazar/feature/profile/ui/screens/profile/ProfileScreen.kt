@@ -232,12 +232,14 @@ fun ProfileScreen(
                     onClick = { navController.navigate(Help) }
                 )
 
-                // Logout
-                ProfileTile(
-                    title = stringResource(R.string.profile_logout),
-                    icon = TablerIcons.Logout,
-                    onClick = { viewModel.openLogoutDialog() }
-                )
+                // Logout (only when not guest)
+                if (!isGuest) {
+                    ProfileTile(
+                        title = stringResource(R.string.profile_logout),
+                        icon = TablerIcons.Logout,
+                        onClick = { viewModel.openLogoutDialog() }
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(Spaces.ExtraLarge))

@@ -93,8 +93,9 @@ fun DetailBottomBar(
                         )
 
                         if (priceSuffix.isNotBlank()) {
+                            val formattedSuffix = if (priceSuffix.trim().startsWith("/")) priceSuffix.trim() else "/ ${priceSuffix.trim()}"
                             Text(
-                                text = priceSuffix,
+                                text = formattedSuffix,
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.padding(bottom = Spaces.ExtraMini)

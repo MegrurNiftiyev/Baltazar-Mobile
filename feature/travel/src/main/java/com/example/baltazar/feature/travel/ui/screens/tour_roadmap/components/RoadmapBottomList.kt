@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
@@ -77,23 +76,26 @@ fun RoadmapBottomList(
 
                 Spacer(modifier = Modifier.width(Spaces.Small))
 
+                val displayName = androidx.compose.runtime.remember(point) {
+                    var text = point.name.trim()
+                    if (text.startsWith("${point.order}. ")) {
+                        text = text.removePrefix("${point.order}. ")
+                    }
+                    if (text.endsWith(" ${point.order}")) {
+                        text = text.removeSuffix(" ${point.order}")
+                    }
+                    text
+                }
+
                 Column {
                     Text(
-                        text = point.name,
+                        text = displayName,
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-
-                    if (point.lat != 0.0 || point.long != 0.0) {
-                        Text(
-                            text = "%.3f, %.3f".format(point.lat, point.long),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
                 }
             }
         }

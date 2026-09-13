@@ -7,8 +7,8 @@ import com.example.baltazar.core.domain.model.User
 
 data class WishlistState(
     val user: User = SessionManager.DEFAULT_GUEST_USER,
-    val isUserLoading: Boolean = false,
-    val isLoading: Boolean = false,
+    val isUserLoading: Boolean = true,
+    val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val items: List<ServiceCardItem> = emptyList(),
     val error: String? = null,

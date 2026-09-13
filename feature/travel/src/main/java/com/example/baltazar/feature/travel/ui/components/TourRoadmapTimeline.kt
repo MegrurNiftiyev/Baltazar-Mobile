@@ -84,6 +84,7 @@ fun TourRoadmapTimeline(
                 GoogleMap(
                     modifier = Modifier.fillMaxSize(),
                     cameraPositionState = cameraPositionState,
+                    onMapClick = { onMapClick?.invoke() },
                     uiSettings = MapUiSettings(
                         scrollGesturesEnabled = false,
                         zoomGesturesEnabled = false,
@@ -108,6 +109,14 @@ fun TourRoadmapTimeline(
                             width = 8f
                         )
                     }
+                }
+
+                if (onMapClick != null) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable(onClick = onMapClick)
+                    )
                 }
             } else {
                 ShimmerWrapper(

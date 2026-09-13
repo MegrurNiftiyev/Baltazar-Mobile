@@ -37,12 +37,8 @@ fun AppNavGraph(
     LaunchedEffect(Unit) {
         sessionManager.authEvents.collect { event ->
             when (event) {
-                is AuthEvent.RequireLogin -> {
-                    navController.navigate(Login(isBackPrevious = event.allowReturnToPrevious)) {
-                        if (!event.allowReturnToPrevious) {
-                            popUpTo(navController.graph.id) { inclusive = true }
-                        }
-                    }
+                AuthEvent.RequireLogin -> {
+                    navController.navigate(Login(isPopStack = true))
                 }
             }
         }

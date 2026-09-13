@@ -37,6 +37,7 @@ import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
 import com.example.baltazar.core.core.enums.CornerShape
 import com.example.baltazar.core.core.navigation.Home
+import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.feature.auth.R
@@ -55,7 +56,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun RegisterScreen(
     navController: NavHostController,
-    isBackPrevious: Boolean = false,
+    isPopStack: Boolean = false,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -70,11 +71,11 @@ fun RegisterScreen(
 
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
-            if (isBackPrevious) {
-                navController.popBackStack()
+            if (isPopStack) {
+                navController.popBackStack<Login>(inclusive = true)
             } else {
                 navController.navigate(Home()) {
-                    popUpTo(navController.graph.id) { inclusive = true }
+                    popUpTo(0) { inclusive = true }
                 }
             }
         }

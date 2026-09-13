@@ -35,7 +35,7 @@ class RentACarsViewModel @Inject constructor(
 
     fun toggleFavorite(carId: String, isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin(allowReturnToPrevious = true)
+            sessionManager.requireLogin()
             return
         }
 

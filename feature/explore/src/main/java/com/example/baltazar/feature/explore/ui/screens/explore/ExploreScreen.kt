@@ -40,6 +40,7 @@ import com.example.baltazar.core.core.navigation.Cart
 import com.example.baltazar.core.core.navigation.LikeResult
 import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.navigation.NavResultKeys
+import com.example.baltazar.core.core.navigation.Notifications
 import com.example.baltazar.core.core.navigation.Settings
 import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
@@ -75,7 +76,7 @@ fun ExploreScreen(
 
     LaunchedEffect(Unit) {
         viewModel.navigateToLoginEvent.collect {
-            navController.navigate(Login(isBackPrevious = true))
+            navController.navigate(Login(isPopStack = true))
         }
     }
 
@@ -103,7 +104,14 @@ fun ExploreScreen(
                     when (route) {
                         is Cart -> onNavigateToTab(HomeTab.Orders)
                         is Settings -> onNavigateToTab(HomeTab.Profile)
-                        else -> navController.navigate(route)
+                        is Notifications -> { /* Notifications screen not ready; do nothing to prevent crash */ }
+                        else -> {
+                            try {
+                                navController.navigate(route)
+                            } catch (_: Exception) {
+                                // Ignore unregistered route navigation errors
+                            }
+                        }
                     }
                 },
                 onUserClick = {

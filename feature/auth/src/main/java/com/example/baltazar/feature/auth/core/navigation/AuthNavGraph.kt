@@ -19,11 +19,11 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     composable<AuthSelection> { AuthSelectionScreen(navController) }
     composable<Login> { backStackEntry ->
         val loginRoute = backStackEntry.toRoute<Login>()
-        LoginScreen(navController = navController, isBackPrevious = loginRoute.isBackPrevious)
+        LoginScreen(navController = navController, isPopStack = loginRoute.isPopStack)
     }
     composable<Register> { backStackEntry ->
         val registerRoute = backStackEntry.toRoute<Register>()
-        RegisterScreen(navController = navController, isBackPrevious = registerRoute.isBackPrevious)
+        RegisterScreen(navController = navController, isPopStack = registerRoute.isPopStack)
     }
 }
 
