@@ -2,7 +2,9 @@ package com.example.baltazar.feature.food.ui.screens.foods
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.baltazar.core.core.enums.ServiceType
 import com.example.baltazar.core.domain.repository.ISettingsRepository
+import com.example.baltazar.core.domain.repository.IWishlistRepository
 import com.example.baltazar.feature.food.domain.repository.IFoodRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -10,12 +12,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class FoodsViewModel @Inject constructor(
     private val foodRepository: IFoodRepository,
+    private val wishlistRepository: IWishlistRepository,
     private val settingsRepository: ISettingsRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(FoodsState())
@@ -24,6 +29,24 @@ class FoodsViewModel @Inject constructor(
     init {
         observeSettings()
         loadInitialData()
+    }
+
+    fun toggleFavorite(foodId: String, isFav: Boolean) {
+        _state.update { currentState ->
+            val updatedItems = currentState.items.map { item ->
+                if (item.id == foodId) item.copy(isLiked = isFav) else item
+            }
+            currentState.copy(items = updatedItems)
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            withContext(NonCancellable) {
+                if (isFav) {
+                    wishlistRepository.addToWishlist(serviceId = foodId, serviceType = ServiceType.FOOD)
+                } else {
+                    wishlistRepository.removeFromWishlist(id = foodId)
+                }
+            }
+        }
     }
 
     private fun observeSettings() {

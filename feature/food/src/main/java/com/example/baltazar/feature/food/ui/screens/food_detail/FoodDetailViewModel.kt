@@ -43,7 +43,7 @@ class FoodDetailViewModel @Inject constructor(
             _state.update { it.copy(isLoading = true, error = null) }
             foodRepository.getFoodDetail(foodId)
                 .onSuccess { detail ->
-                    _state.update { it.copy(food = detail, isLoading = false) }
+                    _state.update { it.copy(food = detail, isFavorite = detail.isLiked, isLoading = false) }
                 }
                 .onFailure { error ->
                     _state.update { it.copy(isLoading = false, error = error.message) }
@@ -67,10 +67,12 @@ class FoodDetailViewModel @Inject constructor(
     fun toggleFavorite(isFav: Boolean) {
         _state.update { it.copy(isFavorite = isFav) }
         viewModelScope.launch(Dispatchers.IO) {
-            if (isFav) {
-                wishlistRepository.addToWishlist(serviceId = foodId, serviceType = ServiceType.FOOD)
-            } else {
-                wishlistRepository.removeFromWishlist(id = foodId)
+            kotlinx.coroutines.withContext(kotlinx.coroutines.NonCancellable) {
+                if (isFav) {
+                    wishlistRepository.addToWishlist(serviceId = foodId, serviceType = ServiceType.FOOD)
+                } else {
+                    wishlistRepository.removeFromWishlist(id = foodId)
+                }
             }
         }
     }

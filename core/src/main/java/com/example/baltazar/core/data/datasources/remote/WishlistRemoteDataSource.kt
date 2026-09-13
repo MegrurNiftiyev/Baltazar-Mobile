@@ -1,5 +1,6 @@
 package com.example.baltazar.core.data.datasources.remote
 
+import com.example.baltazar.core.core.network.executeRequest
 import com.example.baltazar.core.data.datasources.remote.services.WishlistApiService
 import com.example.baltazar.core.data.model.dto.ServiceCardItemDto
 import com.example.baltazar.core.data.model.request.AddToWishlistRequest
@@ -11,14 +12,14 @@ class WishlistRemoteDataSource @Inject constructor(
     private val apiService: WishlistApiService
 ) {
     suspend fun getWishlist(limit: Int, cursor: String?): PaginatedResponse<ServiceCardItemDto> {
-        return apiService.getWishlist(limit, cursor)
+        return executeRequest { apiService.getWishlist(limit, cursor) }
     }
 
     suspend fun addToWishlist(request: AddToWishlistRequest): ApiResponse<Unit> {
-        return apiService.addToWishlist(request)
+        return executeRequest { apiService.addToWishlist(request) }
     }
 
     suspend fun removeFromWishlist(id: String): ApiResponse<Unit> {
-        return apiService.removeFromWishlist(id)
+        return executeRequest { apiService.removeFromWishlist(id) }
     }
 }

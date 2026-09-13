@@ -34,6 +34,13 @@ class CompanyListViewModel @Inject constructor(
         loadCompanies()
     }
 
+    fun setServiceType(serviceType: ServiceType?) {
+        if (serviceType != null && _state.value.serviceType != serviceType) {
+            _state.update { it.copy(serviceType = serviceType, companies = emptyList(), nextCursor = null, hasMore = true) }
+            loadCompanies()
+        }
+    }
+
     fun loadCompanies() {
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isLoading = true, error = null) }

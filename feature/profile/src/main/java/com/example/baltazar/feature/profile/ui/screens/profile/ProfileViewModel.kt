@@ -73,7 +73,7 @@ class ProfileViewModel @Inject constructor(
             closeLanguageSheet()
 
             val currentUser = sessionManager.user.value
-            if (currentUser.role != "GUEST") {
+            if (!currentUser.isGuest) {
                 userRepository.updateProfile(
                     name = currentUser.name,
                     language = language.code
@@ -96,7 +96,7 @@ class ProfileViewModel @Inject constructor(
             closeRegionSheet()
 
             val currentUser = sessionManager.user.value
-            if (currentUser.role != "GUEST") {
+            if (!currentUser.isGuest) {
                 userRepository.updateProfile(
                     name = currentUser.name,
                     region = region.code

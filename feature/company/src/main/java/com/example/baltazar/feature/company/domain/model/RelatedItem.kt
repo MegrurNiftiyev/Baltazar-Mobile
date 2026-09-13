@@ -9,5 +9,7 @@ data class RelatedItem(
     val category: String?,
     val priceSuffix: String? = null,
     val currency: String = "AZN",
-    val reviewCount: Int = 0
+    val reviewCount: Int = 0,
+    val isLiked: Boolean = false
 )
+

@@ -1,91 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="guest_user">Гость</string>
-    <string name="sidebar_guest_user">Гость</string>
-    <string name="sidebar_cart">Корзина</string>
-    <string name="sidebar_notifications">Уведомления</string>
-    <string name="sidebar_settings">Настройки</string>
-    <string name="sidebar_about">О нас</string>
-    <string name="sidebar_help">Помощь и поддержка</string>
-
-    <!-- Services -->
-    <string name="service_hotel">Отель</string>
-    <string name="service_travel">Путешествия</string>
-    <string name="service_rent_a_car">Аренда авто</string>
-    <string name="service_food">Еда</string>
-
-    <!-- Explore Fallback -->
-    <string name="explore_error_title">Не удалось загрузить данные</string>
-    <string name="explore_error_subtitle">Проверьте подключение к интернету и повторите попытку</string>
-    <string name="explore_retry">Повторить</string>
-
-    <!-- Orders -->
-    <string name="orders_title">Мои заказы</string>
-    <string name="orders_empty_message">У вас пока нет заказов</string>
-
-    <!-- Wishlist -->
-    <string name="wishlist_title">Список желаний</string>
-
-    <!-- Profile -->
-    <string name="profile_title">Профиль</string>
-    <string name="edit_profile_title">Редактировать профиль</string>
-    <string name="passport_title">Данные паспорта</string>
-    <string name="driver_license_title">Водительские права</string>
-    <string name="personal_info_title">Личная информация</string>
-    <string name="save">Сохранить</string>
-    <string name="cancel">Отмена</string>
-    <string name="confirm">Подтвердить</string>
-    <string name="passport_number">Номер паспорта</string>
-    <string name="license_number">Номер удостоверения</string>
-    <string name="expiry_date">Срок действия (ГГГГ-ММ-ДД)</string>
-    <string name="name_label">Имя</string>
-    <string name="phone_label">Телефон</string>
-    <string name="region_label">Регион</string>
-    <string name="language_label">Язык</string>
-    <string name="date_of_birth_label">Дата рождения (ГГГГ-ММ-ДД)</string>
-    <string name="address_label">Адрес</string>
-    <string name="id_number_label">Номер удостоверения личности</string>
-    <string name="status_completed">Завершено</string>
-    <string name="status_not_completed">Не завершено</string>
-    <string name="overwrite_warning">Примечание: Новые данные перезапишут существующие.</string>
-    <string name="validation_fill_all_fields">Пожалуйста, заполните все поля</string>
-
-    <!-- Profile & Settings Refactor Strings -->
-    <string name="profile_section_profile">Профиль</string>
-    <string name="profile_section_settings">Настройки</string>
-    <string name="profile_wishlist">Избранное</string>
-    <string name="profile_personal_info">Личная информация</string>
-    <string name="profile_passport">Данные паспорта</string>
-    <string name="profile_driver_license">Водительские права</string>
-    <string name="profile_theme_mode">Светлая/Темная тема</string>
-    <string name="profile_language">Язык</string>
-    <string name="profile_region">Регион</string>
-    <string name="profile_card_style">Стиль карточек</string>
-    <string name="profile_about">О приложении</string>
-    <string name="profile_logout">Выйти</string>
-    <string name="profile_logout_dialog_title">Выход</string>
-    <string name="profile_logout_dialog_subtitle">Вы уверены, что хотите выйти из учетной записи?</string>
-
-    <string name="profile_banner_guest_title">Войти / Регистрация</string>
-    <string name="profile_banner_guest_subtitle">Продолжить с аккаунтом</string>
-
-    <string name="card_style_grid">Сетка</string>
-    <string name="card_style_list">Список</string>
-
-    <!-- About Screen Strings -->
-    <string name="about_title">О приложении</string>
-    <string name="app_version_format">Версия %s</string>
-    <string name="about_description">Этот проект разработан Мегруром Нифтиевым для портфолио. Мобильное приложение создано на Kotlin (Jetpack Compose), бэкенд на Node.js, а база данных — Firebase.</string>
+    <string name="about_description">Этот проект разработан Магруром Нифтиевым для портфолио.</string>
+    <string name="about_developer_name">Магрур Нифтиев</string>
     <string name="about_developer_title">Разработчик</string>
-    <string name="about_developer_name">Мегрур Нифтиев</string>
-    <string name="about_tech_title">Технологии</string>
-    <string name="about_tech_mobile">Мобильное приложение: Kotlin &amp; Jetpack Compose</string>
+    <string name="about_service_title">О сервисе</string>
     <string name="about_tech_backend">Бэкенд: Node.js</string>
     <string name="about_tech_database">База данных: Firebase</string>
-
-    <!-- Help Screen Strings -->
-    <string name="help_title">Помощь и поддержка</string>
-    <string name="help_subtitle">Если у вас есть вопросы или предложения, свяжитесь с нами.</string>
+    <string name="about_tech_mobile">Мобильный: Kotlin &amp; Jetpack Compose</string>
+    <string name="about_tech_title">Технологии</string>
+    <string name="about_title">О нас</string>
+    <string name="add_to_cart">В корзину</string>
+    <string name="added_to_cart_format">%s добавлено в корзину</string>
+    <string name="address_label">Адрес</string>
+    <string name="amount_label">СУММА</string>
+    <string name="app_version_format">Версия %s</string>
+    <string name="calories_label">Калории</string>
+    <string name="cancel">Отмена</string>
+    <string name="carb_label">Углеводы</string>
+    <string name="card_style_grid">Сетка</string>
+    <string name="card_style_list">Список</string>
+    <string name="checkpoint_snippet_format">Точка %d</string>
+    <string name="companies_title">Компании</string>
+    <string name="company_detail">О компании</string>
+    <string name="company_gallery_title">Галерея</string>
+    <string name="company_no_sections">Разделы отсутствуют</string>
+    <string name="company_offers_title">Предложения / Товары</string>
+    <string name="company_provider_label">Поставщик</string>
+    <string name="company_rating_format">%1$.1f (%2$d)</string>
+    <string name="company_reviews_count">(%1$d отзывов)</string>
+    <string name="company_reviews_score">%1$.1f / 5.0</string>
+    <string name="company_reviews_title">Отзывы и оценки</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="data_load_failed">Данные не загружены</string>
+    <string name="date_label">Дата</string>
+    <string name="date_of_birth_label">Дата рождения (YYYY-MM-DD)</string>
+    <string name="description_title">Описание</string>
+    <string name="driver_license_title">Водительское удостоверение</string>
+    <string name="duration_label">Длительность</string>
+    <string name="edit_profile_title">Редактировать профиль</string>
+    <string name="expiry_date">Срок действия (YYYY-MM-DD)</string>
+    <string name="explore_error_subtitle">Проверьте подключение к интернету</string>
+    <string name="explore_error_title">Ошибка загрузки данных</string>
+    <string name="explore_retry">Повторить</string>
+    <string name="explore_services">Исследовать сервисы</string>
+    <string name="fat_label">Жиры</string>
+    <string name="features_title">Характеристики</string>
+    <string name="fuel_label">Топливо</string>
+    <string name="generic_error">Произошла ошибка</string>
+    <string name="gram_suffix">г</string>
+    <string name="guest_user">Гость</string>
     <string name="help_email_label">Электронная почта</string>
     <string name="help_email_value">megrurnftiyev@gmail.com</string>
-    <string name="help_send_email">Написать на почту</string>
+    <string name="help_send_email">Отправить e-mail</string>
+    <string name="help_subtitle">Если у вас есть вопросы или предложения, свяжитесь с нами.</string>
+    <string name="help_title">Помощь и поддержка</string>
+    <string name="id_number_label">Номер удостоверения</string>
+    <string name="included_title">Включено</string>
+    <string name="ingredients_title">Состав</string>
+    <string name="join_tour">Присоединиться к туру</string>
+    <string name="kcal_suffix">ккал</string>
+    <string name="language_label">Язык</string>
+    <string name="license_number">Номер удостоверения</string>
+    <string name="map_api_key_missing_subtitle">Укажите MAPS_API_KEY в local.properties для включения карты.</string>
+    <string name="map_api_key_missing_title">Ключ Google Maps не найден</string>
+    <string name="map_points_count_format">%d точек</string>
+    <string name="name_label">Имя</string>
+    <string name="no_reviews_yet">Отзывов пока нет.</string>
+    <string name="order_coming_soon">Заказ скоро будет доступен</string>
+    <string name="order_now">Заказать</string>
+    <string name="orders_empty_message">У вас пока нет заказов</string>
+    <string name="orders_empty_subtitle">Заказанные услуги появятся здесь</string>
+    <string name="orders_empty_title">У вас нет заказов</string>
+    <string name="orders_title">Мои заказы</string>
+    <string name="overwrite_warning">Примечание: Новые данные перезапишут существующие.</string>
+    <string name="passport_number">Номер паспорта</string>
+    <string name="passport_title">Паспортные данные</string>
+    <string name="personal_info_title">Личные данные</string>
+    <string name="phone_label">Телефон</string>
+    <string name="price_label">ЦЕНА</string>
+    <string name="profile_about">О приложении</string>
+    <string name="profile_banner_guest_subtitle">Продолжить с вашим аккаунтом</string>
+    <string name="profile_banner_guest_title">Войти / Регистрация</string>
+    <string name="profile_card_style">Стиль карточки</string>
+    <string name="profile_driver_license">Водительское удостоверение</string>
+    <string name="profile_language">Язык</string>
+    <string name="profile_logout">Выйти</string>
+    <string name="profile_logout_dialog_subtitle">Вы уверены, что хотите выйти из аккаунта?</string>
+    <string name="profile_logout_dialog_title">Выход</string>
+    <string name="profile_passport">Паспортные данные</string>
+    <string name="profile_personal_info">Личные данные</string>
+    <string name="profile_region">Регион</string>
+    <string name="profile_section_profile">Профиль</string>
+    <string name="profile_section_settings">Настройки</string>
+    <string name="profile_theme_mode">Светлая/Темная тема</string>
+    <string name="profile_title">Профиль</string>
+    <string name="profile_wishlist">Избранное</string>
+    <string name="protein_label">Белки</string>
+    <string name="rate_service_label">Оцените услугу:</string>
+    <string name="read_less">Свернуть</string>
+    <string name="read_more">Читать далее</string>
+    <string name="region_label">Регион</string>
+    <string name="rent">Арендовать</string>
+    <string name="rental_coming_soon">Аренда скоро будет доступна</string>
+    <string name="reservation_coming_soon">Бронирование скоро будет доступно</string>
+    <string name="reserve">Забронировать</string>
+    <string name="review_submitted_success">Отзыв успешно добавлен</string>
+    <string name="reviews_ineligible_notice">Чтобы оставить отзыв, вы должны заказать эту услугу.</string>
+    <string name="reviews_title">Отзывы</string>
+    <string name="room_capacity_format">%d-местный</string>
+    <string name="rooms_title">Номера</string>
+    <string name="save">Сохранить</string>
+    <string name="seats_format">%d мест</string>
+    <string name="seats_label">Места</string>
+    <string name="send">Отправить</string>
+    <string name="service_food">Еда</string>
+    <string name="service_hotel">Отель</string>
+    <string name="service_rent_a_car">Аренда авто</string>
+    <string name="service_travel">Путешествия</string>
+    <string name="share_experience_placeholder">Поделитесь вашим опытом...</string>
+    <string name="show_less">Свернуть</string>
+    <string name="sidebar_about">О нас</string>
+    <string name="sidebar_cart">Корзина</string>
+    <string name="sidebar_guest_user">Гость</string>
+    <string name="sidebar_help">Помощь и поддержка</string>
+    <string name="sidebar_notifications">Уведомления</string>
+    <string name="sidebar_settings">Настройки</string>
+    <string name="status_completed">Завершено</string>
+    <string name="status_not_completed">Не завершено</string>
+    <string name="tour_coming_soon">Присоединение к туру скоро будет доступно</string>
+    <string name="tour_roadmap_title">Маршрут тура</string>
+    <string name="transmission_label">Трансмиссия</string>
+    <string name="validation_fill_all_fields">Пожалуйста, заполните все поля</string>
+    <string name="view_on_map">Посмотреть на карте</string>
+    <string name="wishlist_empty_subtitle">Добавляйте понравившиеся услуги в избранное</string>
+    <string name="wishlist_empty_title">Список избранного пуст</string>
+    <string name="wishlist_title">Избранное</string>
+    <string name="write_review">Написать отзыв</string>
+    <string name="write_review_dialog_title">Напишите отзыв</string>
+    <string name="year_label">Год</string>
+    <string name="your_thoughts_label">Ваши мысли</string>
 </resources>

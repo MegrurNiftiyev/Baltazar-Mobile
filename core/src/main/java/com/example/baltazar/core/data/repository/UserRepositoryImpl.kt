@@ -1,5 +1,7 @@
 package com.example.baltazar.core.data.repository
 
+import com.example.baltazar.core.core.constants.CacheKeys
+import com.example.baltazar.core.core.managers.CacheManager
 import com.example.baltazar.core.core.managers.SessionManager
 import com.example.baltazar.core.data.datasources.remote.UserRemoteDataSource
 import com.example.baltazar.core.data.model.request.UpdateDriverLicenseRequestDto
@@ -15,14 +17,27 @@ import javax.inject.Singleton
 @Singleton
 class UserRepositoryImpl @Inject constructor(
     private val remoteDataSource: UserRemoteDataSource,
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val cacheManager: CacheManager
 ) : IUserRepository {
+
+    private suspend fun syncUserToCache(user: User) {
+        sessionManager.set(user)
+        if (!user.isGuest) {
+            user.language.takeIf { it.isNotBlank() }?.let { lang ->
+                cacheManager.setString(CacheKeys.APP_LANGUAGE, lang)
+            }
+            user.region?.takeIf { it.isNotBlank() }?.let { reg ->
+                cacheManager.setString(CacheKeys.APP_REGION, reg)
+            }
+        }
+    }
 
     override suspend fun getCurrentUser(): Result<User> = runCatching {
         val response = remoteDataSource.getCurrentUser()
         val userDto = response.data ?: throw Exception("Empty user response body")
         val user = userDto.toDomain()
-        sessionManager.set(user)
+        syncUserToCache(user)
         user
     }
 
@@ -41,7 +56,7 @@ class UserRepositoryImpl @Inject constructor(
         val response = remoteDataSource.updateProfile(request)
         val userDto = response.data ?: throw Exception("Empty user response body")
         val user = userDto.toDomain()
-        sessionManager.set(user)
+        syncUserToCache(user)
         user
     }
 
@@ -50,7 +65,7 @@ class UserRepositoryImpl @Inject constructor(
         val response = remoteDataSource.updatePhoto(request)
         val userDto = response.data ?: throw Exception("Empty user response body")
         val user = userDto.toDomain()
-        sessionManager.set(user)
+        syncUserToCache(user)
         user
     }
 
@@ -67,7 +82,7 @@ class UserRepositoryImpl @Inject constructor(
         val response = remoteDataSource.updatePersonalInfo(request)
         val userDto = response.data ?: throw Exception("Empty user response body")
         val user = userDto.toDomain()
-        sessionManager.set(user)
+        syncUserToCache(user)
         user
     }
 
@@ -82,7 +97,7 @@ class UserRepositoryImpl @Inject constructor(
         val response = remoteDataSource.updatePassport(request)
         val userDto = response.data ?: throw Exception("Empty user response body")
         val user = userDto.toDomain()
-        sessionManager.set(user)
+        syncUserToCache(user)
         user
     }
 
@@ -97,7 +112,7 @@ class UserRepositoryImpl @Inject constructor(
         val response = remoteDataSource.updateDriverLicense(request)
         val userDto = response.data ?: throw Exception("Empty user response body")
         val user = userDto.toDomain()
-        sessionManager.set(user)
+        syncUserToCache(user)
         user
     }
 }

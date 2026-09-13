@@ -13,11 +13,13 @@ import com.example.baltazar.core.domain.repository.IWishlistRepository
 import com.example.baltazar.feature.travel.domain.repository.ITravelRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,7 +48,7 @@ class TravelDetailViewModel @Inject constructor(
             _state.update { it.copy(isLoading = true, error = null) }
             travelRepository.getTourDetail(tourId)
                 .onSuccess { detail ->
-                    _state.update { it.copy(tour = detail, isLoading = false) }
+                    _state.update { it.copy(tour = detail, isFavorite = detail.isLiked, isLoading = false) }
                 }
                 .onFailure { error ->
                     _state.update { it.copy(isLoading = false, error = error.message) }
@@ -79,10 +81,12 @@ class TravelDetailViewModel @Inject constructor(
     fun toggleFavorite(isFav: Boolean) {
         _state.update { it.copy(isFavorite = isFav) }
         viewModelScope.launch(Dispatchers.IO) {
-            if (isFav) {
-                wishlistRepository.addToWishlist(serviceId = tourId, serviceType = ServiceType.TRAVEL)
-            } else {
-                wishlistRepository.removeFromWishlist(id = tourId)
+            withContext(NonCancellable) {
+                if (isFav) {
+                    wishlistRepository.addToWishlist(serviceId = tourId, serviceType = ServiceType.TRAVEL)
+                } else {
+                    wishlistRepository.removeFromWishlist(id = tourId)
+                }
             }
         }
     }

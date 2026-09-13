@@ -13,7 +13,9 @@ data class TourItem(
     val duration: String,
     val startDate: String,
     val endDate: String,
-    val status: String
+    val status: String,
+    val isLiked: Boolean = false
 )
+
 
 

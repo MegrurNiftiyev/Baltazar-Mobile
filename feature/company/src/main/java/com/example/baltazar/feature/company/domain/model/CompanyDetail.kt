@@ -1,5 +1,7 @@
 package com.example.baltazar.feature.company.domain.model
 
+import com.example.baltazar.feature.company.core.enums.CompanySectionType
+
 data class CompanyDetail(
     val id: String,
     val name: String,

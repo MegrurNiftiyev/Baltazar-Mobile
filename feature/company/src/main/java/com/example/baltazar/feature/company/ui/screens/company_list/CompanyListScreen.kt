@@ -30,8 +30,9 @@ import com.example.baltazar.core.core.components.CustomAppBar
 import com.example.baltazar.core.core.components.ErrorBox
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
+import com.example.baltazar.core.core.enums.ServiceType
 import com.example.baltazar.core.core.enums.TitleAlignment
-import com.example.baltazar.core.core.navigation.CompanyDetail
+import com.example.baltazar.core.core.extensions.navigateToCompanyDetail
 import com.example.baltazar.feature.company.ui.components.CardShimmer
 import com.example.baltazar.feature.company.ui.components.CompanyCard
 
@@ -39,10 +40,17 @@ import com.example.baltazar.feature.company.ui.components.CompanyCard
 @Composable
 fun CompanyListScreen(
     navController: NavHostController,
+    serviceType: ServiceType? = null,
     viewModel: CompanyListViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val listState = rememberLazyListState()
+
+    LaunchedEffect(serviceType) {
+        if (serviceType != null) {
+            viewModel.setServiceType(serviceType)
+        }
+    }
 
     val shouldLoadMore by remember {
         derivedStateOf {
@@ -112,7 +120,7 @@ fun CompanyListScreen(
                                 category = company.category,
                                 address = company.address,
                                 onClick = {
-                                    navController.navigate(CompanyDetail(id = company.id))
+                                    navController.navigateToCompanyDetail(state.serviceType, company.id)
                                 }
                             )
                         }

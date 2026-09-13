@@ -36,8 +36,11 @@ import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
 import com.example.baltazar.core.core.enums.CardViewMode
 import com.example.baltazar.core.core.enums.TitleAlignment
+import com.example.baltazar.core.core.extensions.consumeResult
 import com.example.baltazar.core.core.navigation.CompanyList
 import com.example.baltazar.core.core.navigation.HotelDetail
+import com.example.baltazar.core.core.navigation.LikeResult
+import com.example.baltazar.core.core.navigation.NavResultKeys
 import com.example.baltazar.feature.hotel.R
 import com.example.baltazar.feature.hotel.ui.components.HotelCard
 import compose.icons.TablerIcons
@@ -51,6 +54,14 @@ fun HotelsScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val listState = rememberLazyGridState()
+
+    val currentEntry = navController.currentBackStackEntry
+    val likeResult = currentEntry?.consumeResult<LikeResult>(NavResultKeys.LIKE_RESULT)
+    LaunchedEffect(likeResult) {
+        likeResult?.let { result ->
+            viewModel.toggleFavorite(result.itemId, result.isLiked)
+        }
+    }
 
     val shouldLoadMore by remember {
         derivedStateOf {
@@ -70,19 +81,7 @@ fun HotelsScreen(
             CustomAppBar(
                 title = stringResource(id = R.string.hotel_title),
                 alignment = TitleAlignment.CENTER,
-                onBackClick = { navController.popBackStack() },
-                trailingContent = {
-                    IconButton(
-                        onClick = { navController.navigate(CompanyList(serviceType = "HOTEL")) }
-                    ) {
-                        Icon(
-                            imageVector = TablerIcons.Building,
-                            contentDescription = null,
-                            modifier = Modifier.size(IconSizes.Large),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
+                onBackClick = { navController.popBackStack() }
             )
         },
         containerColor = MaterialTheme.colorScheme.background
@@ -122,6 +121,8 @@ fun HotelsScreen(
                             hotel = item,
                             isLoading = false,
                             cardViewMode = state.cardViewMode,
+                            isFavorite = item.isLiked,
+                            onFavoriteClick = { isFav -> viewModel.toggleFavorite(item.id, isFav) },
                             onClick = { navController.navigate(HotelDetail(item.id)) }
                         )
                     }

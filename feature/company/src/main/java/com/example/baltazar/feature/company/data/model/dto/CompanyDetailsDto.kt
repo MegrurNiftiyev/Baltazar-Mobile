@@ -1,7 +1,7 @@
 package com.example.baltazar.feature.company.data.model.dto
 
+import com.example.baltazar.feature.company.core.enums.CompanySectionType
 import com.example.baltazar.feature.company.domain.model.CompanyDetail
-import com.example.baltazar.feature.company.domain.model.CompanySectionType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

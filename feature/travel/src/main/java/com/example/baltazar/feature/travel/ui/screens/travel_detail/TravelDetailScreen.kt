@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -33,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,6 +52,10 @@ import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
+import com.example.baltazar.core.core.enums.ServiceType
+import com.example.baltazar.core.core.extensions.setPreviousResult
+import com.example.baltazar.core.core.navigation.LikeResult
+import com.example.baltazar.core.core.navigation.NavResultKeys
 import com.example.baltazar.core.core.navigation.TourRoadmap
 import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
@@ -94,6 +101,7 @@ fun TravelDetailScreen(
     } else emptyList()
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
             DetailBottomBar(
                 price = state.tour.price,
@@ -140,7 +148,7 @@ fun TravelDetailScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .offset(y = -Spaces.ExtraLarge)
+                            .offset(y = -Spaces.Medium)
                             .clip(RoundedCornerShape(topStart = BorderRadiuses.ExtraLarge, topEnd = BorderRadiuses.ExtraLarge))
                             .background(MaterialTheme.colorScheme.background)
                             .padding(horizontal = Paddings.LargeMinus, vertical = Paddings.Large),
@@ -311,6 +319,16 @@ fun TravelDetailScreen(
                             )
                         }
 
+                        if (!state.isLoading && state.tour.companyName.isNotBlank() && state.tour.companyId.isNotBlank()) {
+                            com.example.baltazar.core.core.components.cards.CompanyDetailCard(
+                                companyName = state.tour.companyName,
+                                companyProfilePhoto = state.tour.companyProfilePhoto,
+                                onClick = {
+                                    navController.navigate(com.example.baltazar.core.core.navigation.TravelCompanyDetail(id = state.tour.companyId))
+                                }
+                            )
+                        }
+
                         ReviewSection(
                             reviews = state.reviews,
                             rating = state.tour.rating,
@@ -329,7 +347,17 @@ fun TravelDetailScreen(
                 DetailTopBarOverlay(
                     onBackClick = { navController.popBackStack() },
                     isFavorite = state.isFavorite,
-                    onFavoriteClick = { viewModel.toggleFavorite(it) }
+                    onFavoriteClick = { isFav ->
+                        viewModel.toggleFavorite(isFav)
+                        navController.setPreviousResult(
+                            NavResultKeys.LIKE_RESULT,
+                            LikeResult(
+                                itemId = state.tour.id,
+                                isLiked = isFav,
+                                serviceType = ServiceType.TRAVEL
+                            )
+                        )
+                    }
                 )
             }
         }

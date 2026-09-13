@@ -1,9 +1,11 @@
 package com.example.baltazar.feature.food.data.datasources.remote.datasources
 
 import com.example.baltazar.core.core.network.executeRequest
+import com.example.baltazar.core.data.model.response.ApiResponse
+import com.example.baltazar.core.data.model.response.PaginatedResponse
 import com.example.baltazar.feature.food.data.datasources.remote.services.FoodApiService
-import com.example.baltazar.feature.food.data.model.response.FoodDetailResponse
-import com.example.baltazar.feature.food.data.model.response.FoodResponse
+import com.example.baltazar.feature.food.data.model.dto.FoodDetailDto
+import com.example.baltazar.feature.food.data.model.dto.FoodItemDto
 import javax.inject.Inject
 
 class FoodRemoteDataSource @Inject constructor(
@@ -17,7 +19,7 @@ class FoodRemoteDataSource @Inject constructor(
         maxPrice: Double? = null,
         limit: Int? = 20,
         cursor: String? = null
-    ): FoodResponse {
+    ): PaginatedResponse<FoodItemDto> {
         return executeRequest(
             apiCall = {
                 apiService.getFoodItems(
@@ -33,7 +35,7 @@ class FoodRemoteDataSource @Inject constructor(
         )
     }
 
-    suspend fun getFoodItemDetails(id: String): FoodDetailResponse {
+    suspend fun getFoodItemDetails(id: String): ApiResponse<FoodDetailDto> {
         return executeRequest(
             apiCall = {
                 apiService.getFoodItemDetails(id)

@@ -24,7 +24,11 @@ data class FoodDetailDto(
     @SerialName("rating") val rating: Double = 0.0,
     @SerialName("reviewCount") val reviewCount: Int = 0,
     @SerialName("priceSuffix") val priceSuffix: String? = "",
-    @SerialName("reviewEligibility") val reviewEligibility: ReviewEligibilityDto? = null
+    @SerialName("currency") val currency: String? = "AZN",
+    @SerialName("companyName") val companyName: String? = null,
+    @SerialName("companyProfilePhoto") val companyProfilePhoto: String? = null,
+    @SerialName("reviewEligibility") val reviewEligibility: ReviewEligibilityDto? = null,
+    @SerialName("isLiked") val isLiked: Boolean = false
 ) {
     fun toDomain(): FoodDetail = FoodDetail(
         id = id,
@@ -43,6 +47,11 @@ data class FoodDetailDto(
         rating = rating,
         reviewCount = reviewCount,
         priceSuffix = priceSuffix ?: "",
-        reviewEligibility = reviewEligibility?.toDomain() ?: ReviewEligibility()
+        currency = currency?.ifBlank { "AZN" } ?: "AZN",
+        companyName = companyName.orEmpty(),
+        companyProfilePhoto = companyProfilePhoto,
+        reviewEligibility = reviewEligibility?.toDomain() ?: ReviewEligibility(),
+        isLiked = isLiked
     )
 }
+

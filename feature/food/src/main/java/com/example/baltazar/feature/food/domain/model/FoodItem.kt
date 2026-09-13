@@ -9,5 +9,7 @@ data class FoodItem(
     val priceSuffix: String,
     val rating: Double = 0.0,
     val reviewCount: Int = 0,
-    val image: String
+    val image: String,
+    val isLiked: Boolean = false
 )
+

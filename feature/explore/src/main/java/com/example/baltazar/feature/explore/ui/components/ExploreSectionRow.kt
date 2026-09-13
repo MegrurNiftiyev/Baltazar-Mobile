@@ -32,7 +32,8 @@ fun ExploreSectionRow(
     isLoading: Boolean,
     onItemClick: (ServiceCardItem) -> Unit,
     onSeeAllClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFavoriteClick: ((ServiceCardItem, Boolean) -> Unit)? = null
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
@@ -56,7 +57,7 @@ fun ExploreSectionRow(
             
             if (!isLoading) {
                 CustomTextButton(
-                    text = "See all",
+                    text = androidx.compose.ui.res.stringResource(com.example.baltazar.core.R.string.read_more),
                     onClick = onSeeAllClick
                 )
             }
@@ -87,7 +88,9 @@ fun ExploreSectionRow(
                         price = item.price,
                         currency = item.currency,
                         priceSuffix = item.priceSuffix,
-                        rating = if (item.rating > 0) item.rating else null
+                        rating = if (item.rating > 0) item.rating else null,
+                        isFavorite = item.isLiked,
+                        onFavoriteClick = { isFav -> onFavoriteClick?.invoke(item, isFav) }
                     )
                 }
             }

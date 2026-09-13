@@ -16,7 +16,9 @@ data class HotelItem(
     val priceSuffix: String,
     val currency: String,
     val images: List<String>,
-    val createdAt: String
+    val createdAt: String,
+    val isLiked: Boolean = false
 )
+
 
 

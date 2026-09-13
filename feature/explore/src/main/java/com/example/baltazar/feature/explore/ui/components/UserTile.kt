@@ -29,7 +29,7 @@ fun UserTile(
     isLoading: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
-    val isGuest = user.role == "GUEST"
+    val isGuest = user.isGuest
 
     ShimmerWrapper(
         isLoading = isLoading,

@@ -73,6 +73,24 @@ object FoodCompanyList
 data class FoodCompanyDetail(val id: String)
 
 @Serializable
+object HotelCompanyList
+
+@Serializable
+data class HotelCompanyDetail(val id: String)
+
+@Serializable
+object TravelCompanyList
+
+@Serializable
+data class TravelCompanyDetail(val id: String)
+
+@Serializable
+object RentACarCompanyList
+
+@Serializable
+data class RentACarCompanyDetail(val id: String)
+
+@Serializable
 data class CompanyList(val serviceType: String? = null)
 
 @Serializable
@@ -105,19 +123,7 @@ object ProfileUserDetail
 
 // Order Flow Sub-Screens
 @Serializable
-object OrderPersonalInfo
-
-@Serializable
-object OrderPassportInfo
-
-@Serializable
 object OrderDriverLicense
-
-@Serializable
-object OrderDeliveryAddress
-
-@Serializable
-object OrderAddressSelection
 
 @Serializable
 object OrderMapDeliverySelection

@@ -7,7 +7,6 @@ import com.example.baltazar.core.core.enums.Region
 import com.example.baltazar.core.core.managers.CacheManager
 import com.example.baltazar.core.core.managers.EncryptedCacheManager
 import com.example.baltazar.core.core.managers.SessionManager
-import com.example.baltazar.core.core.preferences.AppPreferences
 import com.example.baltazar.core.domain.repository.ISettingsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -18,7 +17,6 @@ import javax.inject.Singleton
 class SettingsRepository @Inject constructor(
     private val cacheManager: CacheManager,
     private val encryptedCacheManager: EncryptedCacheManager,
-    private val appPreferences: AppPreferences,
     private val sessionManager: SessionManager
 ) : ISettingsRepository {
 
@@ -28,13 +26,13 @@ class SettingsRepository @Inject constructor(
     override val language: Flow<Language>
         get() = cacheManager.getString(
             CacheKeys.APP_LANGUAGE,
-            appPreferences.getSavedLanguage() ?: Language.AZ.code
+            Language.AZ.code
         ).map { Language.fromCode(it) }
 
     override val region: Flow<Region>
         get() = cacheManager.getString(
             CacheKeys.APP_REGION,
-            appPreferences.getSavedRegion() ?: Region.AZ.code
+            Region.AZ.code
         ).map { Region.fromCode(it) }
 
     override val cardViewMode: Flow<CardViewMode>
@@ -57,7 +55,7 @@ class SettingsRepository @Inject constructor(
     override suspend fun setLanguage(languageCode: String) {
         val lang = Language.fromCode(languageCode)
         cacheManager.setString(CacheKeys.APP_LANGUAGE, lang.code)
-        appPreferences.saveLanguage(lang.code)
+        sessionManager.update { it.copy(language = lang.code) }
     }
 
     override suspend fun setRegion(region: Region) {
@@ -67,7 +65,7 @@ class SettingsRepository @Inject constructor(
     override suspend fun setRegion(regionCode: String) {
         val reg = Region.fromCode(regionCode)
         cacheManager.setString(CacheKeys.APP_REGION, reg.code)
-        appPreferences.saveRegion(reg.code)
+        sessionManager.update { it.copy(region = reg.code) }
     }
 
     override suspend fun setCardViewMode(mode: CardViewMode) {

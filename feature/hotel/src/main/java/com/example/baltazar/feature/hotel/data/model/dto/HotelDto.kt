@@ -21,7 +21,8 @@ data class HotelDto(
     @SerialName("priceSuffix") val priceSuffix: String? = "/ night",
     @SerialName("currency") val currency: String? = "AZN",
     @SerialName("images") val images: List<String> = emptyList(),
-    @SerialName("createdAt") val createdAt: String? = null
+    @SerialName("createdAt") val createdAt: String? = null,
+    @SerialName("isLiked") val isLiked: Boolean = false
 ) {
     fun toDomain(): HotelItem {
         return HotelItem(
@@ -40,7 +41,9 @@ data class HotelDto(
             priceSuffix = priceSuffix ?: "/ night",
             currency = currency ?: "AZN",
             images = images,
-            createdAt = createdAt.orEmpty()
+            createdAt = createdAt.orEmpty(),
+            isLiked = isLiked
         )
     }
 }
+

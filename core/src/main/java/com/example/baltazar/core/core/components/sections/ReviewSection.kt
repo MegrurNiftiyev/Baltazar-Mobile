@@ -90,7 +90,7 @@ fun ReviewSection(
         } else {
             Text(
                 text = stringResource(R.string.no_reviews_yet),
-                fontSize = 14.sp,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(vertical = Paddings.Small)
             )

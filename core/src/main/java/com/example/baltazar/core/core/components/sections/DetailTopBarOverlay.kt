@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
+import com.example.baltazar.core.core.theme.FavoriteRed
 import compose.icons.TablerIcons
 import compose.icons.tablericons.ArrowLeft
 import compose.icons.tablericons.Heart
@@ -58,7 +59,7 @@ fun DetailTopBarOverlay(
                 DetailFloatingActionButton(
                     icon = if (isFavorite) Icons.Filled.Favorite else TablerIcons.Heart,
                     contentDescription = "Favorite",
-                    tint = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+                    tint = if (isFavorite) FavoriteRed else MaterialTheme.colorScheme.onSurface,
                     onClick = { onFavoriteClick(!isFavorite) }
                 )
             }

@@ -18,7 +18,8 @@ data class CarDto(
     @SerialName("rating") val rating: Double = 0.0,
     @SerialName("reviewCount") val reviewCount: Int = 0,
     @SerialName("transmission") val transmission: String? = null,
-    @SerialName("fuelType") val fuelType: String? = null
+    @SerialName("fuelType") val fuelType: String? = null,
+    @SerialName("isLiked") val isLiked: Boolean = false
 ) {
     fun toDomain(): CarItem {
         val carTitle = when {
@@ -40,7 +41,9 @@ data class CarDto(
             rating = rating,
             reviewCount = reviewCount,
             transmission = transmission.orEmpty(),
-            fuelType = fuelType.orEmpty()
+            fuelType = fuelType.orEmpty(),
+            isLiked = isLiked
         )
     }
 }
+

@@ -17,7 +17,9 @@ fun ServiceItemCard(
     price: Double? = null,
     currency: String? = "AZN",
     priceSuffix: String? = null,
-    rating: Double? = null
+    rating: Double? = null,
+    isFavorite: Boolean = false,
+    onFavoriteClick: ((Boolean) -> Unit)? = null
 ) {
     StandardItemCard(
         onClick = onClick,
@@ -30,6 +32,8 @@ fun ServiceItemCard(
         price = price,
         currency = currency,
         priceSuffix = priceSuffix,
-        rating = rating
+        rating = rating,
+        isFavorite = isFavorite,
+        onFavoriteClick = onFavoriteClick
     )
 }

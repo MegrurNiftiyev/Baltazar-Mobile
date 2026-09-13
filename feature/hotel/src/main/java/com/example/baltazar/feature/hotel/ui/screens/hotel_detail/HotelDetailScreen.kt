@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +25,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -31,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,6 +53,10 @@ import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
+import com.example.baltazar.core.core.enums.ServiceType
+import com.example.baltazar.core.core.extensions.setPreviousResult
+import com.example.baltazar.core.core.navigation.LikeResult
+import com.example.baltazar.core.core.navigation.NavResultKeys
 import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.feature.hotel.ui.components.HotelRoomCard
@@ -80,10 +87,11 @@ fun HotelDetailScreen(
     }
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
             DetailBottomBar(
                 price = state.effectivePrice,
-                currency = "AZN",
+                currency = state.hotel.currency,
                 priceSuffix = state.hotel.priceSuffix,
                 actionButtonText = stringResource(R.string.reserve),
                 isLoading = state.isLoading,
@@ -126,8 +134,8 @@ fun HotelDetailScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .offset(y = -Spaces.ExtraLarge)
-                            .clip(RoundedCornerShape(topStart = BorderRadiuses.ExtraLarge, topEnd = BorderRadiuses.ExtraLarge))
+                            .offset(y = -Spaces.Medium)
+                            .clip(RoundedCornerShape(topStart = BorderRadiuses.Massive, topEnd = BorderRadiuses.Massive))
                             .background(MaterialTheme.colorScheme.background)
                             .padding(horizontal = Paddings.LargeMinus, vertical = Paddings.Large),
                         verticalArrangement = Arrangement.spacedBy(Spaces.Large)
@@ -256,6 +264,7 @@ fun HotelDetailScreen(
                                     state.rooms.forEach { room ->
                                         HotelRoomCard(
                                             room = room,
+                                            currency = state.hotel.currency,
                                             priceSuffix = state.hotel.priceSuffix,
                                             isSelected = state.selectedRoomId == room.id,
                                             onClick = { viewModel.selectRoom(room.id) }
@@ -283,7 +292,17 @@ fun HotelDetailScreen(
                 DetailTopBarOverlay(
                     onBackClick = { navController.popBackStack() },
                     isFavorite = state.isFavorite,
-                    onFavoriteClick = { viewModel.toggleFavorite(it) }
+                    onFavoriteClick = { isFav ->
+                        viewModel.toggleFavorite(isFav)
+                        navController.setPreviousResult(
+                            NavResultKeys.LIKE_RESULT,
+                            LikeResult(
+                                itemId = state.hotel.id,
+                                isLiked = isFav,
+                                serviceType = ServiceType.HOTEL
+                            )
+                        )
+                    }
                 )
             }
         }

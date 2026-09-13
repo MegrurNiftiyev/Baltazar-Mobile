@@ -11,5 +11,7 @@ data class CarItem(
     val rating: Double = 0.0,
     val reviewCount: Int = 0,
     val transmission: String,
-    val fuelType: String
+    val fuelType: String,
+    val isLiked: Boolean = false
 )
+

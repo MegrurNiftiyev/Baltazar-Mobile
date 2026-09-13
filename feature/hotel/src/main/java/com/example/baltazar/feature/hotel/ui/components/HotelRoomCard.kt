@@ -39,6 +39,7 @@ import compose.icons.tablericons.User
 @Composable
 fun HotelRoomCard(
     room: HotelRoom,
+    currency: String = "AZN",
     priceSuffix: String = "/ gecə",
     isSelected: Boolean = false,
     onClick: (() -> Unit)? = null,
@@ -138,7 +139,7 @@ fun HotelRoomCard(
             }
 
             Text(
-                text = formatPrice(room.price, "AZN", priceSuffix),
+                text = formatPrice(room.price, currency, priceSuffix),
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary

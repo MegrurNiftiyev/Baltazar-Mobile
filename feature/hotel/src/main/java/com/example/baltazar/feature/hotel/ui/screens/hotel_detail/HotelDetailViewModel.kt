@@ -12,11 +12,13 @@ import com.example.baltazar.core.domain.repository.IWishlistRepository
 import com.example.baltazar.feature.hotel.domain.repository.IHotelRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,17 +35,14 @@ class HotelDetailViewModel @Inject constructor(
 
     init {
         loadHotelDetails()
-        loadRooms()
+        loadHotelRooms()
         loadReviews()
     }
 
     fun onMessageShown() = _state.update { it.copy(userMessage = null) }
 
     fun selectRoom(roomId: String) {
-        _state.update {
-            val newSelectedId = if (it.selectedRoomId == roomId) null else roomId
-            it.copy(selectedRoomId = newSelectedId)
-        }
+        _state.update { it.copy(selectedRoomId = roomId) }
     }
 
     fun loadHotelDetails() {
@@ -51,7 +50,7 @@ class HotelDetailViewModel @Inject constructor(
             _state.update { it.copy(isLoading = true, error = null) }
             hotelRepository.getHotelDetail(hotelId)
                 .onSuccess { detail ->
-                    _state.update { it.copy(hotel = detail, isLoading = false) }
+                    _state.update { it.copy(hotel = detail, isFavorite = detail.isLiked, isLoading = false) }
                 }
                 .onFailure { error ->
                     _state.update { it.copy(isLoading = false, error = error.message) }
@@ -59,7 +58,7 @@ class HotelDetailViewModel @Inject constructor(
         }
     }
 
-    private fun loadRooms() {
+    private fun loadHotelRooms() {
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isRoomsLoading = true) }
             hotelRepository.getHotelRooms(hotelId)
@@ -95,10 +94,12 @@ class HotelDetailViewModel @Inject constructor(
     fun toggleFavorite(isFav: Boolean) {
         _state.update { it.copy(isFavorite = isFav) }
         viewModelScope.launch(Dispatchers.IO) {
-            if (isFav) {
-                wishlistRepository.addToWishlist(serviceId = hotelId, serviceType = ServiceType.HOTEL)
-            } else {
-                wishlistRepository.removeFromWishlist(id = hotelId)
+            withContext(NonCancellable) {
+                if (isFav) {
+                    wishlistRepository.addToWishlist(serviceId = hotelId, serviceType = ServiceType.HOTEL)
+                } else {
+                    wishlistRepository.removeFromWishlist(id = hotelId)
+                }
             }
         }
     }

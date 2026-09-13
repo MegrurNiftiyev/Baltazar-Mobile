@@ -1,4 +1,4 @@
-package com.example.baltazar.feature.company.domain.model
+package com.example.baltazar.feature.company.core.enums
 
 enum class CompanySectionType {
     HEADER,

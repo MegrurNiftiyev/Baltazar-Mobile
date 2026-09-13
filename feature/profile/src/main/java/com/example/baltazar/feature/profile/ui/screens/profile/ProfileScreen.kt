@@ -66,7 +66,7 @@ fun ProfileScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
-    val isGuest = state.user.role == "GUEST"
+    val isGuest = state.user.isGuest
 
     LaunchedEffect(state.isLoggedOut) {
         if (state.isLoggedOut) {

@@ -1,93 +1,130 @@
-# 🚀 Baltazar Detailed Task & Refactoring Specifications
+Implementation Plan: UI Polish, Edge-to-Edge, Company Redesign & Localization
+Comprehensive plan to address currency dynamic resolution, full strings localization for detail sections, overlapping container border radius doubling, custom favorite color definition, real API price & suffix wiring, EmptyStateView reusable component for Wishlist & Orders, nutrition chart dedicated macro colors, card price/suffix overflow safety, outer Scaffold edge-to-edge in MainActivity, Hotel screen company button removal, and Company List & Detail screen redesign.
 
-## ✅ Tamamlananlar
-- [x] **AuthSelection Screen**: UI, ViewModel və State strukturu quruldu.
-- [x] **Localization**: Bütün auth ekranları (Onboarding, Selection, Login, Register) EN, AZ, TR dillərinə tam uyğunlaşdırıldı.
-- [x] **DI Standardization**: Bütün modullarda DI qovluqları `core/di` olaraq standartlaşdırıldı.
-- [x] **Font & Style**: Inter şrift ailəsi layihəyə inteqrasiya edildi və Typography yeniləndi.
-- [x] **Project SDK**: Bütün modullarda `minSdk` 25-ə qaldırıldı.
-- [x] **Company Components Refactoring**: `Company` modulundakı komponentlər sadələşdirildi (`Company` prefiksi silindi), dizayn tokenləri və lokallaşdırma təmin edildi.
-- [x] **Company List Service Navigation**: Servis ekranlarından (`Travels`, `RentACars`, `Foods`, `Hotels`) müvafiq servisin `CompanyList`-inə keçid düyməsi əlavə edildi.
+Proposed Changes
+1. Core Module (:core)
+[NEW] 
+EmptyStateView.kt
+Create a modern, reusable empty state composable featuring:
+Icon with soft circular container background
+Headline/Title with MaterialTheme.typography.titleMedium
+Subtitle/Description with MaterialTheme.typography.bodyMedium
+Optional action button (Button / OutlinedButton)
+Centered layout suitable for WishlistScreen, OrdersScreen, and generic empty lists.
+[MODIFY] 
+Color.kt
+Define custom dedicated colors:
+FavoriteRed = Color(0xFFFF3355) (Vibrant modern heart rose/red)
+NutritionCalories = Color(0xFFF59E0B) (Amber / Warm Orange)
+NutritionProtein = Color(0xFFEF4444) (Coral Red)
+NutritionFat = Color(0xFF8B5CF6) (Purple)
+NutritionCarbs = Color(0xFF06B6D4) (Cyan / Aqua Blue)
+[MODIFY] 
+FavoriteButton.kt
+ & 
+DetailTopBarOverlay.kt
+Update default active/selected tint from MaterialTheme.colorScheme.error to FavoriteRed.
+[MODIFY] 
+StandardItemCard.kt
+ & 
+PriceExtensions.kt
+Enhance price + suffix layout to prevent suffix overflow or awkward breaking when currency/suffix strings are long.
+Use FavoriteButton with FavoriteRed for active state and Color.White for default unselected state.
+[MODIFY] String Resources
+Update 
+strings.xml
+, values-az/strings.xml, values-en/strings.xml, values-tr/strings.xml to include all missing strings for detail screen headers, empty states (wishlist_empty_title, wishlist_empty_subtitle, orders_empty_title, orders_empty_subtitle, etc.).
+2. App Module (:app)
+[MODIFY] 
+MainActivity.kt
+Update outer Scaffold to have contentWindowInsets = WindowInsets(0, 0, 0, 0) so it does not consume system insets, and remove Modifier.padding(innerPadding) from AppNavGraph. Each internal screen manages its own insets.
+3. Detail Screens (Border Radius, Currency & Localization)
+[MODIFY] 
+FoodDetailScreen.kt
+Increase top corner border radius of the overlapping card from BorderRadiuses.ExtraLarge (24.dp) to BorderRadiuses.Massive (48.dp).
+Pass dynamic currency and price suffix.
+Ensure all headers & texts are localized.
+[MODIFY] 
+NutritionChart.kt
+Use custom colors NutritionCalories, NutritionProtein, NutritionFat, NutritionCarbs instead of theme palette defaults.
+[MODIFY] 
+CarDetailScreen.kt
+Increase top corner border radius of overlapping card to BorderRadiuses.Massive (48.dp).
+Remove legacy SideEffect status bar color modification block.
+Pass dynamic currency and suffix.
+[MODIFY] 
+TravelDetailScreen.kt
+Increase top corner border radius of overlapping card to BorderRadiuses.Massive (48.dp).
+Remove legacy SideEffect status bar color modification block.
+Pass dynamic currency and suffix.
+[MODIFY] 
+HotelDetailScreen.kt
+Increase top corner border radius of overlapping card to BorderRadiuses.Massive (48.dp).
+Remove legacy SideEffect status bar color modification block.
+Pass dynamic currency and suffix.
+4. Feature Modules (Hotels, Wishlist, Orders, Company)
+[MODIFY] 
+HotelsScreen.kt
+Remove trailingContent (Company list icon button) from CustomAppBar in HotelsScreen.
+[MODIFY] 
+WishlistScreen.kt
+Integrate EmptyStateView when wishlist is empty with icon TablerIcons.Heart, localized title, and subtitle.
+[MODIFY] 
+OrdersScreen.kt
+Integrate EmptyStateView when orders list is empty with icon TablerIcons.Receipt or TablerIcons.Package, localized title, and subtitle.
+[MODIFY] 
+CompanyCard.kt
+Redesign into a clean horizontal Row card:
+Left: Rounded company logo/avatar (e.g. 56x56dp or 64x64dp) with fallback placeholder.
+Middle: Company name, category chip/pill, address with pin icon.
+Right: Rating badge / arrow indicator.
+[MODIFY] 
+CompanyDetailScreen.kt
+Redesign top bar & header:
+Replace DetailTopImageCarousel and DetailTopBarOverlay with standard CustomAppBar (Title = company name / header, back button).
+No wishlist / favorite toggle.
+Create attractive company profile header (cover / avatar banner, verification badge, contact actions).
+Verification Plan
+Automated Build Verification
+Run ./gradlew :app:assembleDebug --daemon to verify all modules compile cleanly with zero errors.
+Manual Verification Flow
+Verify MainActivity edge-to-edge behavior across screens.
+Open FoodDetailScreen, CarDetailScreen, TravelDetailScreen, HotelDetailScreen and check:
+Overlapping card top border radius is 48.dp (double).
+Dynamic price currency & suffix.
+Localized headers and text.
+Heart button displays custom vibrant red when favorited.
+Open HotelsScreen and verify no Company button in TopBar.
+Open WishlistScreen and OrdersScreen and verify empty state UI with EmptyStateView.
+Open CompanyListScreen and CompanyDetailScreen and verify row-based card and custom header design without carousel / favorite icon.
 
----
+bunalri deysdin 
 
-## 🚧 Növbəti Addımlar (Sabah Görüləcək Detallı İşlər)
-
-### 1. Hər Modulun NavGraph-ında Şirkətlər Marşrutunun İnteqrasiyası
-- [ ] **Məqsəd:** Hər modulun öz daxili navqasiya qrafında (`travelNavGraph`, `rentACarNavGraph`, `foodNavGraph`, `hotelNavGraph`) müvafiq servisin şirkətlər siyahısı və detail marşrutları yaradılacaq.
-- [ ] **Nümunə Kod Strukturu:**
-  ```kotlin
-  // Example for feature:travel
-  @Serializable object TravelCompanies
-  @Serializable data class TravelCompanyDetail(val id: String)
-
-  fun NavGraphBuilder.travelNavGraph(navController: NavHostController) {
-      composable<TravelsList> { ... }
-      composable<TravelCompanies> {
-          CompanyListScreen(
-              navController = navController,
-              serviceType = ServiceType.TRAVEL,
-              onCompanyClick = { id -> navController.navigate(TravelCompanyDetail(id)) },
-              onBackClick = { navController.popBackStack() }
-          )
-      }
-      composable<TravelCompanyDetail> { backStackEntry ->
-          val args = backStackEntry.toRoute<TravelCompanyDetail>()
-          CompanyDetailScreen(navController = navController, companyId = args.id)
-      }
-  }
-  ```
-- [ ] Analoji olaraq `rentACarNavGraph`, `foodNavGraph` və `hotelNavGraph` modullarında eyni marşrutlar qoşulacaq.
-
----
-
-### 2. List Və Detail Ekranlarında Refresh İndikatorlarının Və State-lərinin Düzəldilməsi
-- [ ] **Məqsəd:** `CompanyListScreen`, `TravelsScreen`, `RentACarsScreen`, `FoodsScreen`, `HotelsScreen` və Detail ekranlarında `PullToRefreshBox` mexanizmi tam audit olunacaq.
-- [ ] `state.isRefreshing` bayrağının pull-to-refresh hərəkəti zamanı `true` olması və indikatorun vizual olaraq fırlanması təmin ediləcək.
-- [ ] Məlumatlar gəldikdən sonra `isRefreshing = false` edilərək indikator itiriləcək.
-
----
-
-### 3. Detail Ekranlarının Karusel Və Şəkil Overlay Yenilənməsi (`DetailTopImageCarousel` / `DetailBox`)
-- [ ] **Karusel Nöqtələri (Dots Indicator):**
-  - Hazırkı böyük indikator nöqtələri balacalaşdırılacaq: Passiv nöqtələr `6.dp x 6.dp` dairəvi, aktiv nöqtə `16.dp` uzadılmış pill (oval) formasına gətiriləcək.
-  - Nöqtələr arasında `Spaces.ExtraSmall` (4.dp) məsafə qoyulacaq.
-  - İndikator bloku arxa fona yarımşəffaf pill konteyner içində yerləşdiriləcək.
-- [ ] **Detail Box Küncləri Və Üst-Üstə Düşməsi (Border Radius & Overlap):**
-  - Örtük şəklinin (cover image) altındakı məlumat qutusunun üst künc radiusu 2 qat artırılacaq: `RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)` (`BorderRadiuses.ExtraLarge`).
-  - Məlumat qutusu mənfi vertikal ofset (`offset(y = (-24).dp)`) və ya mənfi top padding verilərək örtük şəklinin alt hissəsinin üstünə estetik şəkildə keçiriləcək (Edge-to-Edge görünüşü).
-
----
-
-### 4. Rəy Və Reytinq Yazma Komponenti (`ReviewSubmissionComponent`)
-- [ ] **Məqsəd:** İstifadəçinin rəy yazmaq icazəsi olduqda (`isEligibleForReview == true`) rəy və reytinq göndərə bilməsi üçün komponent hazırlanacaq.
-- [ ] **Komponent Strukturu (`ReviewSubmissionComponent.kt`):**
-  - **Ulduz Reytinqi Seçimi:** 1-dən 5-ə qədər interaktiv ulduz seçimi (kliklədikdə dolan `TablerIcons.StarFilled`).
-  - **Mətn Sahəsi:** Çoxsətirli şərh yazma `OutlinedTextField` / `CustomTextField`.
-  - **Göndər Düyməsi:** `CustomTextButton` / Primary düymə.
-- [ ] Bu komponent `CompanyDetailScreen`, `TravelDetailScreen`, `RentACarDetailScreen`, `FoodDetailScreen` və `HotelDetailScreen` rəylər bölməsinin aşağısına inteqrasiya olunacaq.
-
----
-
-### 5. Favori (Ürək) Düyməsinin Yenilənməsi (`StandardItemCard` / `FavoriteButton`)
-- [ ] **İkon Dəyişikliyi:**
-  - `isFavorite == true` olduqda: `TablerIcons.HeartFilled` (dolu ürək).
-  - `isFavorite == false` olduqda: `TablerIcons.Heart` (kontur ürək).
-- [ ] **Rəng Düzəlişi:**
-  - `isFavorite == true` olduqda ikon və haşiyə rəngi: `MaterialTheme.colorScheme.error` (parlaq qırmızı).
-  - `isFavorite == false` olduqda: `MaterialTheme.colorScheme.onSurfaceVariant`.
-
----
-
-### 6. Food Detail Ekranının Bədcləri Və Xüsusi Rəngləri (`FoodDetailScreen`)
-- [ ] Qida göstəriciləri (Kalori, Zülal, Karbohidrat, Yağ) üçün spesifik semantik container rəngləri təyin ediləcək:
-  - **Kalori:** Qırmızımsı/Al-qırmızı ton (`MaterialTheme.colorScheme.errorContainer` / `error`).
-  - **Karbohidrat:** Sarımşıl/Narıncı ton.
-  - **Zülal (Protein):** Yaşılımtıl/Uğurlu ton.
-  - **Yağ (Fat):** Əsas vurğu tonu (`primaryContainer`).
-
----
-
-### 7. Detail Ekranlarının Lokallaşdırılması (`strings.xml`)
-- [ ] Bütün detail ekranlarında hardcode olan sabit mətnlər auditi olunacaq və `:core:src:main:res:values:strings.xml` resursuna çıxarılacaq:
-  - `"Haqqında"`, `"Rəylər Və Qiymətləndirmə"`, `"Tərkibi"`, `"Xüsusiyyətlər"`, `"Bənzər Təkliflər"`, `"Məhsullar / Təkliflər"`, `"Rəy yazın"` və s.
+Color.kt
+EmptyStateView.kt
+FavoriteButton.kt
+DetailTopBarOverlay.kt
+DetailTopBarOverlay.kt
+DetailTopBarOverlay.kt
+strings.xml
+strings.xml
+strings.xml
+strings.xml
+MainActivity.kt
+MainActivity.kt
+MainActivity.kt
+FoodDetailDto.kt
+FoodDetailDto.kt
+FoodDetail.kt
+FoodDetailScreen.kt
+NutritionChart.kt
+NutritionChart.kt
+NutritionChart.kt
+CarDetailDto.kt
+CarDetail.kt
+CarDetailScreen.kt
+CarDetailScreen.kt
+TourDetailDto.kt
+TourDetail.kt
+TravelDetailScreen.kt#L95-165
+Working

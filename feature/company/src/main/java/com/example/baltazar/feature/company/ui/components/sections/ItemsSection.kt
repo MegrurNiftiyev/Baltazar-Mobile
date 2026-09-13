@@ -12,16 +12,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.baltazar.core.R
 import com.example.baltazar.core.core.components.SectionTitle
-import com.example.baltazar.core.core.components.StandardItemCard
+import com.example.baltazar.core.core.components.ServiceItemCard
 import com.example.baltazar.core.core.constants.Spaces
-import com.example.baltazar.core.core.enums.CardViewMode
 import com.example.baltazar.feature.company.domain.model.RelatedItem
 
 @Composable
 fun ItemsSection(
     items: List<RelatedItem>,
     modifier: Modifier = Modifier,
-    onItemClick: ((RelatedItem) -> Unit)? = null
+    onItemClick: ((RelatedItem) -> Unit)? = null,
+    onFavoriteClick: ((RelatedItem, Boolean) -> Unit)? = null
 ) {
     if (items.isEmpty()) return
 
@@ -35,19 +35,20 @@ fun ItemsSection(
             horizontalArrangement = Arrangement.spacedBy(Spaces.Medium)
         ) {
             items(items, key = { it.id }) { item ->
-                StandardItemCard(
+                ServiceItemCard(
                     title = item.title,
                     subtitle = item.category,
-                    imageUrl = item.imageUrl,
+                    image = item.imageUrl,
                     price = item.price,
                     currency = item.currency,
                     priceSuffix = item.priceSuffix,
-                    rating = item.rating,
-                    cardViewMode = CardViewMode.GRID,
-                    onClick = { onItemClick?.invoke(item) },
-                    modifier = Modifier.width(180.dp)
+                    rating = if (item.rating > 0) item.rating else null,
+                    isFavorite = item.isLiked,
+                    onFavoriteClick = { isFav -> onFavoriteClick?.invoke(item, isFav) },
+                    onClick = { onItemClick?.invoke(item) }
                 )
             }
         }
     }
 }
+

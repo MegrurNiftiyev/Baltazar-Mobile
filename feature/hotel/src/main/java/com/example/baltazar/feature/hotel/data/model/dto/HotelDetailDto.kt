@@ -20,9 +20,11 @@ data class HotelDetailDto(
     @SerialName("rating") val rating: Double = 0.0,
     @SerialName("reviewCount") val reviewCount: Int = 0,
     @SerialName("priceSuffix") val priceSuffix: String? = "/ gecə",
+    @SerialName("currency") val currency: String? = "AZN",
     @SerialName("priceRange") val priceRange: PriceRangeDto? = null,
     @SerialName("amenities") val amenities: List<String> = emptyList(),
-    @SerialName("reviewEligibility") val reviewEligibility: ReviewEligibilityDto? = null
+    @SerialName("reviewEligibility") val reviewEligibility: ReviewEligibilityDto? = null,
+    @SerialName("isLiked") val isLiked: Boolean = false
 ) {
     fun toDomain(): HotelDetail = HotelDetail(
         id = id,
@@ -37,9 +39,12 @@ data class HotelDetailDto(
         rating = rating,
         reviewCount = reviewCount,
         priceSuffix = if (priceSuffix.isNullOrBlank()) "/ gecə" else priceSuffix,
+        currency = currency?.ifBlank { "AZN" } ?: "AZN",
         minPrice = priceRange?.min ?: 0.0,
         maxPrice = priceRange?.max ?: 0.0,
         amenities = amenities,
-        reviewEligibility = reviewEligibility?.toDomain() ?: ReviewEligibility()
+        reviewEligibility = reviewEligibility?.toDomain() ?: ReviewEligibility(),
+        isLiked = isLiked
     )
 }
+

@@ -20,6 +20,7 @@ import com.example.baltazar.feature.order.core.navigation.orderNavGraph
 import com.example.baltazar.feature.profile.core.navigation.profileNavGraph
 import com.example.baltazar.feature.rentacar.core.navigation.rentACarNavGraph
 import com.example.baltazar.feature.travel.core.navigation.travelNavGraph
+import com.example.baltazar.feature.company.core.navigation.companyNavGraph
 import com.example.baltazar.ui.screens.home.HomeScreen
 
 @Composable
@@ -72,5 +73,6 @@ fun AppNavGraph(
         rentACarNavGraph(navController)
         profileNavGraph(navController)
         orderNavGraph(navController)
+        companyNavGraph(navController)
     }
 }

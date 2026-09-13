@@ -19,5 +19,10 @@ data class CarDetail(
     val rating: Double = 0.0,
     val reviewCount: Int = 0,
     val priceSuffix: String = "/ gün",
-    val reviewEligibility: ReviewEligibility = ReviewEligibility()
+    val currency: String = "AZN",
+    val companyName: String = "",
+    val companyProfilePhoto: String? = null,
+    val reviewEligibility: ReviewEligibility = ReviewEligibility(),
+    val isLiked: Boolean = false
 )
+

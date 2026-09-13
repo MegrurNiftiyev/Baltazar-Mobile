@@ -1,6 +1,7 @@
 package com.example.baltazar.feature.auth.data.model.dto
 
 
+import com.example.baltazar.core.core.enums.UserRole
 import com.example.baltazar.core.domain.model.User
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -22,7 +23,7 @@ data class UserDto(
             id = id,
             name = name,
             email = email,
-            role = role,
+            role = UserRole.fromString(role),
             phone = phone,
             region = region,
             language = language ?: "en",

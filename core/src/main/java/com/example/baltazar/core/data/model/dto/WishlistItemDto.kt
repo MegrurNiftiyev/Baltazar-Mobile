@@ -18,7 +18,8 @@ data class WishlistItemDto(
     @SerialName("currency") val currency: String = "AZN",
     @SerialName("rating") val rating: Double = 0.0,
     @SerialName("ratingCount") val ratingCount: Int = 0,
-    @SerialName("category") val category: String? = null
+    @SerialName("category") val category: String? = null,
+    @SerialName("isLiked") val isLiked: Boolean = true
 ) {
     fun toDomain(): WishlistItem = WishlistItem(
         wishlistItemId = wishlistItemId,
@@ -31,9 +32,11 @@ data class WishlistItemDto(
         currency = currency,
         rating = rating,
         ratingCount = ratingCount,
-        category = category
+        category = category ?: "",
+        isLiked = isLiked
     )
 }
+
 
 @Serializable
 data class WishlistResponseDto(

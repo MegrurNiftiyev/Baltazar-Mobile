@@ -20,7 +20,8 @@ data class TourItemDto(
     @SerialName("duration") val duration: String,
     @SerialName("startDate") val startDate: String,
     @SerialName("endDate") val endDate: String,
-    @SerialName("status") val status: String
+    @SerialName("status") val status: String,
+    @SerialName("isLiked") val isLiked: Boolean = false
 ) {
     fun toDomain(): TourItem = TourItem(
         id = id,
@@ -35,9 +36,11 @@ data class TourItemDto(
         duration = duration,
         startDate = startDate,
         endDate = endDate,
-        status = status
+        status = status,
+        isLiked = isLiked
     )
 }
+
 
 @Serializable
 data class TourListResponseDto(

@@ -37,12 +37,6 @@ import com.example.baltazar.core.core.enums.CornerShape
 import com.example.baltazar.core.core.enums.TitleAlignment
 import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
-import com.example.baltazar.feature.profile.ui.screens.profile.components.LanguageBottomSheet
-import com.example.baltazar.feature.profile.ui.screens.profile.components.ProfileTile
-import com.example.baltazar.feature.profile.ui.screens.profile.components.RegionBottomSheet
-import compose.icons.TablerIcons
-import compose.icons.tablericons.Language
-import compose.icons.tablericons.MapPin
 
 @Composable
 fun UserDetailScreen(
@@ -120,22 +114,6 @@ fun UserDetailScreen(
                         singleLine = true
                     )
 
-                    // Region Tile
-                    ProfileTile(
-                        title = stringResource(R.string.region_label),
-                        icon = TablerIcons.MapPin,
-                        trailingValue = state.selectedRegion.displayName,
-                        onClick = { viewModel.openRegionSheet() }
-                    )
-
-                    // Language Tile
-                    ProfileTile(
-                        title = stringResource(R.string.language_label),
-                        icon = TablerIcons.Language,
-                        trailingValue = state.selectedLanguage.displayName,
-                        onClick = { viewModel.openLanguageSheet() }
-                    )
-
                     Spacer(modifier = Modifier.height(Spaces.Small))
 
                     RoundedButton(
@@ -151,22 +129,6 @@ fun UserDetailScreen(
                     )
                 }
             }
-        }
-
-        if (state.isLanguageSheetOpen) {
-            LanguageBottomSheet(
-                selectedLanguage = state.selectedLanguage,
-                onLanguageSelected = viewModel::setLanguage,
-                onDismissRequest = viewModel::closeLanguageSheet
-            )
-        }
-
-        if (state.isRegionSheetOpen) {
-            RegionBottomSheet(
-                selectedRegion = state.selectedRegion,
-                onRegionSelected = viewModel::setRegion,
-                onDismissRequest = viewModel::closeRegionSheet
-            )
         }
     }
 }

@@ -30,6 +30,10 @@ import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
+import com.example.baltazar.core.core.theme.NutritionCalories
+import com.example.baltazar.core.core.theme.NutritionCarbs
+import com.example.baltazar.core.core.theme.NutritionFat
+import com.example.baltazar.core.core.theme.NutritionProtein
 
 @Composable
 fun NutritionChart(
@@ -100,28 +104,28 @@ fun NutritionChart(
                     label = stringResource(R.string.calories_label),
                     value = "$calories",
                     unit = stringResource(R.string.kcal_suffix),
-                    color = MaterialTheme.colorScheme.primary,
+                    color = NutritionCalories,
                     progress = (calories / 800f).coerceIn(0.1f, 1f)
                 )
                 MacroItem(
                     label = stringResource(R.string.protein_label),
                     value = "$protein",
                     unit = stringResource(R.string.gram_suffix),
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = NutritionProtein,
                     progress = (protein / 50f).coerceIn(0.1f, 1f)
                 )
                 MacroItem(
                     label = stringResource(R.string.fat_label),
                     value = "$fat",
                     unit = stringResource(R.string.gram_suffix),
-                    color = MaterialTheme.colorScheme.tertiary,
+                    color = NutritionFat,
                     progress = (fat / 50f).coerceIn(0.1f, 1f)
                 )
                 MacroItem(
                     label = stringResource(R.string.carb_label),
                     value = "$carb",
                     unit = stringResource(R.string.gram_suffix),
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
+                    color = NutritionCarbs,
                     progress = (carb / 100f).coerceIn(0.1f, 1f)
                 )
             }

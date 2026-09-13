@@ -15,8 +15,11 @@ data class HotelDetail(
     val rating: Double = 0.0,
     val reviewCount: Int = 0,
     val priceSuffix: String = "/ gecə",
+    val currency: String = "AZN",
     val minPrice: Double = 0.0,
     val maxPrice: Double = 0.0,
     val amenities: List<String> = emptyList(),
-    val reviewEligibility: ReviewEligibility = ReviewEligibility()
+    val reviewEligibility: ReviewEligibility = ReviewEligibility(),
+    val isLiked: Boolean = false
 )
+

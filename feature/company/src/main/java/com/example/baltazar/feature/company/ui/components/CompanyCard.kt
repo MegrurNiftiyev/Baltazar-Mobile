@@ -1,13 +1,17 @@
 package com.example.baltazar.feature.company.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -19,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -27,6 +32,8 @@ import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
 import compose.icons.TablerIcons
+import compose.icons.tablericons.Building
+import compose.icons.tablericons.ChevronRight
 import compose.icons.tablericons.MapPin
 import compose.icons.tablericons.Star
 
@@ -48,57 +55,65 @@ fun CompanyCard(
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(BorderRadiuses.Medium),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = Spaces.ExtraMini)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            AsyncImage(
-                model = coverImageUrl ?: logoUrl,
-                contentDescription = name,
-                contentScale = ContentScale.Crop,
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Paddings.Medium),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Left: Rounded Company Logo/Avatar
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(140.dp)
-                    .clip(RoundedCornerShape(topStart = BorderRadiuses.Medium, topEnd = BorderRadiuses.Medium))
-            )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Paddings.Medium),
-                verticalArrangement = Arrangement.spacedBy(Spaces.ExtraSmall)
+                    .size(60.dp)
+                    .clip(RoundedCornerShape(BorderRadiuses.Medium))
+                    .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+                contentAlignment = Alignment.Center
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = name,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f)
+                val imageSource = logoUrl ?: coverImageUrl
+                if (!imageSource.isNullOrBlank()) {
+                    AsyncImage(
+                        model = imageSource,
+                        contentDescription = name,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.size(60.dp)
                     )
+                } else {
+                    Icon(
+                        imageVector = TablerIcons.Building,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(IconSizes.Large)
+                    )
+                }
+            }
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(Spaces.ExtraMini)
-                    ) {
-                        Icon(
-                            imageVector = TablerIcons.Star,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(IconSizes.ExtraSmall)
-                        )
-                        Text(
-                            text = String.format("%.1f (%d)", rating, reviewCount),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+            Spacer(modifier = Modifier.width(Spaces.Medium))
+
+            // Middle: Details
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(Spaces.ExtraMini)
+            ) {
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                if (category.isNotBlank()) {
+                    Text(
+                        text = category,
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
 
                 if (!address.isNullOrBlank()) {
@@ -109,7 +124,7 @@ fun CompanyCard(
                         Icon(
                             imageVector = TablerIcons.MapPin,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.outline,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(IconSizes.ExtraSmall)
                         )
                         Text(
@@ -121,13 +136,47 @@ fun CompanyCard(
                         )
                     }
                 }
+            }
 
-                Text(
-                    text = category,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
+            Spacer(modifier = Modifier.width(Spaces.Small))
+
+            // Right: Rating badge & arrow indicator
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(Spaces.Small)
+            ) {
+                if (rating > 0) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(Spaces.ExtraMini),
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(BorderRadiuses.Small))
+                            .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f))
+                            .padding(horizontal = Paddings.SmallMinus, vertical = Paddings.ExtraMini)
+                    ) {
+                        Icon(
+                            imageVector = TablerIcons.Star,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(IconSizes.ExtraSmall)
+                        )
+                        Text(
+                            text = String.format("%.1f", rating),
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+                }
+
+                Icon(
+                    imageVector = TablerIcons.ChevronRight,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                    modifier = Modifier.size(IconSizes.Medium)
                 )
             }
         }
     }
 }
+

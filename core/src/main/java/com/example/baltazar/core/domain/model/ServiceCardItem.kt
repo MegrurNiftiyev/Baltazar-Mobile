@@ -13,5 +13,7 @@ data class ServiceCardItem(
     val currency: String,
     val rating: Double,
     val ratingCount: Int,
-    val category: String?
+    val category: String?,
+    val isLiked: Boolean = false
 )
+

@@ -20,7 +20,8 @@ data class RelatedItemDto(
     @SerialName("rating") val rating: Double? = null,
     @SerialName("ratingCount") val ratingCount: Int? = null,
     @SerialName("reviewCount") val reviewCount: Int? = null,
-    @SerialName("category") val category: String? = null
+    @SerialName("category") val category: String? = null,
+    @SerialName("isLiked") val isLiked: Boolean = false
 ) {
     fun toDomain(): RelatedItem {
         return RelatedItem(
@@ -32,7 +33,9 @@ data class RelatedItemDto(
             category = category,
             priceSuffix = priceSuffix,
             currency = currency ?: "AZN",
-            reviewCount = ratingCount ?: reviewCount ?: 0
+            reviewCount = ratingCount ?: reviewCount ?: 0,
+            isLiked = isLiked
         )
     }
 }
+

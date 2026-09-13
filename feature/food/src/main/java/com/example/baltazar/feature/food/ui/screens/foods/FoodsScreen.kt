@@ -36,8 +36,11 @@ import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
 import com.example.baltazar.core.core.enums.CardViewMode
 import com.example.baltazar.core.core.enums.TitleAlignment
+import com.example.baltazar.core.core.extensions.consumeResult
 import com.example.baltazar.core.core.navigation.CompanyList
 import com.example.baltazar.core.core.navigation.FoodDetail
+import com.example.baltazar.core.core.navigation.LikeResult
+import com.example.baltazar.core.core.navigation.NavResultKeys
 import com.example.baltazar.feature.food.R
 import com.example.baltazar.feature.food.ui.components.FoodCard
 import compose.icons.TablerIcons
@@ -51,6 +54,14 @@ fun FoodsScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val listState = rememberLazyGridState()
+
+    val currentEntry = navController.currentBackStackEntry
+    val likeResult = currentEntry?.consumeResult<LikeResult>(NavResultKeys.LIKE_RESULT)
+    LaunchedEffect(likeResult) {
+        likeResult?.let { result ->
+            viewModel.toggleFavorite(result.itemId, result.isLiked)
+        }
+    }
 
     val shouldLoadMore by remember {
         derivedStateOf {
@@ -122,6 +133,8 @@ fun FoodsScreen(
                             food = item,
                             isLoading = false,
                             cardViewMode = state.cardViewMode,
+                            isFavorite = item.isLiked,
+                            onFavoriteClick = { isFav -> viewModel.toggleFavorite(item.id, isFav) },
                             onClick = { navController.navigate(FoodDetail(item.id)) }
                         )
                     }

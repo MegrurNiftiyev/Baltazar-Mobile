@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -48,6 +49,10 @@ import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
+import com.example.baltazar.core.core.enums.ServiceType
+import com.example.baltazar.core.core.extensions.setPreviousResult
+import com.example.baltazar.core.core.navigation.LikeResult
+import com.example.baltazar.core.core.navigation.NavResultKeys
 import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.feature.food.ui.components.NutritionChart
@@ -75,10 +80,11 @@ fun FoodDetailScreen(
     }
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
             DetailBottomBar(
                 price = state.food.price,
-                currency = "AZN",
+                currency = state.food.currency,
                 priceSuffix = state.food.priceSuffix,
                 actionButtonText = stringResource(R.string.order_now),
                 isLoading = state.isLoading,
@@ -121,8 +127,8 @@ fun FoodDetailScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .offset(y = -Spaces.ExtraLarge)
-                            .clip(RoundedCornerShape(topStart = BorderRadiuses.ExtraLarge, topEnd = BorderRadiuses.ExtraLarge))
+                            .offset(y = -Spaces.Medium)
+                            .clip(RoundedCornerShape(topStart = BorderRadiuses.Massive, topEnd = BorderRadiuses.Massive))
                             .background(MaterialTheme.colorScheme.background)
                             .padding(horizontal = Paddings.LargeMinus, vertical = Paddings.Large),
                         verticalArrangement = Arrangement.spacedBy(Spaces.Large)
@@ -239,6 +245,16 @@ fun FoodDetailScreen(
                             )
                         }
 
+                        if (!state.isLoading && state.food.companyName.isNotBlank() && state.food.companyId.isNotBlank()) {
+                            com.example.baltazar.core.core.components.cards.CompanyDetailCard(
+                                companyName = state.food.companyName,
+                                companyProfilePhoto = state.food.companyProfilePhoto,
+                                onClick = {
+                                    navController.navigate(com.example.baltazar.core.core.navigation.FoodCompanyDetail(id = state.food.companyId))
+                                }
+                            )
+                        }
+
                         ReviewSection(
                             reviews = state.reviews,
                             rating = state.food.rating,
@@ -257,7 +273,17 @@ fun FoodDetailScreen(
                 DetailTopBarOverlay(
                     onBackClick = { navController.popBackStack() },
                     isFavorite = state.isFavorite,
-                    onFavoriteClick = { viewModel.toggleFavorite(it) }
+                    onFavoriteClick = { isFav ->
+                        viewModel.toggleFavorite(isFav)
+                        navController.setPreviousResult(
+                            NavResultKeys.LIKE_RESULT,
+                            LikeResult(
+                                itemId = state.food.id,
+                                isLiked = isFav,
+                                serviceType = ServiceType.FOOD
+                            )
+                        )
+                    }
                 )
             }
         }

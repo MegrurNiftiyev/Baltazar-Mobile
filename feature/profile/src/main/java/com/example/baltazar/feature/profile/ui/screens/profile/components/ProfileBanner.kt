@@ -36,7 +36,7 @@ fun ProfileBanner(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isGuest = user.role == "GUEST"
+    val isGuest = user.isGuest
 
     Card(
         modifier = modifier

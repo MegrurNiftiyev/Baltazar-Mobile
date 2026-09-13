@@ -23,7 +23,11 @@ data class TourDetailDto(
     @SerialName("rating") val rating: Double = 0.0,
     @SerialName("reviewCount") val reviewCount: Int = 0,
     @SerialName("priceSuffix") val priceSuffix: String? = "paket qiyməti",
-    @SerialName("reviewEligibility") val reviewEligibility: ReviewEligibilityDto? = null
+    @SerialName("currency") val currency: String? = "AZN",
+    @SerialName("companyName") val companyName: String? = null,
+    @SerialName("companyProfilePhoto") val companyProfilePhoto: String? = null,
+    @SerialName("reviewEligibility") val reviewEligibility: ReviewEligibilityDto? = null,
+    @SerialName("isLiked") val isLiked: Boolean = false
 ) {
     fun toDomain(): TourDetail = TourDetail(
         id = id,
@@ -41,6 +45,11 @@ data class TourDetailDto(
         rating = rating,
         reviewCount = reviewCount,
         priceSuffix = if (priceSuffix.isNullOrBlank()) "paket qiyməti" else priceSuffix,
-        reviewEligibility = reviewEligibility?.toDomain() ?: ReviewEligibility()
+        currency = currency?.ifBlank { "AZN" } ?: "AZN",
+        companyName = companyName.orEmpty(),
+        companyProfilePhoto = companyProfilePhoto,
+        reviewEligibility = reviewEligibility?.toDomain() ?: ReviewEligibility(),
+        isLiked = isLiked
     )
 }
+

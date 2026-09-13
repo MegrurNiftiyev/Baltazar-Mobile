@@ -33,17 +33,14 @@ import com.example.baltazar.core.core.constants.Spaces
 import com.example.baltazar.core.core.enums.HomeTab
 import com.example.baltazar.core.core.enums.ServiceType
 import com.example.baltazar.core.core.enums.TitleAlignment
+import com.example.baltazar.core.core.extensions.consumeResult
+import com.example.baltazar.core.core.extensions.navigateToServiceDetail
+import com.example.baltazar.core.core.extensions.navigateToServiceList
 import com.example.baltazar.core.core.navigation.Cart
-import com.example.baltazar.core.core.navigation.FoodDetail
-import com.example.baltazar.core.core.navigation.FoodList
-import com.example.baltazar.core.core.navigation.Home
-import com.example.baltazar.core.core.navigation.HotelDetail
-import com.example.baltazar.core.core.navigation.HotelList
-import com.example.baltazar.core.core.navigation.RentACarDetail
-import com.example.baltazar.core.core.navigation.RentACarList
+import com.example.baltazar.core.core.navigation.LikeResult
+import com.example.baltazar.core.core.navigation.Login
+import com.example.baltazar.core.core.navigation.NavResultKeys
 import com.example.baltazar.core.core.navigation.Settings
-import com.example.baltazar.core.core.navigation.TravelDetail
-import com.example.baltazar.core.core.navigation.TravelList
 import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.core.domain.model.ServiceCardItem
@@ -68,6 +65,20 @@ fun ExploreScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
 
+    val currentBackStackEntry = navController.currentBackStackEntry
+    val likeResult = currentBackStackEntry?.consumeResult<LikeResult>(NavResultKeys.LIKE_RESULT)
+    LaunchedEffect(likeResult) {
+        likeResult?.let { result ->
+            viewModel.toggleFavorite(result.itemId, result.serviceType ?: ServiceType.UNKNOWN, result.isLiked)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.navigateToLoginEvent.collect {
+            navController.navigate(Login)
+        }
+    }
+
     LaunchedEffect(state.userMessage) {
         state.userMessage?.let { userMsg ->
             val text = userMsg.text.asString(context)
@@ -76,26 +87,6 @@ fun ExploreScreen(
                 SnackbarType.ERROR -> AppSnackbar.error(text)
             }
             viewModel.onMessageShown()
-        }
-    }
-
-    fun navigateToService(serviceType: ServiceType) {
-        when (serviceType) {
-            ServiceType.RENT_A_CAR -> navController.navigate(RentACarList)
-            ServiceType.HOTEL -> navController.navigate(HotelList)
-            ServiceType.TRAVEL -> navController.navigate(TravelList)
-            ServiceType.FOOD -> navController.navigate(FoodList)
-            ServiceType.UNKNOWN -> {}
-        }
-    }
-
-    fun navigateToDetail(item: ServiceCardItem) {
-        when (item.serviceType) {
-            ServiceType.RENT_A_CAR -> navController.navigate(RentACarDetail(item.serviceId))
-            ServiceType.HOTEL -> navController.navigate(HotelDetail(item.serviceId))
-            ServiceType.TRAVEL -> navController.navigate(TravelDetail(item.serviceId))
-            ServiceType.FOOD -> navController.navigate(FoodDetail(item.serviceId))
-            ServiceType.UNKNOWN -> {}
         }
     }
 
@@ -166,13 +157,13 @@ fun ExploreScreen(
                             isError = state.isBannersError,
                             onRetry = { viewModel.loadExploreData() },
                             onBannerClick = { banner ->
-                                navigateToService(banner.serviceType)
+                                navController.navigateToServiceList(banner.serviceType)
                             }
                         )
                         Spacer(modifier = Modifier.height(Spaces.Large))
                         ExploreServiceQuickActions(
                             onServiceClick = { serviceType ->
-                                navigateToService(serviceType)
+                                navController.navigateToServiceList(serviceType)
                             },
                             isLoading = state.isSectionsLoading
                         )
@@ -196,8 +187,11 @@ fun ExploreScreen(
                             ExploreSectionRow(
                                 section = section,
                                 isLoading = state.isSectionsLoading,
-                                onItemClick = { item -> navigateToDetail(item) },
-                                onSeeAllClick = { navigateToService(section.serviceType) },
+                                onItemClick = { item -> navController.navigateToServiceDetail(item) },
+                                onSeeAllClick = { navController.navigateToServiceList(section.serviceType) },
+                                onFavoriteClick = { item, isFav ->
+                                    viewModel.toggleFavorite(item.id, section.serviceType, isFav)
+                                },
                                 modifier = Modifier.padding(bottom = Spaces.Large)
                             )
                         }

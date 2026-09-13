@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -47,6 +48,10 @@ import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
+import com.example.baltazar.core.core.enums.ServiceType
+import com.example.baltazar.core.core.extensions.setPreviousResult
+import com.example.baltazar.core.core.navigation.LikeResult
+import com.example.baltazar.core.core.navigation.NavResultKeys
 import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.feature.rentacar.ui.components.CarSpecsGrid
@@ -74,10 +79,11 @@ fun CarDetailScreen(
     }
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
             DetailBottomBar(
                 price = state.car.price,
-                currency = "AZN",
+                currency = state.car.currency,
                 priceSuffix = state.car.priceSuffix,
                 actionButtonText = stringResource(R.string.rent),
                 isLoading = state.isLoading,
@@ -120,8 +126,8 @@ fun CarDetailScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .offset(y = -Spaces.ExtraLarge)
-                            .clip(RoundedCornerShape(topStart = BorderRadiuses.ExtraLarge, topEnd = BorderRadiuses.ExtraLarge))
+                            .offset(y = -Spaces.Medium)
+                            .clip(RoundedCornerShape(topStart = BorderRadiuses.Massive, topEnd = BorderRadiuses.Massive))
                             .background(MaterialTheme.colorScheme.background)
                             .padding(horizontal = Paddings.LargeMinus, vertical = Paddings.Large),
                         verticalArrangement = Arrangement.spacedBy(Spaces.Large)
@@ -228,6 +234,16 @@ fun CarDetailScreen(
                             )
                         }
 
+                        if (!state.isLoading && state.car.companyName.isNotBlank() && state.car.companyId.isNotBlank()) {
+                            com.example.baltazar.core.core.components.cards.CompanyDetailCard(
+                                companyName = state.car.companyName,
+                                companyProfilePhoto = state.car.companyProfilePhoto,
+                                onClick = {
+                                    navController.navigate(com.example.baltazar.core.core.navigation.RentACarCompanyDetail(id = state.car.companyId))
+                                }
+                            )
+                        }
+
                         ReviewSection(
                             reviews = state.reviews,
                             rating = state.car.rating,
@@ -246,7 +262,17 @@ fun CarDetailScreen(
                 DetailTopBarOverlay(
                     onBackClick = { navController.popBackStack() },
                     isFavorite = state.isFavorite,
-                    onFavoriteClick = { viewModel.toggleFavorite(it) }
+                    onFavoriteClick = { isFav ->
+                        viewModel.toggleFavorite(isFav)
+                        navController.setPreviousResult(
+                            NavResultKeys.LIKE_RESULT,
+                            LikeResult(
+                                itemId = state.car.id,
+                                isLiked = isFav,
+                                serviceType = ServiceType.RENT_A_CAR
+                            )
+                        )
+                    }
                 )
             }
         }
