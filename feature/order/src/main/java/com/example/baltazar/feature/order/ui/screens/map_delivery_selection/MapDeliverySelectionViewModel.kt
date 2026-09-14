@@ -70,6 +70,9 @@ class MapDeliverySelectionViewModel @Inject constructor(
                 .onSuccess { result ->
                     _state.update { it.copy(selectedAddressName = result.addressName) }
                 }
+                .onFailure {
+                    _state.update { it.copy(selectedAddressName = "%.5f, %.5f".format(lat, lng)) }
+                }
         }
     }
 

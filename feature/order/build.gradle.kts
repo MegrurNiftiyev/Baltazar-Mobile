@@ -44,9 +44,10 @@ dependencies {
     // Modules
     implementation(project(":core"))
 
-    // Maps
+    // Maps & Location
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 
     // Compose & UI
     implementation(libs.androidx.compose.ui)

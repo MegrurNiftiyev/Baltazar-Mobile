@@ -76,6 +76,9 @@ import androidx.activity.compose.BackHandler
 import com.example.baltazar.core.core.components.CustomAlertDialog
 import com.example.baltazar.core.core.navigation.Home
 
+import com.google.android.gms.location.LocationServices
+import com.google.maps.android.compose.MapProperties
+
 @Composable
 fun MapDeliverySelectionScreen(
     navController: NavHostController,
@@ -85,8 +88,42 @@ fun MapDeliverySelectionScreen(
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
     val permissionManager = remember { PermissionHandlerManager() }
+    val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
     var showPermissionDialog by remember { mutableStateOf(false) }
     var showCancelDialog by remember { mutableStateOf(false) }
+
+    val fetchUserLocation: () -> Unit = {
+        if (permissionManager.hasLocationPermission(context)) {
+            try {
+                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                    if (location != null) {
+                        viewModel.onCoordinatesSelected(location.latitude, location.longitude)
+                    } else {
+                        viewModel.onCoordinatesSelected(
+                            DefaultLocationConstants.DEFAULT_LAT,
+                            DefaultLocationConstants.DEFAULT_LNG
+                        )
+                    }
+                }.addOnFailureListener {
+                    viewModel.onCoordinatesSelected(
+                        DefaultLocationConstants.DEFAULT_LAT,
+                        DefaultLocationConstants.DEFAULT_LNG
+                    )
+                }
+            } catch (e: SecurityException) {
+                viewModel.onCoordinatesSelected(
+                    DefaultLocationConstants.DEFAULT_LAT,
+                    DefaultLocationConstants.DEFAULT_LNG
+                )
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        if (permissionManager.hasLocationPermission(context)) {
+            fetchUserLocation()
+        }
+    }
 
     BackHandler {
         showCancelDialog = true
@@ -116,10 +153,7 @@ fun MapDeliverySelectionScreen(
         val coarseGranted = permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
 
         if (fineGranted || coarseGranted) {
-            viewModel.onCoordinatesSelected(
-                DefaultLocationConstants.DEFAULT_LAT,
-                DefaultLocationConstants.DEFAULT_LNG
-            )
+            fetchUserLocation()
         } else {
             showPermissionDialog = true
         }
@@ -169,6 +203,9 @@ fun MapDeliverySelectionScreen(
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
+            properties = MapProperties(
+                isMyLocationEnabled = permissionManager.hasLocationPermission(context)
+            ),
             onMapClick = { latLng ->
                 viewModel.onCoordinatesSelected(latLng.latitude, latLng.longitude)
             },
@@ -183,7 +220,7 @@ fun MapDeliverySelectionScreen(
             )
         }
 
-        // 2. Top Search Floating Bar
+        // 2. Top Search Floating Row
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -191,60 +228,90 @@ fun MapDeliverySelectionScreen(
                 .padding(horizontal = Paddings.Medium, vertical = Paddings.Small)
                 .align(Alignment.TopCenter)
         ) {
-            Surface(
-                shape = RoundedCornerShape(BorderRadiuses.Huge),
-                color = MaterialTheme.colorScheme.surface,
-                tonalElevation = Spaces.Small,
-                shadowElevation = Spaces.Small,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = Paddings.Small, vertical = Paddings.ExtraSmall)
+                // Separate Circular Back Button Box
+                Surface(
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.surface,
+                    shadowElevation = Spaces.Small,
+                    tonalElevation = Spaces.Small,
+                    modifier = Modifier.size(52.dp)
                 ) {
-                    IconButton(onClick = { showCancelDialog = true }) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable { showCancelDialog = true },
+                        contentAlignment = Alignment.Center
+                    ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(IconSizes.Medium)
                         )
                     }
+                }
 
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(IconSizes.Medium)
-                    )
-                    Spacer(modifier = Modifier.width(Spaces.Small))
+                Spacer(modifier = Modifier.width(Spaces.Small))
 
-                    BasicTextField(
-                        value = state.searchQuery,
-                        onValueChange = { viewModel.onSearchQueryChanged(it) },
-                        singleLine = true,
-                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
-                        decorationBox = { innerTextField ->
-                            if (state.searchQuery.isEmpty()) {
-                                Text(
-                                    text = stringResource(id = R.string.search_for_new_address),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                // Search Bar Surface
+                Surface(
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.surface,
+                    shadowElevation = Spaces.Small,
+                    tonalElevation = Spaces.Small,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(52.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = Paddings.Medium)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(IconSizes.Medium)
+                        )
+
+                        Spacer(modifier = Modifier.width(Spaces.Small))
+
+                        BasicTextField(
+                            value = state.searchQuery,
+                            onValueChange = { viewModel.onSearchQueryChanged(it) },
+                            singleLine = true,
+                            textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
+                            decorationBox = { innerTextField ->
+                                if (state.searchQuery.isEmpty()) {
+                                    Text(
+                                        text = stringResource(id = R.string.search_for_new_address),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                innerTextField()
+                            },
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        if (state.searchQuery.isNotEmpty()) {
+                            IconButton(
+                                onClick = { viewModel.onSearchQueryChanged("") },
+                                modifier = Modifier.size(IconSizes.Large)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.size(IconSizes.Medium)
                                 )
                             }
-                            innerTextField()
-                        },
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    if (state.searchQuery.isNotEmpty()) {
-                        IconButton(onClick = { viewModel.onSearchQueryChanged("") }) {
-                            Icon(
-                                imageVector = Icons.Default.Clear,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
                         }
                     }
                 }
@@ -295,10 +362,7 @@ fun MapDeliverySelectionScreen(
         FloatingActionButton(
             onClick = {
                 if (permissionManager.hasLocationPermission(context)) {
-                    viewModel.onCoordinatesSelected(
-                        DefaultLocationConstants.DEFAULT_LAT,
-                        DefaultLocationConstants.DEFAULT_LNG
-                    )
+                    fetchUserLocation()
                 } else {
                     locationPermissionLauncher.launch(
                         arrayOf(

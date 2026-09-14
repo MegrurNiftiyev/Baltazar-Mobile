@@ -3,6 +3,7 @@ package com.example.baltazar.feature.order.data.model.dto
 import com.example.baltazar.feature.order.domain.model.PaymentCard
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.util.UUID
 
 @Serializable
 data class PaymentCardDto(
@@ -15,9 +16,14 @@ data class PaymentCardDto(
     @SerialName("expiryYear") val expiryYear: Int? = null
 ) {
     fun toDomain(): PaymentCard {
+        val uniquePmId = paymentMethodId.takeIf { !it.isNullOrBlank() }
+            ?: id.takeIf { !it.isNullOrBlank() }
+            ?: mongoId.takeIf { !it.isNullOrBlank() }
+            ?: UUID.randomUUID().toString()
+
         return PaymentCard(
             id = id ?: mongoId,
-            paymentMethodId = paymentMethodId.orEmpty(),
+            paymentMethodId = uniquePmId,
             brand = brand ?: "Card",
             last4 = last4 ?: "****",
             expiryMonth = expiryMonth ?: 1,

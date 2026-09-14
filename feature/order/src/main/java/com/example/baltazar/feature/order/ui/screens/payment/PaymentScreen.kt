@@ -124,22 +124,11 @@ fun PaymentScreen(
                         .height(Paddings.ColossalMinus)
                 ) {
                     if (state.isProcessingPayment) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(IconSizes.Medium),
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                strokeWidth = BorderRadiuses.ExtraMini
-                            )
-                            Spacer(modifier = Modifier.width(Spaces.Small))
-                            Text(
-                                text = stringResource(id = R.string.redirecting_to_next_screen),
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onPrimary
-                            )
-                        }
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(IconSizes.Medium),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            strokeWidth = BorderRadiuses.ExtraMini
+                        )
                     } else {
                         Text(
                             text = stringResource(id = R.string.pay_now_format, formattedPrice),
