@@ -94,14 +94,16 @@ fun DeliveryLocationCard(
                         overflow = TextOverflow.Ellipsis,
                         color = MaterialTheme.colorScheme.onSurface
                     )
-                    Spacer(modifier = Modifier.height(Spaces.ExtraSmall))
-                    Text(
-                        text = if (deliveryInstructions.isNotBlank()) deliveryInstructions else "Bakı, Azərbaycan",
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    if (deliveryInstructions.isNotBlank()) {
+                        Spacer(modifier = Modifier.height(Spaces.ExtraSmall))
+                        Text(
+                            text = deliveryInstructions,
+                            style = MaterialTheme.typography.bodyMedium,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
 
