@@ -6,12 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.baltazar.feature.order.domain.model.NextScreenType
 import com.example.baltazar.feature.order.domain.repository.IOrderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -79,7 +81,9 @@ class OrderDetailViewModel @Inject constructor(
             orderRepository.getNextScreen(orderId)
                 .onSuccess { nextResult ->
                     _state.update { it.copy(isLoading = false) }
-                    onResolvedNextScreen(nextResult.screen, orderId)
+                    withContext(Dispatchers.Main) {
+                        onResolvedNextScreen(nextResult.screen, orderId)
+                    }
                 }
                 .onFailure { error ->
                     _state.update { it.copy(isLoading = false, errorMessage = error.message) }

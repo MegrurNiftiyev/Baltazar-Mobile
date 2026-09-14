@@ -45,7 +45,7 @@ class OrderRepository @Inject constructor(
             val response = remoteDataSource.getNextScreen(orderId)
             val data = response.data
             if (response.success && data != null) {
-                data.toDomain() ?: throw Exception("Invalid next screen response data")
+                data.toDomain()
             } else {
                 throw Exception(response.message ?: "Failed to resolve next screen")
             }

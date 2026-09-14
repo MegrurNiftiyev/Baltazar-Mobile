@@ -10,11 +10,10 @@ data class NextScreenDataDto(
     @SerialName("screen") val screen: String? = null,
     @SerialName("order") val order: OrderDto? = null
 ) {
-    fun toDomain(): NextScreenResult? {
-        val mappedOrder = order?.toDomain() ?: return null
+    fun toDomain(): NextScreenResult {
         return NextScreenResult(
             screen = NextScreenType.fromRaw(screen),
-            order = mappedOrder
+            order = order?.toDomain()
         )
     }
 }

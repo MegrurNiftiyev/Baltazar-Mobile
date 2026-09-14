@@ -7,6 +7,7 @@ import com.example.baltazar.feature.order.domain.model.LocationSearchResult
 import com.example.baltazar.feature.order.domain.repository.ILocationRepository
 import com.example.baltazar.feature.order.domain.repository.IOrderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -97,7 +99,9 @@ class MapDeliverySelectionViewModel @Inject constructor(
                 orderRepository.getNextScreen(orderId)
                     .onSuccess { nextScreenResult ->
                         _state.update { state -> state.copy(isSaving = false) }
-                        onSuccessNavigate(nextScreenResult.screen.name)
+                        withContext(Dispatchers.Main) {
+                            onSuccessNavigate(nextScreenResult.screen.name)
+                        }
                     }
                     .onFailure { error ->
                         _state.update { state -> state.copy(isSaving = false, errorMessage = error.message) }

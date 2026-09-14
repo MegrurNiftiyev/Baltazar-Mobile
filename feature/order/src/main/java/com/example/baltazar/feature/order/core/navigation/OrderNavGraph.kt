@@ -25,14 +25,21 @@ import com.example.baltazar.feature.order.ui.screens.order_detail.OrderDetailScr
 import com.example.baltazar.feature.order.ui.screens.unknown_screen_fallback.UnknownScreenFallbackScreen
 
 fun NavHostController.navigateToNextScreen(screenType: NextScreenType, orderId: String) {
+    val isFromOrderFlow = currentBackStackEntry?.destination?.route?.contains("OrderFlow") == true
+    val popUpBlock: androidx.navigation.NavOptionsBuilder.() -> Unit = {
+        if (isFromOrderFlow) {
+            popUpTo<OrderFlow> { inclusive = true }
+        }
+    }
+
     when (screenType) {
-        NextScreenType.PERSONAL_INFO_SCREEN -> navigate(ProfilePersonalInfo(isFromOrder = true))
-        NextScreenType.DRIVER_LICENSE_SCREEN -> navigate(ProfileDriverLicense(isFromOrder = true))
-        NextScreenType.PASSPORT_INFO_SCREEN -> navigate(ProfilePassport(isFromOrder = true))
-        NextScreenType.DELIVERY_ADDRESS_SCREEN -> navigate(OrderMapDeliverySelection(orderId = orderId))
-        NextScreenType.PAYMENT_SCREEN -> navigate(OrderPayment(orderId = orderId))
-        NextScreenType.CONFIRM_SCREEN -> navigate(OrderConfirm)
-        NextScreenType.UNKNOWN -> navigate(OrderUnknownScreenFallback)
+        NextScreenType.PERSONAL_INFO_SCREEN -> navigate(ProfilePersonalInfo(isFromOrder = true), popUpBlock)
+        NextScreenType.DRIVER_LICENSE_SCREEN -> navigate(ProfileDriverLicense(isFromOrder = true), popUpBlock)
+        NextScreenType.PASSPORT_INFO_SCREEN -> navigate(ProfilePassport(isFromOrder = true), popUpBlock)
+        NextScreenType.DELIVERY_ADDRESS_SCREEN -> navigate(OrderMapDeliverySelection(orderId = orderId), popUpBlock)
+        NextScreenType.PAYMENT_SCREEN -> navigate(OrderPayment(orderId = orderId), popUpBlock)
+        NextScreenType.CONFIRM_SCREEN -> navigate(OrderConfirm, popUpBlock)
+        NextScreenType.UNKNOWN -> navigate(OrderUnknownScreenFallback, popUpBlock)
     }
 }
 
