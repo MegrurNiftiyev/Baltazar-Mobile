@@ -55,7 +55,7 @@ fun NavGraphBuilder.orderNavGraph(navController: NavHostController) {
         MapDeliverySelectionScreen(
             navController = navController,
             onNextScreen = { screenName ->
-                val nextType = try { NextScreenType.valueOf(screenName) } catch (_: Exception) { NextScreenType.PAYMENT_SCREEN }
+                val nextType = try { NextScreenType.valueOf(screenName) } catch (_: Exception) { NextScreenType.UNKNOWN }
                 navController.navigateToNextScreen(nextType, route.orderId)
             }
         )
