@@ -65,7 +65,7 @@ fun OrderServiceCard(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = order.serviceItemSnapshot?.title ?: "Order #${order.id.takeLast(6)}",
+                    text = order.serviceItemSnapshot?.title ?: stringResource(id = com.example.baltazar.core.R.string.order_number_format, order.id.takeLast(6)),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface

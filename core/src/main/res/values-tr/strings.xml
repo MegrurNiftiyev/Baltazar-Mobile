@@ -68,6 +68,7 @@
     <string name="name_label">İsim</string>
     <string name="no_reviews_yet">Henüz değerlendirme yapılmadı.</string>
     <string name="order_coming_soon">Sipariş süreci yakında eklenecek</string>
+    <string name="order_number_format">Sipariş #%s</string>
     <string name="order_now">Sipariş Et</string>
     <string name="orders_empty_message">Henüz siparişiniz yok</string>
     <string name="orders_empty_subtitle">Sipariş ettiğiniz hizmetler burada görünecek</string>

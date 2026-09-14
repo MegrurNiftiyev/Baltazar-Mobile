@@ -29,10 +29,7 @@ class AuthGateManager @Inject constructor(
     }
 }
 
-/**
- * UI extension helper to require authentication before executing an action.
- * Centralizes the Login redirection in the UI layer while keeping AuthGateManager free of NavController dependency.
- */
+
 inline fun AuthGateManager.requireAuth(
     navController: NavController,
     crossinline onAuthenticated: () -> Unit

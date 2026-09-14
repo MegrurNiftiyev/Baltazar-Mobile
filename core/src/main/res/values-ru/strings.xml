@@ -68,6 +68,7 @@
     <string name="name_label">Имя</string>
     <string name="no_reviews_yet">Отзывов пока нет.</string>
     <string name="order_coming_soon">Заказ скоро будет доступен</string>
+    <string name="order_number_format">Заказ #%s</string>
     <string name="order_now">Заказать</string>
     <string name="orders_empty_message">У вас пока нет заказов</string>
     <string name="orders_empty_subtitle">Заказанные услуги появятся здесь</string>

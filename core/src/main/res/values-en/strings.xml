@@ -68,6 +68,7 @@
     <string name="name_label">Name</string>
     <string name="no_reviews_yet">No reviews yet.</string>
     <string name="order_coming_soon">Ordering feature coming soon</string>
+    <string name="order_number_format">Order #%s</string>
     <string name="order_now">Order Now</string>
     <string name="orders_empty_message">You have no orders yet</string>
     <string name="orders_empty_subtitle">Your ordered services will appear here</string>

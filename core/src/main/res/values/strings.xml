@@ -51,6 +51,7 @@
     <string name="order_date_label">Sifariş tarixi</string>
     <string name="order_id_label">Sifariş ID</string>
     <string name="continue_order">Sifarişə davam et</string>
+    <string name="order_number_format">Sifariş #%s</string>
     <string name="duration_label">Müddət</string>
     <string name="edit_profile_title">Profili redaktə et</string>
     <string name="expiry_date">Bitmə tarixi (YYYY-MM-DD)</string>
