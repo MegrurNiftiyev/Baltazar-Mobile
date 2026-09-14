@@ -1,5 +1,6 @@
 package com.example.baltazar.feature.company.domain.model
 
+import com.example.baltazar.core.domain.model.ReviewEligibility
 import com.example.baltazar.feature.company.core.enums.CompanySectionType
 
 data class CompanyDetail(
@@ -19,6 +20,7 @@ data class CompanyDetail(
     val website: String?,
     val workingHours: String?,
     val priceSuffix: String? = null,
+    val reviewEligibility: ReviewEligibility = ReviewEligibility(eligible = true, canSubmit = true),
     val sectionOrder: List<CompanySectionType> = listOf(
         CompanySectionType.HEADER,
         CompanySectionType.ABOUT,

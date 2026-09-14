@@ -1,5 +1,7 @@
 package com.example.baltazar.feature.company.data.model.dto
 
+import com.example.baltazar.core.data.model.dto.ReviewEligibilityDto
+import com.example.baltazar.core.domain.model.ReviewEligibility
 import com.example.baltazar.feature.company.core.enums.CompanySectionType
 import com.example.baltazar.feature.company.domain.model.CompanyDetail
 import kotlinx.serialization.SerialName
@@ -26,6 +28,7 @@ data class CompanyDetailsDto(
     @SerialName("email") val email: String? = null,
     @SerialName("website") val website: String? = null,
     @SerialName("workingHours") val workingHours: String? = null,
+    @SerialName("reviewEligibility") val reviewEligibility: ReviewEligibilityDto? = null,
     @SerialName("sectionOrder") val sectionOrder: List<String>? = null,
     @SerialName("fullSectionOrder") val fullSectionOrder: List<String>? = null
 ) {
@@ -68,6 +71,7 @@ data class CompanyDetailsDto(
             email = email,
             website = website,
             workingHours = workingHours,
+            reviewEligibility = reviewEligibility?.toDomain() ?: ReviewEligibility(eligible = true, canSubmit = true),
             sectionOrder = parsedSections
         )
     }

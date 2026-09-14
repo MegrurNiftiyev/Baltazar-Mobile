@@ -18,8 +18,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.example.baltazar.core.R
 import com.example.baltazar.core.core.managers.AuthGateManager
-import com.example.baltazar.core.core.managers.SessionManager
+import com.example.baltazar.core.core.utils.SnackbarMessage
+import com.example.baltazar.core.core.utils.SnackbarType
+import com.example.baltazar.core.core.utils.UiText
+import com.example.baltazar.core.domain.model.ReviewEligibility
 
 @HiltViewModel
 class CompanyDetailViewModel @Inject constructor(
@@ -140,6 +144,48 @@ class CompanyDetailViewModel @Inject constructor(
                     wishlistRepository.addToWishlist(serviceId = itemId, serviceType = serviceType)
                 } else {
                     wishlistRepository.removeFromWishlist(id = itemId)
+                }
+            }
+        }
+    }
+
+    fun submitReview(rating: Int, comment: String) {
+        if (sessionManager.user.value.isGuest) {
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.update { it.copy(isSubmittingReview = true) }
+            reviewRepository.createReview(
+                targetType = ReviewTargetType.COMPANY.name,
+                targetId = companyId,
+                rating = rating,
+                comment = comment
+            ).onSuccess {
+                _state.update { state ->
+                    val currentCompany = state.company
+                    val updatedEligibility = currentCompany?.reviewEligibility?.copy(canSubmit = false, alreadyReviewed = true)
+                        ?: ReviewEligibility(canSubmit = false, alreadyReviewed = true)
+                    val updatedCompany = currentCompany?.copy(reviewEligibility = updatedEligibility)
+                    state.copy(
+                        company = updatedCompany,
+                        isSubmittingReview = false,
+                        userMessage = SnackbarMessage(
+                            text = UiText.StringResource(R.string.review_submitted_success),
+                            type = SnackbarType.SUCCESS
+                        )
+                    )
+                }
+                loadReviews()
+            }.onFailure { error ->
+                _state.update {
+                    it.copy(
+                        isSubmittingReview = false,
+                        userMessage = SnackbarMessage(
+                            text = UiText.DynamicString(error.message ?: "Xəta baş verdi"),
+                            type = SnackbarType.ERROR
+                        )
+                    )
                 }
             }
         }

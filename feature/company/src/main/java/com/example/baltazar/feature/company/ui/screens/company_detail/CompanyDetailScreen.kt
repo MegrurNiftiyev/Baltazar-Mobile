@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.baltazar.core.R
+import com.example.baltazar.core.core.components.ReviewSection
 import com.example.baltazar.core.core.components.CustomAppBar
 import com.example.baltazar.core.core.components.ErrorBox
 import com.example.baltazar.core.core.constants.BorderRadiuses
@@ -218,11 +219,18 @@ fun CompanyDetailScreen(
                                     )
                                 }
                                 CompanySectionType.REVIEWS -> {
-                                    ReviewsSection(
+                                    ReviewSection(
+                                        reviews = state.reviews,
                                         rating = company.rating,
                                         reviewCount = company.reviewCount,
-                                        reviews = state.reviews,
-                                        isLoading = state.isReviewsLoading
+                                        reviewEligibility = company.reviewEligibility,
+                                        isLoading = state.isReviewsLoading,
+                                        isSubmittingReview = state.isSubmittingReview,
+                                        onSubmitReview = { rating, comment ->
+                                            viewModel.authGateManager.requireAuth(navController) {
+                                                viewModel.submitReview(rating, comment)
+                                            }
+                                        }
                                     )
                                 }
                                 CompanySectionType.UNKNOWN -> {}

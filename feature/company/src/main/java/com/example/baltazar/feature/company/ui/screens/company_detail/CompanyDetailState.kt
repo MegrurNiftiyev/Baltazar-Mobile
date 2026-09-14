@@ -13,6 +13,7 @@ data class CompanyDetailState(
     val isRelatedItemsLoading: Boolean = false,
     val isReviewsLoading: Boolean = false,
     val isFavorite: Boolean = false,
+    val isSubmittingReview: Boolean = false,
     val error: String? = null,
     val userMessage: SnackbarMessage? = null
 )
