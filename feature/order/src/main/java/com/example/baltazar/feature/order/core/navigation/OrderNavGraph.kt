@@ -16,6 +16,11 @@ import com.example.baltazar.feature.order.ui.screens.payment.PaymentScreen
 
 import com.example.baltazar.core.core.navigation.OrderDetail
 import com.example.baltazar.core.core.navigation.OrderUnknownScreenFallback
+import com.example.baltazar.core.core.navigation.Orders
+import com.example.baltazar.core.core.navigation.ProfileDriverLicense
+import com.example.baltazar.core.core.navigation.ProfilePassport
+import com.example.baltazar.core.core.navigation.ProfilePersonalInfo
+import com.example.baltazar.feature.order.domain.model.NextScreenType
 import com.example.baltazar.feature.order.ui.screens.order_detail.OrderDetailScreen
 import com.example.baltazar.feature.order.ui.screens.unknown_screen_fallback.UnknownScreenFallbackScreen
 

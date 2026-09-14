@@ -24,6 +24,7 @@ import com.example.baltazar.core.core.utils.SnackbarMessage
 import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.core.core.utils.UiText
 import com.example.baltazar.core.domain.model.ReviewEligibility
+import javax.inject.Inject
 
 @HiltViewModel
 class CompanyDetailViewModel @Inject constructor(

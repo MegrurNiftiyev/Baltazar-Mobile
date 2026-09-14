@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.example.baltazar.core.core.managers.AuthGateManager
-import com.example.baltazar.core.core.managers.SessionManager
+import javax.inject.Inject
 
 @HiltViewModel
 class TravelDetailViewModel @Inject constructor(

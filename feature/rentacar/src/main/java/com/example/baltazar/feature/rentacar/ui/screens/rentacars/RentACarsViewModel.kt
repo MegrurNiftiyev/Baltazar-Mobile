@@ -17,6 +17,7 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import com.example.baltazar.core.core.managers.AuthGateManager
 
 @HiltViewModel
 class RentACarsViewModel @Inject constructor(

@@ -51,6 +51,7 @@ import com.example.baltazar.core.core.extensions.consumeResult
 import com.example.baltazar.core.core.navigation.CompanyList
 import com.example.baltazar.core.core.navigation.HotelDetail
 import com.example.baltazar.core.core.navigation.LikeResult
+import com.example.baltazar.core.core.navigation.NavResultKeys
 import com.example.baltazar.core.core.managers.requireAuth
 import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.R as CoreR

@@ -52,6 +52,7 @@ import com.example.baltazar.core.core.navigation.LikeResult
 import com.example.baltazar.core.core.managers.requireAuth
 import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.navigation.NavResultKeys
+import com.example.baltazar.core.core.navigation.RentACarDetail
 import com.example.baltazar.core.R as CoreR
 import com.example.baltazar.feature.rentacar.R
 import com.example.baltazar.feature.rentacar.ui.components.CarCard

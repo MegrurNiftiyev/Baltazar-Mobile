@@ -15,11 +15,11 @@ import com.example.baltazar.core.R
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
-import com.example.baltazar.feature.order.domain.model.PersonalInfo
+import com.example.baltazar.feature.order.domain.model.OrderPersonalInfo
 
 @Composable
 fun PersonalInfoCard(
-    personalInfo: PersonalInfo,
+    personalInfo: OrderPersonalInfo,
     modifier: Modifier = Modifier
 ) {
     Surface(

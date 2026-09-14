@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.example.baltazar.core.core.managers.AuthGateManager
-import com.example.baltazar.core.core.managers.SessionManager
+import javax.inject.Inject
 
 @HiltViewModel
 class FoodDetailViewModel @Inject constructor(
