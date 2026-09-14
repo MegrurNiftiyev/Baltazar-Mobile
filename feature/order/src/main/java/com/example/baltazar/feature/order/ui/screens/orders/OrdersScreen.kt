@@ -202,11 +202,7 @@ fun OrdersScreen(
                                     .background(MaterialTheme.colorScheme.surfaceContainerLow)
                                     .combinedClickable(
                                         onClick = {
-                                            if (isPending) {
-                                                viewModel.continueOrderFlow(order.id, onNavigateNext)
-                                            } else {
-                                                navController.navigate(OrderDetail(order.id))
-                                            }
+                                            navController.navigate(OrderDetail(order.id))
                                         },
                                         onLongClick = {
                                             if (order.status != OrderStatus.CANCELLED) {

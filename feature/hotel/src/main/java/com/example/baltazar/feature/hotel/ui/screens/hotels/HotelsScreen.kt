@@ -130,19 +130,7 @@ fun HotelsScreen(
                 CustomAppBar(
                     title = stringResource(id = R.string.hotel_title),
                     alignment = TitleAlignment.CENTER,
-                    onBackClick = { navController.popBackStack() },
-                    trailingContent = {
-                        IconButton(
-                            onClick = { navController.navigate(CompanyList(serviceType = "HOTEL")) }
-                        ) {
-                            Icon(
-                                imageVector = TablerIcons.Building,
-                                contentDescription = null,
-                                modifier = Modifier.size(IconSizes.Large),
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                    }
+                    onBackClick = { navController.popBackStack() }
                 )
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = Paddings.Medium, vertical = Paddings.Small),

@@ -22,6 +22,8 @@ import com.example.baltazar.feature.profile.ui.screens.wishlist.WishlistScreen
 
 import androidx.navigation.toRoute
 
+import com.example.baltazar.core.core.navigation.OrderFlow
+
 fun NavGraphBuilder.profileNavGraph(navController: NavHostController) {
     composable<Profile> { ProfileScreen(navController) }
     composable<Wishlist> { WishlistScreen(navController) }
@@ -29,15 +31,27 @@ fun NavGraphBuilder.profileNavGraph(navController: NavHostController) {
     composable<Help> { HelpScreen(navController) }
     composable<ProfilePersonalInfo> { backStackEntry ->
         val route = backStackEntry.toRoute<ProfilePersonalInfo>()
-        PersonalInfoScreen(navController = navController, isFromOrder = route.isFromOrder)
+        PersonalInfoScreen(
+            navController = navController,
+            isFromOrder = route.isFromOrder,
+            orderId = route.orderId
+        )
     }
     composable<ProfileDriverLicense> { backStackEntry ->
         val route = backStackEntry.toRoute<ProfileDriverLicense>()
-        DriverLicenseScreen(navController = navController, isFromOrder = route.isFromOrder)
+        DriverLicenseScreen(
+            navController = navController,
+            isFromOrder = route.isFromOrder,
+            orderId = route.orderId
+        )
     }
     composable<ProfilePassport> { backStackEntry ->
         val route = backStackEntry.toRoute<ProfilePassport>()
-        PassportInfoScreen(navController = navController, isFromOrder = route.isFromOrder)
+        PassportInfoScreen(
+            navController = navController,
+            isFromOrder = route.isFromOrder,
+            orderId = route.orderId
+        )
     }
     composable<ProfileUserDetail> { UserDetailScreen(navController) }
 }

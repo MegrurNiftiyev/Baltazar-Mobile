@@ -33,9 +33,9 @@ fun NavHostController.navigateToNextScreen(screenType: NextScreenType, orderId: 
     }
 
     when (screenType) {
-        NextScreenType.PERSONAL_INFO_SCREEN -> navigate(ProfilePersonalInfo(isFromOrder = true), popUpBlock)
-        NextScreenType.DRIVER_LICENSE_SCREEN -> navigate(ProfileDriverLicense(isFromOrder = true), popUpBlock)
-        NextScreenType.PASSPORT_INFO_SCREEN -> navigate(ProfilePassport(isFromOrder = true), popUpBlock)
+        NextScreenType.PERSONAL_INFO_SCREEN -> navigate(ProfilePersonalInfo(isFromOrder = true, orderId = orderId), popUpBlock)
+        NextScreenType.DRIVER_LICENSE_SCREEN -> navigate(ProfileDriverLicense(isFromOrder = true, orderId = orderId), popUpBlock)
+        NextScreenType.PASSPORT_INFO_SCREEN -> navigate(ProfilePassport(isFromOrder = true, orderId = orderId), popUpBlock)
         NextScreenType.DELIVERY_ADDRESS_SCREEN -> navigate(OrderMapDeliverySelection(orderId = orderId), popUpBlock)
         NextScreenType.PAYMENT_SCREEN -> navigate(OrderPayment(orderId = orderId), popUpBlock)
         NextScreenType.CONFIRM_SCREEN -> navigate(OrderConfirm, popUpBlock)
@@ -77,7 +77,9 @@ fun NavGraphBuilder.orderNavGraph(navController: NavHostController) {
         PaymentScreen(
             navController = navController,
             onPaymentSuccessNavigate = {
-                navController.navigate(OrderConfirm)
+                navController.navigate(OrderConfirm) {
+                    popUpTo<OrderPayment> { inclusive = true }
+                }
             }
         )
     }

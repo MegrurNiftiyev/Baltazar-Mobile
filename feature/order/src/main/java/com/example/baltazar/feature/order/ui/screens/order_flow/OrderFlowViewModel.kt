@@ -26,6 +26,7 @@ class OrderFlowViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val routeData: OrderFlow? = try { savedStateHandle.toRoute<OrderFlow>() } catch (_: Exception) { null }
+    private val existingOrderId: String? = routeData?.orderId ?: savedStateHandle.get<String>("orderId")
     private val serviceTypeStr: String = routeData?.serviceType ?: savedStateHandle.get<String>("serviceType") ?: ""
     private val serviceId: String = routeData?.serviceId ?: savedStateHandle.get<String>("serviceId") ?: ""
     private val subItemId: String? = savedStateHandle.get<String>("subItemId")
@@ -37,38 +38,46 @@ class OrderFlowViewModel @Inject constructor(
 
     fun initOrderFlow(onResolvedNextScreen: (NextScreenType, String) -> Unit) {
         if (isOrderFlowInitiated) return
-        if (serviceTypeStr.isBlank() || serviceId.isBlank()) {
-            _state.update { it.copy(isLoading = false, errorMessage = "Invalid order request details") }
-            return
-        }
-        val serviceType = try {
-            ServiceType.valueOf(serviceTypeStr.uppercase())
-        } catch (_: Exception) {
-            _state.update { it.copy(isLoading = false, errorMessage = "Invalid service type") }
-            return
-        }
-
         isOrderFlowInitiated = true
 
         viewModelScope.launch(IO) {
             _state.update { it.copy(isLoading = true, errorMessage = null) }
-            orderRepository.createOrder(serviceType, serviceId, subItemId)
-                .onSuccess { order ->
-                    _state.update { it.copy(order = order) }
-                    // Resolve next screen dynamically
-                    orderRepository.getNextScreen(order.id)
-                        .onSuccess { nextScreenResult ->
-                            _state.update { state -> state.copy(isLoading = false, nextScreenType = nextScreenResult.screen) }
-                            withContext(Dispatchers.Main) {
-                                onResolvedNextScreen(nextScreenResult.screen, order.id)
-                            }
-                        }
-                        .onFailure { error ->
-                            _state.update { state -> state.copy(isLoading = false, errorMessage = error.message ?: "Failed to resolve next screen") }
-                        }
+
+            val targetOrderId: String = if (!existingOrderId.isNullOrBlank()) {
+                existingOrderId
+            } else {
+                if (serviceTypeStr.isBlank() || serviceId.isBlank()) {
+                    _state.update { it.copy(isLoading = false, errorMessage = "Invalid order request details") }
+                    return@launch
+                }
+                val serviceType = try {
+                    ServiceType.valueOf(serviceTypeStr.uppercase())
+                } catch (_: Exception) {
+                    _state.update { it.copy(isLoading = false, errorMessage = "Invalid service type") }
+                    return@launch
+                }
+
+                val createResult = orderRepository.createOrder(serviceType, serviceId, subItemId)
+                val createdOrder = createResult.getOrNull()
+                if (createdOrder == null) {
+                    val error = createResult.exceptionOrNull()
+                    _state.update { it.copy(isLoading = false, errorMessage = error?.message ?: "Failed to create order") }
+                    return@launch
+                }
+                _state.update { it.copy(order = createdOrder) }
+                createdOrder.id
+            }
+
+            // Resolve next screen dynamically
+            orderRepository.getNextScreen(targetOrderId)
+                .onSuccess { nextScreenResult ->
+                    _state.update { state -> state.copy(isLoading = false, nextScreenType = nextScreenResult.screen) }
+                    withContext(Dispatchers.Main) {
+                        onResolvedNextScreen(nextScreenResult.screen, targetOrderId)
+                    }
                 }
                 .onFailure { error ->
-                    _state.update { state -> state.copy(isLoading = false, errorMessage = error.message ?: "Failed to create order") }
+                    _state.update { state -> state.copy(isLoading = false, errorMessage = error.message ?: "Failed to resolve next screen") }
                 }
         }
     }

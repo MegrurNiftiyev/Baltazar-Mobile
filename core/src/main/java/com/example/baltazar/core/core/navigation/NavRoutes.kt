@@ -103,20 +103,24 @@ object FoodList
 data class FoodDetail(val id: String)
 
 @Serializable
-data class OrderFlow(val serviceType: String, val serviceId: String)
+data class OrderFlow(
+    val serviceType: String? = null,
+    val serviceId: String? = null,
+    val orderId: String? = null
+)
 
 @Serializable
 object Orders
 
 // Profile Sub-Screens
 @Serializable
-data class ProfilePersonalInfo(val isFromOrder: Boolean = false)
+data class ProfilePersonalInfo(val isFromOrder: Boolean = false, val orderId: String? = null)
 
 @Serializable
-data class ProfileDriverLicense(val isFromOrder: Boolean = false)
+data class ProfileDriverLicense(val isFromOrder: Boolean = false, val orderId: String? = null)
 
 @Serializable
-data class ProfilePassport(val isFromOrder: Boolean = false)
+data class ProfilePassport(val isFromOrder: Boolean = false, val orderId: String? = null)
 
 @Serializable
 object ProfileUserDetail

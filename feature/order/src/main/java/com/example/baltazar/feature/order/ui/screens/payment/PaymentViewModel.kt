@@ -6,12 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.baltazar.feature.order.domain.repository.IOrderRepository
 import com.example.baltazar.feature.order.domain.repository.IPaymentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -220,7 +223,9 @@ class PaymentViewModel @Inject constructor(
                     .onSuccess { txn ->
                         _state.update { it.copy(isProcessingPayment = false) }
                         if (txn.status == "SUCCESS") {
-                            onPaymentSuccess()
+                            withContext(Main) {
+                                onPaymentSuccess()
+                            }
                         } else {
                             _state.update { it.copy(isPaymentDeclined = true) }
                         }

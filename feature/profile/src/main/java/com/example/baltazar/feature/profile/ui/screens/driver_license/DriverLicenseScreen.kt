@@ -51,11 +51,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.example.baltazar.core.core.components.CustomAlertDialog
 import com.example.baltazar.core.core.navigation.Home
+import com.example.baltazar.core.core.navigation.OrderFlow
+import com.example.baltazar.core.core.navigation.ProfileDriverLicense
 
 @Composable
 fun DriverLicenseScreen(
     navController: NavHostController,
     isFromOrder: Boolean = false,
+    orderId: String? = null,
     viewModel: DriverLicenseViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -89,7 +92,13 @@ fun DriverLicenseScreen(
 
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
-            navController.popBackStack()
+            if (isFromOrder && !orderId.isNullOrBlank()) {
+                navController.navigate(OrderFlow(orderId = orderId)) {
+                    popUpTo<ProfileDriverLicense> { inclusive = true }
+                }
+            } else {
+                navController.popBackStack()
+            }
         }
     }
 

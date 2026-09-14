@@ -51,11 +51,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.example.baltazar.core.core.components.CustomAlertDialog
 import com.example.baltazar.core.core.navigation.Home
+import com.example.baltazar.core.core.navigation.OrderFlow
+import com.example.baltazar.core.core.navigation.ProfilePersonalInfo
 
 @Composable
 fun PersonalInfoScreen(
     navController: NavHostController,
     isFromOrder: Boolean = false,
+    orderId: String? = null,
     viewModel: PersonalInfoViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -89,7 +92,13 @@ fun PersonalInfoScreen(
 
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
-            navController.popBackStack()
+            if (isFromOrder && !orderId.isNullOrBlank()) {
+                navController.navigate(OrderFlow(orderId = orderId)) {
+                    popUpTo<ProfilePersonalInfo> { inclusive = true }
+                }
+            } else {
+                navController.popBackStack()
+            }
         }
     }
 
