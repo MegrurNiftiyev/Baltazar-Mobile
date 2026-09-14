@@ -7,6 +7,7 @@ import com.example.baltazar.feature.order.domain.model.LocationSearchResult
 import com.example.baltazar.feature.order.domain.repository.ILocationRepository
 import com.example.baltazar.feature.order.domain.repository.IOrderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +39,7 @@ class MapDeliverySelectionViewModel @Inject constructor(
             return
         }
 
-        searchJob = viewModelScope.launch {
+        searchJob = viewModelScope.launch(IO) {
             delay(400)
             _state.update { it.copy(isSearching = true) }
             locationRepository.searchLocation(query)
@@ -64,7 +65,7 @@ class MapDeliverySelectionViewModel @Inject constructor(
     }
 
     fun onCoordinatesSelected(lat: Double, lng: Double) {
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             _state.update { it.copy(selectedLat = lat, selectedLng = lng) }
             locationRepository.reverseGeocode(lat, lng)
                 .onSuccess { result ->
@@ -85,7 +86,7 @@ class MapDeliverySelectionViewModel @Inject constructor(
             onSuccessNavigate("PAYMENT_SCREEN")
             return
         }
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             _state.update { it.copy(isSaving = true, errorMessage = null) }
             orderRepository.patchDeliveryAddress(
                 orderId = orderId,

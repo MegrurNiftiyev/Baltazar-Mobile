@@ -7,6 +7,7 @@ import com.example.baltazar.core.core.enums.ServiceType
 import com.example.baltazar.feature.order.domain.model.NextScreenType
 import com.example.baltazar.feature.order.domain.repository.IOrderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,7 +37,7 @@ class OrderFlowViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             _state.update { it.copy(isLoading = true, errorMessage = null) }
             orderRepository.createOrder(serviceType, serviceId, subItemId)
                 .onSuccess { order ->

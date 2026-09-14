@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.baltazar.feature.order.domain.model.NextScreenType
 import com.example.baltazar.feature.order.domain.repository.IOrderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,7 +35,7 @@ class OrderDetailViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             _state.update { it.copy(isLoading = true, errorMessage = null) }
             orderRepository.getOrderDetails(orderId)
                 .onSuccess { order ->
@@ -48,7 +49,7 @@ class OrderDetailViewModel @Inject constructor(
 
     fun cancelOrder() {
         if (orderId.isBlank()) return
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             _state.update { it.copy(isCancelling = true) }
             orderRepository.cancelOrder(orderId)
                 .onSuccess { updatedOrder ->
@@ -73,7 +74,7 @@ class OrderDetailViewModel @Inject constructor(
 
     fun continueOrderFlow(onResolvedNextScreen: (NextScreenType, String) -> Unit) {
         if (orderId.isBlank()) return
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             _state.update { it.copy(isLoading = true) }
             orderRepository.getNextScreen(orderId)
                 .onSuccess { nextResult ->

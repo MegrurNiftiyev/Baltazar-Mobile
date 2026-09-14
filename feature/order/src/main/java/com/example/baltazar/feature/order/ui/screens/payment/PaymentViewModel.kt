@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.baltazar.feature.order.domain.repository.IOrderRepository
 import com.example.baltazar.feature.order.domain.repository.IPaymentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,7 +31,7 @@ class PaymentViewModel @Inject constructor(
     }
 
     fun loadData() {
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             _state.update { it.copy(isLoading = true, paymentErrorMessage = null) }
             
             // 1. Fetch Order details if orderId present
@@ -164,7 +165,7 @@ class PaymentViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             _state.update { it.copy(isTokenizingCard = true, addCardError = null) }
 
             // Step A: Tokenize card via External Payment Gateway API
@@ -209,7 +210,7 @@ class PaymentViewModel @Inject constructor(
         val selectedCardId = _state.value.selectedCardId ?: return
         if (orderId.isBlank()) return
 
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             _state.update { it.copy(isProcessingPayment = true, isPaymentDeclined = false, paymentErrorMessage = null) }
 
             // 1. Attach payment method to order
