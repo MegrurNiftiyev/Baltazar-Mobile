@@ -27,13 +27,13 @@
 
 ---
 
-## 🏗️ Architecture & Module Partitioning (Bölgü Sistemi)
+## 🏗️ 1. Architecture Overview
 
-The project strictly follows a **Feature-based Multi-Module Clean Architecture**. This ensures complete layer isolation, high maintainability, atomic testability, and parallel compile speeds.
+The project strictly follows a **Feature-based Multi-Module Clean Architecture**.
 
 ```text
 root/
-├── app/                        # Main entry point (Global NavHost, MainActivity, Hilt App)
+├── app/                        # Main entry point (Global NavHost, MainActivity, Hilt Application)
 ├── core/                       # Shared foundational library module (:core)
 │   ├── components/             # Reusable UI atoms (CustomTextField, CustomAppBar, CustomAlertDialog)
 │   ├── constants/              # Centralized Design Tokens (Paddings, Spaces, BorderRadiuses, IconSizes)
@@ -54,121 +54,346 @@ root/
     └── order/                  # Centralized Checkout flow (Map delivery selection, Payment, Confirmation)
 ```
 
-### 🧱 Modular Clean Architecture Rules
-Every feature module (e.g., `feature/order`, `feature/auth`) strictly enforces four internal packages:
+Each feature module is internally structured into clean architectural layers:
 
 ```text
 feature/<name>/src/main/java/com/example/baltazar/feature/<name>/
 ├── core/                  # Module-specific utilities, DI modules (Network & Repository), Navigation graphs
-│   ├── di/                # Independent AuthNetworkModule / AuthRepositoryModule
-│   ├── mapper/            # Custom exception and DTO mappers
+│   ├── di/                # Feature-specific AuthNetworkModule / AuthRepositoryModule
+│   ├── mapper/            # Exception & DTO mappers
 │   └── navigation/        # Sub-navigation graphs
 ├── data/                  # Data Layer
 │   ├── datasources/       # Remote API services and Retrofit endpoints
-│   ├── model/             # Request & Response DTO models (request/, response/)
+│   ├── model/             # Request & Response DTO models
 │   └── repository/        # Repository implementations
 ├── domain/                # Domain Layer (Pure Kotlin, zero Android dependencies)
-│   ├── model/             # Domain entities (e.g. PaymentCard, OrderItem)
-│   └── repository/        # Repository Interfaces (e.g. IOrderRepository)
+│   ├── model/             # Domain entities
+│   └── repository/        # Repository Interfaces
 └── ui/                    # Presentation Layer
     ├── components/        # Atomic, pure UI components (No ViewModel dependencies)
     └── screens/           # Composables & ViewModels (State orchestration)
 ```
 
-> 📌 **Rule on Shared Models**: If a model (e.g., `User` or `SessionToken`) is shared across more than one feature module, it is promoted to `:core:domain`. Feature modules never depend directly on each other; they only depend on `:core`.
+> 📌 **Module Coupling Rule**: Feature modules do not depend directly on each other; they only depend on `:core`. Shared models and cross-module infrastructure reside in `:core`.
 
 ---
 
-## 🔒 Centralized Auth Gate & Target Screen Redirection (`AuthGateManager`)
+## 🗺️ 2. Global Navigation Architecture
 
-To provide a seamless user experience, guest users are allowed to browse products, hotels, and services freely. However, when an unauthenticated user attempts to perform a protected action (e.g., placing an order, writing a review, or opening profile settings), the application intercepts the action via **`AuthGateManager`**.
-
-### 🔄 How `AuthGateManager` Works
-
-```mermaid
-graph TD
-    A[User triggers protected action] --> B{SessionManager.isLoggedIn?}
-    B -- Yes --> C[Execute target action / Navigate directly]
-    B -- No --> D[AuthGateManager.requireAuth nextScreen = TargetRoute]
-    D --> E[Navigate to AuthNavGraph / LoginScreen]
-    E --> F[User completes Login / Registration]
-    F --> G[AuthGateManager resolves pending AuthGateState]
-    G --> H[App automatically redirects user to original nextScreen]
-```
-
-1. **Gate Trigger**: When a composable or ViewModel calls `authGateManager.requireAuth(nextScreen = OrderSummaryRoute)`, the manager checks the user session via `SessionManager`.
-2. **Pending Route Preservation**: If the user is unauthenticated, `AuthGateManager` emits an `AuthGateState.Required(nextScreen)` event and saves the target destination route.
-3. **Seamless Redirection**: The global `NavHost` captures the event and routes the user to `AuthNavGraph`. Upon successful authentication, `AuthGateManager.onAuthSuccess()` triggers navigation directly to the original target `nextScreen` (e.g. `OrderSummaryRoute`), bypassing unnecessary steps.
-
----
-
-## 💳 Payment System & Component Decomposition (`feature/order`)
-
-The payment architecture in `feature/order` handles secure payment processing, saved cards selection, tokenization of new credit cards, and error handling via `Baltazar-Payment-Backend`.
-
-### 🧩 `PaymentScreen` Component Decomposition
-To maintain readability and clean separation of concerns, `PaymentScreen.kt` acts strictly as an **Orchestrator**. It delegates UI rendering to isolated, pure Composables inside `payment/components/`:
+The application uses **Navigation Compose** with type-safe navigation routes.
 
 ```text
-payment/
-├── PaymentScreen.kt                  # UI Orchestrator (~140 lines)
-└── components/
-    ├── SavedCardsSection.kt          # List of user's saved payment methods
-    ├── SavedCardItem.kt             # Individual atomic card item with radio selection
-    ├── AddCardButton.kt             # Styled button triggering new card bottom sheet
-    ├── OrderSummaryCard.kt          # Dynamic base price & total price breakdown
-    ├── PaymentBottomBar.kt          # Bottom container with progress indicator & pay button
-    ├── PaymentLoading.kt            # Loading indicator during initial data fetch
-    ├── AddCardBottomSheet.kt        # Card tokenization form (Card Number, Expiry, CVV)
-    └── PaymentErrorBottomSheet.kt   # Error modal handling declined cards with retry logic
+MainActivity
+     │
+     ▼
+Global NavHost
+     │
+     ├── AuthNavGraph
+     ├── ExploreNavGraph
+     ├── FoodNavGraph
+     ├── HotelNavGraph
+     ├── TravelNavGraph
+     ├── RentACarNavGraph
+     ├── TaxiNavGraph
+     ├── ProfileNavGraph
+     └── OrderNavGraph
 ```
 
-### ⚡ Clean Component Coupling Principle
-UI components under `components/` **never accept `PaymentViewModel` directly**. Instead, they accept primitive values, state data objects, and emit event callbacks:
+### Key Distinction:
+- **NavGraph**: Maps routes to composable screens.
+- **ViewModel / Repository**: Decides what the next business step is.
+
+The navigation graph itself does not decide whether the user needs personal information, a driver's license, a delivery address, or payment.
+
+---
+
+## 🔒 3. Authentication Gate (`AuthGateManager`)
+
+Guest users can browse public content freely. Protected actions require authentication (e.g. placing an order, writing a review, or opening profile settings).
+
+```text
+User performs protected action
+          │
+          ▼
+SessionManager
+          │
+     Is user logged in?
+       /           \
+     YES            NO
+      │              │
+      ▼              ▼
+Continue        AuthGateManager
+                    │
+                    ▼
+              Save target route
+                    │
+                    ▼
+              Login / Register
+                    │
+                    ▼
+             Authentication OK
+                    │
+                    ▼
+          Resolve pending route
+                    │
+                    ▼
+          Original destination
+```
 
 ```kotlin
-// ❌ Bad: Component bound to ViewModel (Reduces reusability & testability)
-SavedCardsSection(viewModel = viewModel)
-
-// ✅ Good: Pure component accepting clean parameters & returning callbacks
-SavedCardsSection(
-    cards = state.savedCards,
-    selectedCardId = state.selectedCardId,
-    onCardSelected = viewModel::selectCard
+authGateManager.requireAuth(
+    nextScreen = TargetRoute
 )
 ```
 
----
-
-## ⚡ Asynchronous Operations & Exception Handling
-
-1. **ViewModel Coroutine Scope**: All network and I/O calls in ViewModels strictly specify `Dispatchers.IO`:
-   ```kotlin
-   viewModelScope.launch(Dispatchers.IO) {
-       val result = orderRepository.processPayment(request)
-       // Update state on Main thread via StateFlow
-   }
-   ```
-2. **Custom Exception Mapping**: Network errors and Retrofit `HttpException` instances are never leaked raw to the UI. They are transformed into domain-specific exceptions via custom mappers (e.g. `ValidationErrorMapper`), and friendly error messages are displayed via Snackbar or BottomSheets.
+- **If authenticated**: `requireAuth()` executes the target action immediately.
+- **If guest**: `requireAuth()` saves the target route, emits `AuthGateState.Required(targetRoute)`, routes to `AuthNavGraph`, and automatically redirects the user to the `targetRoute` upon successful login or registration.
 
 ---
 
-## 🎨 Design System & UI Token Compliance
+## 🛒 4. Service Detail → Order Flow Convergence
 
-All UI components adhere strictly to the project design tokens defined in `:core:constants`:
-- **Spacings**: `Spaces.ExtraMini`, `Spaces.Small`, `Spaces.Medium`, `Spaces.Large`, `Spaces.Huge`
-- **Paddings**: `Paddings.Mini`, `Paddings.Small`, `Paddings.Medium`, `Paddings.Large`, `Paddings.Massive`
-- **Radiuses**: `BorderRadiuses.Small`, `BorderRadiuses.Medium`, `BorderRadiuses.Large`, `BorderRadiuses.Huge`
-- **Icon Sizes**: `IconSizes.Small`, `IconSizes.Medium`, `IconSizes.Large`, `IconSizes.Max`
-- **Typography & Palette**: Exclusively derived from `MaterialTheme.typography` and `MaterialTheme.colorScheme`.
+Detail screens (Food, Hotel, Travel, Rent-a-car) do not construct the checkout process internally. They navigate directly to the centralized **Order Flow**:
+
+```kotlin
+onActionClick = {
+    if (viewModel.isGuest()) {
+        navController.navigate(Login(isPopStack = true))
+    } else {
+        navController.navigate(
+            OrderFlow(
+                serviceType = ServiceType.FOOD.name,
+                serviceId = state.food.id
+            )
+        )
+    }
+}
+```
+
+```text
+Food Detail      ──────┐
+Hotel Detail     ──────┼────► OrderFlow (Centralized Checkout)
+Travel Detail    ──────┤
+Rent-a-car Detail ─────┘
+```
 
 ---
 
-## 🌐 Backend Microservices Integration
+## ⚡ 5. Order Flow Execution
 
-The application integrates with two primary backends:
-- **[Baltazar-Backend](https://github.com/MegrurNiftiyev/Baltazar-Backend)**: Primary REST API powering authentication, catalog exploration, reviews, and user management.
-- **[Baltazar-Payment-Backend](https://github.com/MegrurNiftiyev/Baltazar-Payment-Backend)**: Dedicated microservice handling tokenization, card storage, and payment gateway authorizations.
+The checkout flow is controlled by `OrderNavGraph`. The initial entry point is `OrderSummaryScreen`:
+
+```text
+OrderFlow ──► OrderSummaryScreen ──► OrderSummaryViewModel ──► createOrder() ──► getNextScreen(orderId)
+```
+
+---
+
+## 🔄 6. Dynamic `next-screen` Mechanism
+
+The client does **not** hardcode the checkout step order. After creating an order:
+
+```text
+POST /api/orders
+      │
+      ▼
+GET /api/orders/{id}/next-screen
+      │
+      ▼
+NextScreenType
+```
+
+The backend dynamically returns the exact required next step:
+- `PERSONAL_INFO_SCREEN`
+- `DRIVER_LICENSE_SCREEN`
+- `PASSPORT_INFO_SCREEN`
+- `DELIVERY_ADDRESS_SCREEN`
+- `PAYMENT_SCREEN`
+- `CONFIRM_SCREEN`
+- `UNKNOWN`
+
+```kotlin
+fun NavHostController.navigateToNextScreen(
+    screenType: NextScreenType,
+    orderId: String
+) {
+    when (screenType) {
+        NextScreenType.PERSONAL_INFO_SCREEN -> navigate(ProfilePersonalInfo(isFromOrder = true))
+        NextScreenType.DRIVER_LICENSE_SCREEN -> navigate(ProfileDriverLicense(isFromOrder = true))
+        NextScreenType.PASSPORT_INFO_SCREEN -> navigate(ProfilePassport(isFromOrder = true))
+        NextScreenType.DELIVERY_ADDRESS_SCREEN -> navigate(OrderMapDeliverySelection(orderId = orderId))
+        NextScreenType.PAYMENT_SCREEN -> navigate(OrderPayment(orderId = orderId))
+        NextScreenType.CONFIRM_SCREEN -> navigate(OrderConfirm)
+        NextScreenType.UNKNOWN -> Unit
+    }
+}
+```
+
+```text
+Backend decides WHAT is required  ──►  NextScreenType  ──►  Navigation decides WHERE to go
+```
+
+---
+
+## 🔄 7. Complete Dynamic Order Navigation Example
+
+```text
+┌─────────────────────┐
+│    Order Summary    │
+└──────────┬──────────┘
+           │ getNextScreen()
+           ▼
+┌─────────────────────┐
+│    Personal Info    │
+└──────────┬──────────┘
+           │ save / getNextScreen()
+           ▼
+┌─────────────────────┐
+│   Driver License    │
+└──────────┬──────────┘
+           │ save / getNextScreen()
+           ▼
+┌─────────────────────┐
+│    Passport Info    │
+└──────────┬──────────┘
+           │ save / getNextScreen()
+           ▼
+┌─────────────────────┐
+│ Delivery / Map      │
+└──────────┬──────────┘
+           │ save address / getNextScreen()
+           ▼
+┌─────────────────────┐
+│      Payment        │
+└──────────┬──────────┘
+           │ payment / getNextScreen()
+           ▼
+┌─────────────────────┐
+│      Confirm        │
+└─────────────────────┘
+```
+
+---
+
+## 🔙 8. `popBackStack()` vs `next-screen`
+
+These two navigation actions serve completely different purposes:
+
+- **Forward Navigation (`next-screen`)**: Resolves the next business step determined by the backend (`getNextScreen()`).
+- **Backward Navigation (`popBackStack()`)**: Pops the top destination off the back stack when the user presses Back, returning smoothly to the previous screen.
+
+```text
+next-screen    = Forward business flow resolution
+popBackStack   = Backward stack traversal
+```
+
+---
+
+## 📚 9. Order Flow Navigation Back Stack
+
+Using normal `navigate()` calls without clearing previous destinations maintains the complete history:
+
+```text
+Navigation Back Stack:
+┌─────────────────────────┐
+│ Payment                 │ ← Current Screen
+├─────────────────────────┤
+│ DeliveryAddress         │
+├─────────────────────────┤
+│ DriverLicense           │
+├─────────────────────────┤
+│ PersonalInfo            │
+├─────────────────────────┤
+│ OrderSummary            │
+└─────────────────────────┘
+```
+
+Calling `navController.popBackStack()` smoothly pops destination by destination.
+
+---
+
+## 🔁 10. Continuing Pending Orders from `OrdersScreen`
+
+The `OrdersScreen` allows users to resume pending or incomplete orders:
+
+```text
+User taps pending order (PENDING / AWAITING_PAYMENT / PROCESSING)
+                 │
+                 ▼
+      continueOrderFlow(order.id)
+                 │
+                 ▼
+       getNextScreen(orderId)
+                 │
+                 ▼
+      navigateToNextScreen(...)
+```
+
+Completed orders navigate directly to `OrderDetailScreen(order.id)`.
+
+---
+
+## 📍 11. Delivery Address / Map Flow (`MapDeliverySelection`)
+
+`MapDeliverySelectionScreen` is an active business step in the order process handling location permission, map interaction, reverse geocoding, and address confirmation:
+
+```text
+MapDeliverySelection ──► patchDeliveryAddress(...) ──► Success ──► getNextScreen(orderId) ──► navigateToNextScreen(...)
+```
+
+---
+
+## 💳 12. Payment Architecture & Component Decomposition
+
+`PaymentScreen` delegates UI rendering to pure atomic components in `payment/components/`:
+
+```text
+PaymentScreen
+  ├── SavedCardsSection ──► SavedCardItem
+  ├── AddCardButton
+  ├── OrderSummaryCard
+  ├── PaymentBottomBar
+  ├── AddCardBottomSheet
+  └── PaymentErrorBottomSheet
+```
+
+---
+
+## 💸 13. Payment Request Sequence
+
+Payment execution involves two distinct remote steps:
+
+```text
+1. PATCH /api/orders/{id}/payment-method   (Attaches selected payment method to order)
+2. POST  /api/payment/pay/{id}             (Authorizes payment transaction via gateway)
+```
+
+A successful payment-method update does not guarantee that the transaction authorization will succeed.
+
+---
+
+## ⚠️ 14. Payment Error Handling
+
+If payment authorization fails (e.g. insufficient funds, HTTP 429, card declined):
+1. The error message is captured by `PaymentViewModel`.
+2. The UI opens `PaymentErrorBottomSheet` with options to **Try Again** or **Choose a Different Card**.
+3. The app **never** forces local fallback navigation on failure; errors are surfaced to the user cleanly.
+
+---
+
+## 🎨 AI Coding Rules & Design System
+
+1. **Theme-Driven**: All colors & fonts derive from `MaterialTheme`. No hardcoded hex colors or `.sp` values.
+2. **Design Tokens**: Spacing, padding, and radiuses use `:core:constants` (`Paddings.*`, `Spaces.*`, `BorderRadiuses.*`, `IconSizes.*`).
+3. **Zero Hardcoded Strings**: All user-facing strings live in `strings.xml` with support for English, Azerbaijani, Turkish, and Russian.
+4. **Clean Import Rule**: No inline FQCN package references in code logic; use top-level imports.
+
+---
+
+## 🌐 Backend Services Integration
+
+- **[Baltazar-Backend](https://github.com/MegrurNiftiyev/Baltazar-Backend)**: Primary REST API powering authentication, catalog exploration, reviews, and order state machines.
+- **[Baltazar-Payment-Backend](https://github.com/MegrurNiftiyev/Baltazar-Payment-Backend)**: Microservice managing card tokenization, payment method persistence, and gateway authorizations.
 
 ---
 
@@ -179,7 +404,7 @@ The application integrates with two primary backends:
    git clone https://github.com/MegrurNiftiyev/Baltazar-Mobile.git
    ```
 2. Open the project in **Android Studio Ladybug** (or newer).
-3. Sync Gradle dependencies and run the `:app` configuration on an Android Emulator or physical device.
+3. Sync Gradle and run the `:app` configuration.
 
 ---
 
