@@ -19,6 +19,7 @@
     <string name="carb_label">Karbonhidrat</string>
     <string name="card_style_grid">Izgara</string>
     <string name="card_style_list">Liste</string>
+    <string name="checkpoint_label">Nokta</string>
     <string name="checkpoint_snippet_format">Nokta %d</string>
     <string name="companies_title">Şirketler</string>
     <string name="company_detail">Şirket Detayları</string>

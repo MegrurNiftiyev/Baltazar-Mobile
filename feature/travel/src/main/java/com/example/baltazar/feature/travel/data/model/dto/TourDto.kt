@@ -11,14 +11,14 @@ data class TourDto(
     @SerialName("title") val title: String? = null,
     @SerialName("categories") val categories: List<String> = emptyList(),
     @SerialName("price") val price: Double = 0.0,
-    @SerialName("priceSuffix") val priceSuffix: String? = "/ person",
+    @SerialName("priceSuffix") val priceSuffix: String? = null,
     @SerialName("image") val image: String? = null,
     @SerialName("rating") val rating: Double = 0.0,
     @SerialName("reviewCount") val reviewCount: Int = 0,
     @SerialName("duration") val duration: String? = null,
     @SerialName("startDate") val startDate: String? = null,
     @SerialName("endDate") val endDate: String? = null,
-    @SerialName("status") val status: String? = "ACTIVE"
+    @SerialName("status") val status: String? = null
 ) {
     fun toDomain(): TourItem {
         return TourItem(
@@ -27,14 +27,14 @@ data class TourDto(
             title = title.orEmpty(),
             categories = categories,
             price = price,
-            priceSuffix = priceSuffix ?: "/ person",
+            priceSuffix = priceSuffix.orEmpty(),
             image = image.orEmpty(),
             rating = rating,
             reviewCount = reviewCount,
             duration = duration.orEmpty(),
             startDate = startDate.orEmpty(),
             endDate = endDate.orEmpty(),
-            status = status ?: "ACTIVE"
+            status = status.orEmpty()
         )
     }
 }

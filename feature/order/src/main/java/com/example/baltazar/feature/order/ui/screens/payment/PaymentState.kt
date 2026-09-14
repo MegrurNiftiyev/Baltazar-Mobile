@@ -15,6 +15,13 @@ data class PaymentState(
     val expiryMonthInput: String = "",
     val expiryYearInput: String = "",
     val cvvInput: String = "",
+
+    val cardNumberError: String? = null,
+    val cardHolderError: String? = null,
+    val expiryMonthError: String? = null,
+    val expiryYearError: String? = null,
+    val cvvError: String? = null,
+
     val addCardError: String? = null,
     val isProcessingPayment: Boolean = false,
     val isPaymentDeclined: Boolean = false,

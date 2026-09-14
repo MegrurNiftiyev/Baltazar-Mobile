@@ -62,6 +62,8 @@ import com.example.baltazar.core.core.components.cards.CompanyDetailCard
 import com.example.baltazar.core.core.navigation.FoodCompanyDetail
 import kotlinx.coroutines.launch
 
+import com.example.baltazar.core.core.managers.requireAuth
+
 @Composable
 fun FoodDetailScreen(
     navController: NavController,
@@ -92,9 +94,7 @@ fun FoodDetailScreen(
                 actionButtonText = stringResource(R.string.order_now),
                 isLoading = state.isLoading,
                 onActionClick = {
-                    if (viewModel.isGuest()) {
-                        navController.navigate(Login(isPopStack = true))
-                    } else {
+                    viewModel.authGateManager.requireAuth(navController) {
                         navController.navigate(
                             OrderFlow(
                                 serviceType = ServiceType.FOOD.name,
@@ -273,7 +273,9 @@ fun FoodDetailScreen(
                             isLoading = state.isReviewsLoading || state.isLoading,
                             isSubmittingReview = state.isSubmittingReview,
                             onSubmitReview = { rating, comment ->
-                                viewModel.submitReview(rating, comment)
+                                viewModel.authGateManager.requireAuth(navController) {
+                                    viewModel.submitReview(rating, comment)
+                                }
                             }
                         )
                     }
@@ -284,15 +286,17 @@ fun FoodDetailScreen(
                     onBackClick = { navController.popBackStack() },
                     isFavorite = state.isFavorite,
                     onFavoriteClick = { isFav ->
-                        viewModel.toggleFavorite(isFav)
-                        navController.setPreviousResult(
-                            NavResultKeys.LIKE_RESULT,
-                            LikeResult(
-                                itemId = state.food.id,
-                                isLiked = isFav,
-                                serviceType = ServiceType.FOOD
+                        viewModel.authGateManager.requireAuth(navController) {
+                            viewModel.toggleFavorite(isFav)
+                            navController.setPreviousResult(
+                                NavResultKeys.LIKE_RESULT,
+                                LikeResult(
+                                    itemId = state.food.id,
+                                    isLiked = isFav,
+                                    serviceType = ServiceType.FOOD
+                                )
                             )
-                        )
+                        }
                     }
                 )
             }

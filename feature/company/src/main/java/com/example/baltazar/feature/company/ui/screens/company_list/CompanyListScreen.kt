@@ -27,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.baltazar.core.R
 import com.example.baltazar.core.core.components.CustomAppBar
+import com.example.baltazar.core.core.components.EmptyStateView
 import com.example.baltazar.core.core.components.ErrorBox
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
@@ -35,6 +36,8 @@ import com.example.baltazar.core.core.enums.TitleAlignment
 import com.example.baltazar.core.core.extensions.navigateToCompanyDetail
 import com.example.baltazar.feature.company.ui.components.CardShimmer
 import com.example.baltazar.feature.company.ui.components.CompanyCard
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Building
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,44 +99,53 @@ fun CompanyListScreen(
                     .fillMaxSize()
                     .padding(paddingValues)
             ) {
-                LazyColumn(
-                    state = listState,
-                    contentPadding = PaddingValues(Paddings.Medium),
-                    verticalArrangement = Arrangement.spacedBy(Spaces.Medium),
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    if (state.isLoading && state.companies.isEmpty()) {
-                        items(5) {
-                            CardShimmer()
-                        }
-                    } else {
-                        items(
-                            items = state.companies,
-                            key = { it.id }
-                        ) { company ->
-                            CompanyCard(
-                                name = company.name,
-                                logoUrl = company.logoUrl,
-                                coverImageUrl = company.coverImageUrl,
-                                rating = company.rating,
-                                reviewCount = company.reviewCount,
-                                category = company.category,
-                                address = company.address,
-                                onClick = {
-                                    navController.navigateToCompanyDetail(state.serviceType, company.id)
-                                }
-                            )
-                        }
+                if (!state.isLoading && state.companies.isEmpty()) {
+                    EmptyStateView(
+                        icon = TablerIcons.Building,
+                        title = "Şirkət tapılmadı",
+                        subtitle = "Seçilmiş kateqoriyaya uyğun aktiv şirkət mövcud deyil.",
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    LazyColumn(
+                        state = listState,
+                        contentPadding = PaddingValues(Paddings.Medium),
+                        verticalArrangement = Arrangement.spacedBy(Spaces.Medium),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        if (state.isLoading && state.companies.isEmpty()) {
+                            items(5) {
+                                CardShimmer()
+                            }
+                        } else {
+                            items(
+                                items = state.companies,
+                                key = { it.id }
+                            ) { company ->
+                                CompanyCard(
+                                    name = company.name,
+                                    logoUrl = company.logoUrl,
+                                    coverImageUrl = company.coverImageUrl,
+                                    rating = company.rating,
+                                    reviewCount = company.reviewCount,
+                                    category = company.category,
+                                    address = company.address,
+                                    onClick = {
+                                        navController.navigateToCompanyDetail(state.serviceType, company.id)
+                                    }
+                                )
+                            }
 
-                        if (state.isLoadingMore) {
-                            item {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(Paddings.Medium),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                            if (state.isLoadingMore) {
+                                item {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(Paddings.Medium),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                                    }
                                 }
                             }
                         }

@@ -7,6 +7,7 @@ data class TourItem(
     val categories: List<String>,
     val price: Double,
     val priceSuffix: String,
+    val currency: String = "AZN",
     val image: String,
     val rating: Double,
     val reviewCount: Int,

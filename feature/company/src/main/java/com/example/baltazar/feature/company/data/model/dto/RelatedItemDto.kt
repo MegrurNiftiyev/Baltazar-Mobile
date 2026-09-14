@@ -33,7 +33,7 @@ data class RelatedItemDto(
             rating = rating ?: 0.0,
             category = category,
             priceSuffix = priceSuffix,
-            currency = currency ?: "AZN",
+            currency = currency.orEmpty(),
             reviewCount = ratingCount ?: reviewCount ?: 0,
             isLiked = isLiked,
             serviceType = ServiceType.fromRaw(serviceType, category)

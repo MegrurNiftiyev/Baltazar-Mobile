@@ -5,7 +5,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,36 +12,38 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,12 +59,23 @@ import androidx.navigation.NavHostController
 import com.example.baltazar.core.R
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.DefaultLocationConstants
-import com.example.baltazar.core.core.managers.PermissionHandlerManager
 import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
+import com.example.baltazar.core.core.managers.PermissionHandlerManager
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
 
-@OptIn(ExperimentalMaterial3Api::class)
+import androidx.activity.compose.BackHandler
+import com.example.baltazar.core.core.components.CustomAlertDialog
+import com.example.baltazar.core.core.navigation.Home
+
 @Composable
 fun MapDeliverySelectionScreen(
     navController: NavHostController,
@@ -74,6 +86,28 @@ fun MapDeliverySelectionScreen(
     val context = LocalContext.current
     val permissionManager = remember { PermissionHandlerManager() }
     var showPermissionDialog by remember { mutableStateOf(false) }
+    var showCancelDialog by remember { mutableStateOf(false) }
+
+    BackHandler {
+        showCancelDialog = true
+    }
+
+    if (showCancelDialog) {
+        CustomAlertDialog(
+            title = stringResource(id = R.string.cancel_order_dialog_title),
+            subtitle = stringResource(id = R.string.cancel_order_dialog_msg),
+            confirmText = stringResource(id = R.string.yes_cancel),
+            cancelText = stringResource(id = R.string.no_stay),
+            isDestructive = true,
+            onConfirm = {
+                showCancelDialog = false
+                navController.navigate(Home()) {
+                    popUpTo(0) { inclusive = true }
+                }
+            },
+            onCancel = { showCancelDialog = false }
+        )
+    }
 
     val locationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
@@ -114,36 +148,249 @@ fun MapDeliverySelectionScreen(
         )
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.delivery_address),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(
+            LatLng(state.selectedLat, state.selectedLng),
+            15f
+        )
+    }
+
+    LaunchedEffect(state.selectedLat, state.selectedLng) {
+        val target = LatLng(state.selectedLat, state.selectedLng)
+        if (cameraPositionState.position.target != target) {
+            cameraPositionState.animate(
+                CameraUpdateFactory.newLatLngZoom(target, 15f)
+            )
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // 1. Full screen interactive Google Map
+        GoogleMap(
+            modifier = Modifier.fillMaxSize(),
+            cameraPositionState = cameraPositionState,
+            onMapClick = { latLng ->
+                viewModel.onCoordinatesSelected(latLng.latitude, latLng.longitude)
+            },
+            uiSettings = MapUiSettings(
+                zoomControlsEnabled = false,
+                myLocationButtonEnabled = false
+            )
+        ) {
+            Marker(
+                state = MarkerState(position = LatLng(state.selectedLat, state.selectedLng)),
+                title = state.selectedAddressName
+            )
+        }
+
+        // 2. Top Search Floating Bar
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .statusBarsPadding()
+                .padding(horizontal = Paddings.Medium, vertical = Paddings.Small)
+                .align(Alignment.TopCenter)
+        ) {
+            Surface(
+                shape = RoundedCornerShape(BorderRadiuses.Huge),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = Spaces.Small,
+                shadowElevation = Spaces.Small,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Paddings.Small, vertical = Paddings.ExtraSmall)
+                ) {
+                    IconButton(onClick = { showCancelDialog = true }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                )
+
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(IconSizes.Medium)
+                    )
+                    Spacer(modifier = Modifier.width(Spaces.Small))
+
+                    BasicTextField(
+                        value = state.searchQuery,
+                        onValueChange = { viewModel.onSearchQueryChanged(it) },
+                        singleLine = true,
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
+                        decorationBox = { innerTextField ->
+                            if (state.searchQuery.isEmpty()) {
+                                Text(
+                                    text = stringResource(id = R.string.search_for_new_address),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            innerTextField()
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    if (state.searchQuery.isNotEmpty()) {
+                        IconButton(onClick = { viewModel.onSearchQueryChanged("") }) {
+                            Icon(
+                                imageVector = Icons.Default.Clear,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            }
+
+            if (state.searchResults.isNotEmpty()) {
+                Surface(
+                    shape = RoundedCornerShape(BorderRadiuses.Large),
+                    color = MaterialTheme.colorScheme.surface,
+                    shadowElevation = Spaces.Medium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = Paddings.Small)
+                ) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = Paddings.Max * 5)
+                    ) {
+                        items(state.searchResults) { result ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { viewModel.selectLocationResult(result) }
+                                    .padding(Paddings.Medium)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.LocationOn,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(IconSizes.Medium)
+                                )
+                                Spacer(modifier = Modifier.width(Spaces.Small))
+                                Text(
+                                    text = result.addressName,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 3. Floating My Location FAB (above bottom sheet)
+        FloatingActionButton(
+            onClick = {
+                if (permissionManager.hasLocationPermission(context)) {
+                    viewModel.onCoordinatesSelected(
+                        DefaultLocationConstants.DEFAULT_LAT,
+                        DefaultLocationConstants.DEFAULT_LNG
+                    )
+                } else {
+                    locationPermissionLauncher.launch(
+                        arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        )
+                    )
+                }
+            },
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.primary,
+            shape = CircleShape,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 220.dp, end = Paddings.Medium)
+        ) {
+            Icon(
+                imageVector = Icons.Default.MyLocation,
+                contentDescription = null,
+                modifier = Modifier.size(IconSizes.Medium)
             )
-        },
-        bottomBar = {
-            Box(
+        }
+
+        // 4. Bottom Location Details Card
+        Surface(
+            shape = RoundedCornerShape(topStart = BorderRadiuses.ExtraLarge, topEnd = BorderRadiuses.ExtraLarge),
+            color = MaterialTheme.colorScheme.surface,
+            shadowElevation = Spaces.Large,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+        ) {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .navigationBarsPadding()
                     .padding(Paddings.Medium)
             ) {
+                // Drag handle
+                Box(
+                    modifier = Modifier
+                        .width(Spaces.Massive)
+                        .height(BorderRadiuses.ExtraMini)
+                        .clip(RoundedCornerShape(BorderRadiuses.Small))
+                        .background(MaterialTheme.colorScheme.outlineVariant)
+                        .align(Alignment.CenterHorizontally)
+                )
+
+                Spacer(modifier = Modifier.height(Spaces.Medium))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(Paddings.Max)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(IconSizes.Medium)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(Spaces.Medium))
+
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = state.selectedAddressName.ifBlank { stringResource(id = R.string.delivery_address) },
+                            style = MaterialTheme.typography.titleMedium,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(modifier = Modifier.height(Spaces.ExtraSmall))
+                        Text(
+                            text = if (state.deliveryInstructions.isNotBlank()) state.deliveryInstructions else "Bakı, Azərbaycan",
+                            style = MaterialTheme.typography.bodyMedium,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(Spaces.Large))
+
                 Button(
                     onClick = { viewModel.confirmDeliveryAddress(onNextScreen) },
                     enabled = !state.isSaving && state.selectedAddressName.isNotBlank(),
@@ -163,205 +410,12 @@ fun MapDeliverySelectionScreen(
                             strokeWidth = BorderRadiuses.ExtraMini
                         )
                     } else {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.confirm_address),
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Spacer(modifier = Modifier.width(Spaces.Small))
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                contentDescription = null,
-                                modifier = Modifier.size(IconSizes.Small)
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = Paddings.Medium)
-        ) {
-            Text(
-                text = stringResource(id = R.string.where_are_we_delivering),
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(vertical = Paddings.Small)
-            )
-
-            // Search Bar
-            OutlinedTextField(
-                value = state.searchQuery,
-                onValueChange = { viewModel.onSearchQueryChanged(it) },
-                placeholder = { Text(text = stringResource(id = R.string.search_for_new_address)) },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                },
-                trailingIcon = {
-                    if (state.searchQuery.isNotEmpty()) {
-                        IconButton(onClick = { viewModel.onSearchQueryChanged("") }) {
-                            Icon(
-                                imageVector = Icons.Default.Clear,
-                                contentDescription = null
-                            )
-                        }
-                    }
-                },
-                singleLine = true,
-                shape = RoundedCornerShape(BorderRadiuses.Medium),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            if (state.searchResults.isNotEmpty()) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = Paddings.Small)
-                        .background(
-                            MaterialTheme.colorScheme.surface,
-                            shape = RoundedCornerShape(BorderRadiuses.Medium)
+                        Text(
+                            text = stringResource(id = R.string.confirm_address),
+                            style = MaterialTheme.typography.titleMedium
                         )
-                ) {
-                    items(state.searchResults) { result ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { viewModel.selectLocationResult(result) }
-                                .padding(Paddings.Medium)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.LocationOn,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(IconSizes.Medium)
-                            )
-                            Spacer(modifier = Modifier.width(Spaces.Small))
-                            Text(
-                                text = result.addressName,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
                     }
                 }
-            }
-
-            Spacer(modifier = Modifier.height(Spaces.Medium))
-
-            // Map Preview Container
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(Paddings.Colossal * 4)
-                    .clip(RoundedCornerShape(BorderRadiuses.Large))
-                    .background(MaterialTheme.colorScheme.surfaceContainerLow),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.LocationOn,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(IconSizes.Massive)
-                    )
-                    Spacer(modifier = Modifier.height(Spaces.Small))
-                    Text(
-                        text = state.selectedAddressName,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(horizontal = Paddings.Medium)
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(Spaces.Medium))
-
-            // Use Current Location
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .clickable {
-                        if (permissionManager.hasLocationPermission(context)) {
-                            viewModel.onCoordinatesSelected(
-                                DefaultLocationConstants.DEFAULT_LAT,
-                                DefaultLocationConstants.DEFAULT_LNG
-                            )
-                        } else {
-                            locationPermissionLauncher.launch(
-                                arrayOf(
-                                    Manifest.permission.ACCESS_FINE_LOCATION,
-                                    Manifest.permission.ACCESS_COARSE_LOCATION
-                                )
-                            )
-                        }
-                    }
-                    .padding(vertical = Paddings.Small)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.MyLocation,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(IconSizes.Medium)
-                )
-                Spacer(modifier = Modifier.width(Spaces.Small))
-                Text(
-                    text = stringResource(id = R.string.use_current_location),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-
-            Spacer(modifier = Modifier.height(Spaces.Medium))
-
-            // Delivery Instructions Input
-            OutlinedTextField(
-                value = state.deliveryInstructions,
-                onValueChange = { viewModel.onDeliveryInstructionsChanged(it) },
-                placeholder = { Text(text = stringResource(id = R.string.add_delivery_instructions)) },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                },
-                shape = RoundedCornerShape(BorderRadiuses.Medium),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            state.errorMessage?.let { error ->
-                Text(
-                    text = error,
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(top = Paddings.Small)
-                )
             }
         }
     }

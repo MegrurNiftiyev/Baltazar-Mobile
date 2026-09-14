@@ -19,6 +19,7 @@
     <string name="carb_label">Carbs</string>
     <string name="card_style_grid">Grid</string>
     <string name="card_style_list">List</string>
+    <string name="checkpoint_label">Checkpoint</string>
     <string name="checkpoint_snippet_format">Checkpoint %d</string>
     <string name="companies_title">Companies</string>
     <string name="company_detail">Company Details</string>

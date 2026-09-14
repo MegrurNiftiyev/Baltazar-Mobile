@@ -23,7 +23,9 @@ class TokenAuthenticator @Inject constructor(
 
     override fun authenticate(route: Route?, response: Response): Request? {
         if (getRetryCount(response) >= 2) {
-            sessionManager.requireLogin()
+            encryptedCacheManager.removeSecureKey(CacheKeys.ACCESS_TOKEN)
+            encryptedCacheManager.removeSecureKey(CacheKeys.REFRESH_TOKEN)
+            sessionManager.clear()
             return null
         }
 
@@ -39,7 +41,7 @@ class TokenAuthenticator @Inject constructor(
 
             val refreshToken = encryptedCacheManager.getSecureString(CacheKeys.REFRESH_TOKEN)
             if (refreshToken == null) {
-                sessionManager.requireLogin()
+                sessionManager.clear()
                 return null
             }
 
@@ -48,7 +50,7 @@ class TokenAuthenticator @Inject constructor(
                     val refreshResponse = refreshTokenDataSource.get().refresh(RefreshTokenRequest(refreshToken))
                     val tokenData = refreshResponse.data
                     if (tokenData == null) {
-                        sessionManager.requireLogin()
+                        sessionManager.clear()
                         return@runBlocking null
                     }
 
@@ -61,7 +63,7 @@ class TokenAuthenticator @Inject constructor(
                 } catch (e: Exception) {
                     encryptedCacheManager.removeSecureKey(CacheKeys.ACCESS_TOKEN)
                     encryptedCacheManager.removeSecureKey(CacheKeys.REFRESH_TOKEN)
-                    sessionManager.requireLogin()
+                    sessionManager.clear()
                     null
                 }
             }

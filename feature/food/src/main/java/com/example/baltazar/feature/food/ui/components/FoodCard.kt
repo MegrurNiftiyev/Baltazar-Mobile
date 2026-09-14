@@ -153,7 +153,7 @@ fun FoodCard(
                         modifier = if (isLoading) Modifier.width(90.dp).height(18.dp) else Modifier
                     ) {
                         Text(
-                            text = if (food?.price != null) formatPrice(food.price, "AZN", food.priceSuffix) else "",
+                            text = if (food?.price != null) formatPrice(food.price, food.currency, food.priceSuffix) else "",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,
@@ -275,7 +275,7 @@ fun FoodCard(
                         modifier = if (isLoading) Modifier.width(90.dp).height(18.dp) else Modifier
                     ) {
                         Text(
-                            text = if (food?.price != null) formatPrice(food.price, "AZN", food.priceSuffix) else "",
+                            text = if (food?.price != null) formatPrice(food.price, food.currency, food.priceSuffix) else "",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,

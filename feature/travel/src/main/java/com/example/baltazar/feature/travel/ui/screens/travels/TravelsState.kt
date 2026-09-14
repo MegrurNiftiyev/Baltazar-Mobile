@@ -10,5 +10,15 @@ data class TravelsState(
     val nextCursor: String? = null,
     val hasMore: Boolean = true,
     val error: String? = null,
-    val cardViewMode: CardViewMode = CardViewMode.GRID
-)
+    val cardViewMode: CardViewMode = CardViewMode.GRID,
+
+    // Applied filters
+    val minRating: Double? = null,
+
+    // Draft filters
+    val draftMinRating: Double? = null
+) {
+    val hasDraftChanges: Boolean
+        get() = draftMinRating != minRating
+}
+

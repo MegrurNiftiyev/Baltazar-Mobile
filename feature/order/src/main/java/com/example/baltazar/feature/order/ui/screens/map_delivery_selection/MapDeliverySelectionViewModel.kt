@@ -78,7 +78,10 @@ class MapDeliverySelectionViewModel @Inject constructor(
     }
 
     fun confirmDeliveryAddress(onSuccessNavigate: (String) -> Unit) {
-        if (orderId.isBlank()) return
+        if (orderId.isBlank()) {
+            onSuccessNavigate("PAYMENT_SCREEN")
+            return
+        }
         viewModelScope.launch {
             _state.update { it.copy(isSaving = true, errorMessage = null) }
             orderRepository.patchDeliveryAddress(
@@ -94,6 +97,7 @@ class MapDeliverySelectionViewModel @Inject constructor(
                     }
                     .onFailure { error ->
                         _state.update { state -> state.copy(isSaving = false, errorMessage = error.message) }
+                        onSuccessNavigate("PAYMENT_SCREEN")
                     }
             }.onFailure { error ->
                 _state.update { state -> state.copy(isSaving = false, errorMessage = error.message) }

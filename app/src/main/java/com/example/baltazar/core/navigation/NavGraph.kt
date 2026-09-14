@@ -11,8 +11,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.baltazar.core.core.managers.AuthEvent
-import com.example.baltazar.core.core.managers.SessionManager
 import com.example.baltazar.core.core.navigation.Home
 import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.navigation.Splash
@@ -29,21 +27,10 @@ import com.example.baltazar.ui.screens.home.HomeScreen
 
 @Composable
 fun AppNavGraph(
-    sessionManager: SessionManager,
     startDestination: Any = Splash,
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
-    LaunchedEffect(Unit) {
-        sessionManager.authEvents.collect { event ->
-            when (event) {
-                AuthEvent.RequireLogin -> {
-                    navController.navigate(Login(isPopStack = true))
-                }
-            }
-        }
-    }
-
     NavHost(
         navController = navController,
         startDestination = startDestination,

@@ -63,15 +63,6 @@ fun WriteReviewCard(
             .padding(Paddings.Large)
     ) {
         Text(
-            text = stringResource(R.string.write_review_dialog_title),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-
-        Spacer(modifier = Modifier.height(Spaces.Small))
-
-        Text(
             text = stringResource(R.string.rate_service_label),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -92,14 +83,14 @@ fun WriteReviewCard(
                     contentDescription = "$starIndex star",
                     tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
                     modifier = Modifier
-                        .size(IconSizes.ExtraLarge)
+                        .size(36.dp)
                         .clickable(
                             interactionSource = interactionSource,
                             indication = null
                         ) {
                             rating = starIndex
                         }
-                        .padding(end = Paddings.Small)
+                        .padding(end = Paddings.ExtraSmall)
                 )
             }
         }
@@ -116,7 +107,9 @@ fun WriteReviewCard(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 110.dp),
             textStyle = MaterialTheme.typography.bodyMedium,
             shape = RoundedCornerShape(BorderRadiuses.Medium),
             colors = OutlinedTextFieldDefaults.colors(

@@ -24,12 +24,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import com.example.baltazar.core.core.managers.AuthGateManager
+import com.example.baltazar.core.core.managers.SessionManager
 
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
     private val exploreRepository: IExploreRepository,
     private val wishlistRepository: IWishlistRepository,
+    val authGateManager: AuthGateManager,
     private val sessionManager: SessionManager
 ) : ViewModel() {
 
@@ -125,12 +127,10 @@ class ExploreViewModel @Inject constructor(
         }
     }
 
-    private val _navigateToLoginEvent = MutableSharedFlow<Unit>()
-    val navigateToLoginEvent: SharedFlow<Unit> = _navigateToLoginEvent.asSharedFlow()
+    fun isGuest(): Boolean = authGateManager.isGuest()
 
     fun toggleFavorite(itemId: String, serviceType: ServiceType, isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin()
             return
         }
 

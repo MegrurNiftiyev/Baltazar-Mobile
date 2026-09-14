@@ -48,6 +48,8 @@ import com.example.baltazar.core.core.constants.Spaces
 import com.example.baltazar.core.core.extensions.navigateToServiceDetail
 import com.example.baltazar.core.core.extensions.setPreviousResult
 import com.example.baltazar.core.core.navigation.LikeResult
+import com.example.baltazar.core.core.managers.requireAuth
+import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.navigation.NavResultKeys
 import com.example.baltazar.core.core.utils.AppSnackbar
 import com.example.baltazar.core.core.utils.SnackbarType
@@ -202,14 +204,16 @@ fun CompanyDetailScreen(
                                             navController.navigateToServiceDetail(item.serviceType, item.id)
                                         },
                                         onFavoriteClick = { item, isFav ->
-                                            viewModel.toggleRelatedItemFavorite(item.id, isFav)
-                                            navController.setPreviousResult(
-                                                NavResultKeys.LIKE_RESULT,
-                                                LikeResult(
-                                                    itemId = item.id,
-                                                    isLiked = isFav
+                                            viewModel.authGateManager.requireAuth(navController) {
+                                                viewModel.toggleRelatedItemFavorite(item.id, isFav)
+                                                navController.setPreviousResult(
+                                                    NavResultKeys.LIKE_RESULT,
+                                                    LikeResult(
+                                                        itemId = item.id,
+                                                        isLiked = isFav
+                                                    )
                                                 )
-                                            )
+                                            }
                                         }
                                     )
                                 }

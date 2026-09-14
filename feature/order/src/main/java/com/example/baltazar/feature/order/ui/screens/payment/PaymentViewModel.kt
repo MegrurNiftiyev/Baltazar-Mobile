@@ -30,19 +30,19 @@ class PaymentViewModel @Inject constructor(
     }
 
     fun loadData() {
-        if (orderId.isBlank()) return
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, paymentErrorMessage = null) }
             
-            // 1. Fetch Order details
-            orderRepository.getOrderDetails(orderId).onSuccess { order ->
-                _state.update { it.copy(order = order) }
+            // 1. Fetch Order details if orderId present
+            if (orderId.isNotBlank()) {
+                orderRepository.getOrderDetails(orderId).onSuccess { order ->
+                    _state.update { it.copy(order = order) }
+                }
             }
 
             // 2. Fetch saved cards from Baltazar backend
             paymentRepository.getAllCards()
                 .onSuccess { cards ->
-                    // Sort cards newest first (or by ID/date)
                     val sortedCards = cards.reversed()
                     val defaultSelectedId = sortedCards.firstOrNull()?.paymentMethodId
                     _state.update {
@@ -72,6 +72,11 @@ class PaymentViewModel @Inject constructor(
                 expiryMonthInput = "",
                 expiryYearInput = "",
                 cvvInput = "",
+                cardNumberError = null,
+                cardHolderError = null,
+                expiryMonthError = null,
+                expiryYearError = null,
+                cvvError = null,
                 addCardError = null
             )
         }
@@ -81,16 +86,81 @@ class PaymentViewModel @Inject constructor(
         _state.update { it.copy(isAddCardSheetOpen = false) }
     }
 
-    fun updateCardNumber(value: String) { _state.update { it.copy(cardNumberInput = value) } }
-    fun updateCardHolder(value: String) { _state.update { it.copy(cardHolderInput = value) } }
-    fun updateExpiryMonth(value: String) { _state.update { it.copy(expiryMonthInput = value) } }
-    fun updateExpiryYear(value: String) { _state.update { it.copy(expiryYearInput = value) } }
-    fun updateCvv(value: String) { _state.update { it.copy(cvvInput = value) } }
+    fun updateCardNumber(value: String) {
+        val digits = value.filter { it.isDigit() }.take(16)
+        val formatted = digits.chunked(4).joinToString(" ")
+        _state.update { it.copy(cardNumberInput = formatted, cardNumberError = null) }
+    }
+
+    fun updateCardHolder(value: String) {
+        _state.update { it.copy(cardHolderInput = value, cardHolderError = null) }
+    }
+
+    fun updateExpiryMonth(value: String) {
+        val digits = value.filter { it.isDigit() }.take(2)
+        _state.update { it.copy(expiryMonthInput = digits, expiryMonthError = null) }
+    }
+
+    fun updateExpiryYear(value: String) {
+        val digits = value.filter { it.isDigit() }.take(2)
+        _state.update { it.copy(expiryYearInput = digits, expiryYearError = null) }
+    }
+
+    fun updateCvv(value: String) {
+        val digits = value.filter { it.isDigit() }.take(4)
+        _state.update { it.copy(cvvInput = digits, cvvError = null) }
+    }
 
     fun submitNewCard() {
         val s = _state.value
-        if (s.cardNumberInput.isBlank() || s.cardHolderInput.isBlank() || s.cvvInput.isBlank()) {
-            _state.update { it.copy(addCardError = "Please fill in all card details") }
+        val rawCardNumber = s.cardNumberInput.replace(" ", "")
+        val cardHolder = s.cardHolderInput.trim()
+        val monthInt = s.expiryMonthInput.toIntOrNull()
+        val yearInt = s.expiryYearInput.toIntOrNull()
+        val cvv = s.cvvInput.trim()
+
+        var hasError = false
+        var cardNumberErr: String? = null
+        var cardHolderErr: String? = null
+        var expiryMonthErr: String? = null
+        var expiryYearErr: String? = null
+        var cvvErr: String? = null
+
+        if (rawCardNumber.length != 16) {
+            cardNumberErr = "Kart nömrəsi 16 rəqəmdən ibarət olmalıdır"
+            hasError = true
+        }
+
+        if (cardHolder.isBlank()) {
+            cardHolderErr = "Kart sahibinin adını daxil edin"
+            hasError = true
+        }
+
+        if (monthInt == null || monthInt !in 1..12) {
+            expiryMonthErr = "Düzgün ay daxil edin (01-12)"
+            hasError = true
+        }
+
+        if (yearInt == null || s.expiryYearInput.length != 2) {
+            expiryYearErr = "Düzgün il daxil edin (YY)"
+            hasError = true
+        }
+
+        if (cvv.length !in 3..4) {
+            cvvErr = "CVV 3 və ya 4 rəqəmdən ibarət olmalıdır"
+            hasError = true
+        }
+
+        if (hasError) {
+            _state.update {
+                it.copy(
+                    cardNumberError = cardNumberErr,
+                    cardHolderError = cardHolderErr,
+                    expiryMonthError = expiryMonthErr,
+                    expiryYearError = expiryYearErr,
+                    cvvError = cvvErr
+                )
+            }
             return
         }
 
@@ -99,11 +169,11 @@ class PaymentViewModel @Inject constructor(
 
             // Step A: Tokenize card via External Payment Gateway API
             paymentRepository.tokenizeCard(
-                cardNumber = s.cardNumberInput.replace(" ", ""),
-                cardHolder = s.cardHolderInput,
-                expiryMonth = s.expiryMonthInput,
-                expiryYear = s.expiryYearInput,
-                cvv = s.cvvInput
+                cardNumber = rawCardNumber,
+                cardHolder = cardHolder,
+                expiryMonth = s.expiryMonthInput.padStart(2, '0'),
+                expiryYear = "20" + s.expiryYearInput,
+                cvv = cvv
             ).onSuccess { tokenized ->
                 // Step B: Save tokenized card to Baltazar Backend API
                 paymentRepository.addPaymentMethod(

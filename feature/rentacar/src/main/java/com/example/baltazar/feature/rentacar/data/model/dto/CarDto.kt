@@ -13,7 +13,7 @@ data class CarDto(
     @SerialName("model") val model: String? = null,
     @SerialName("category") val category: String? = null,
     @SerialName("price") val price: Double = 0.0,
-    @SerialName("priceSuffix") val priceSuffix: String? = "/ day",
+    @SerialName("priceSuffix") val priceSuffix: String? = null,
     @SerialName("image") val image: String? = null,
     @SerialName("rating") val rating: Double = 0.0,
     @SerialName("reviewCount") val reviewCount: Int = 0,
@@ -27,7 +27,7 @@ data class CarDto(
             !brand.isNullOrBlank() && !model.isNullOrBlank() -> "$brand $model"
             !brand.isNullOrBlank() -> brand
             !model.isNullOrBlank() -> model
-            else -> "Car"
+            else -> ""
         }
 
         return CarItem(
@@ -36,7 +36,7 @@ data class CarDto(
             title = carTitle,
             category = category.orEmpty(),
             price = price,
-            priceSuffix = priceSuffix ?: "/ day",
+            priceSuffix = priceSuffix.orEmpty(),
             image = image.orEmpty(),
             rating = rating,
             reviewCount = reviewCount,

@@ -19,6 +19,7 @@
     <string name="carb_label">Углеводы</string>
     <string name="card_style_grid">Сетка</string>
     <string name="card_style_list">Список</string>
+    <string name="checkpoint_label">Точка</string>
     <string name="checkpoint_snippet_format">Точка %d</string>
     <string name="companies_title">Компании</string>
     <string name="company_detail">О компании</string>

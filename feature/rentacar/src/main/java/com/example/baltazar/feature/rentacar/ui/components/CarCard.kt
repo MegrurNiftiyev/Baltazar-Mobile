@@ -152,7 +152,7 @@ fun CarCard(
                         modifier = if (isLoading) Modifier.width(90.dp).height(18.dp) else Modifier
                     ) {
                         Text(
-                            text = if (car?.price != null) formatPrice(car.price, "AZN", car.priceSuffix.orEmpty()) else "",
+                            text = if (car?.price != null) formatPrice(car.price, car.currency, car.priceSuffix.orEmpty()) else "",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,
@@ -281,7 +281,7 @@ fun CarCard(
                         modifier = if (isLoading) Modifier.width(90.dp).height(18.dp) else Modifier
                     ) {
                         Text(
-                            text = if (car?.price != null) formatPrice(car.price, "AZN", car.priceSuffix.orEmpty()) else "",
+                            text = if (car?.price != null) formatPrice(car.price, car.currency, car.priceSuffix.orEmpty()) else "",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,

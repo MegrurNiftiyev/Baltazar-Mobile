@@ -8,6 +8,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class PriceRangeDto(
+    @SerialName("min") val min: Double? = null,
+    @SerialName("max") val max: Double? = null
+)
+
+@Serializable
 data class WishlistItemDto(
     @SerialName("wishlistItemId") val wishlistItemId: String? = null,
     @SerialName("id") val id: String? = null,
@@ -20,8 +26,9 @@ data class WishlistItemDto(
     @SerialName("images") val images: List<String> = emptyList(),
     @SerialName("image") val image: String? = null,
     @SerialName("price") val price: Double = 0.0,
+    @SerialName("priceRange") val priceRange: PriceRangeDto? = null,
     @SerialName("priceSuffix") val priceSuffix: String? = null,
-    @SerialName("currency") val currency: String = "USD",
+    @SerialName("currency") val currency: String? = null,
     @SerialName("rating") val rating: Double = 0.0,
     @SerialName("reviewCount") val reviewCount: Int = 0,
     @SerialName("ratingCount") val ratingCount: Int = 0,
@@ -36,15 +43,13 @@ data class WishlistItemDto(
             !title.isNullOrBlank() -> title
             !name.isNullOrBlank() -> name
             !brand.isNullOrBlank() || !model.isNullOrBlank() -> listOfNotNull(brand, model).joinToString(" ")
-            else -> "Service"
+            else -> ""
         }
         val effectiveImage = image ?: images.firstOrNull() ?: ""
         val effectiveRatingCount = if (reviewCount > 0) reviewCount else ratingCount
         val effectiveCategory = category ?: categories.firstOrNull() ?: ""
-        val effectiveSuffix = priceSuffix ?: when (serviceType) {
-            ServiceType.RENT_A_CAR, ServiceType.HOTEL -> "/gün"
-            else -> ""
-        }
+        val effectivePrice = if (price > 0.0) price else (priceRange?.min ?: 0.0)
+        val effectiveSuffix = priceSuffix.orEmpty()
 
         return ServiceCardItem(
             id = effectiveId,
@@ -52,9 +57,9 @@ data class WishlistItemDto(
             serviceId = effectiveServiceId,
             title = effectiveTitle,
             image = effectiveImage,
-            price = price,
+            price = effectivePrice,
             priceSuffix = effectiveSuffix,
-            currency = currency,
+            currency = currency.orEmpty(),
             rating = rating,
             ratingCount = effectiveRatingCount,
             category = effectiveCategory,

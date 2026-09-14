@@ -110,13 +110,13 @@ object Orders
 
 // Profile Sub-Screens
 @Serializable
-object ProfilePersonalInfo
+data class ProfilePersonalInfo(val isFromOrder: Boolean = false)
 
 @Serializable
-object ProfileDriverLicense
+data class ProfileDriverLicense(val isFromOrder: Boolean = false)
 
 @Serializable
-object ProfilePassport
+data class ProfilePassport(val isFromOrder: Boolean = false)
 
 @Serializable
 object ProfileUserDetail
@@ -126,15 +126,18 @@ object ProfileUserDetail
 object OrderDriverLicense
 
 @Serializable
-object OrderMapDeliverySelection
+data class OrderMapDeliverySelection(val orderId: String = "")
 
 @Serializable
-object OrderSummary
-
-@Serializable
-object OrderPayment
+data class OrderPayment(val orderId: String = "")
 
 @Serializable
 object OrderConfirm
+
+@Serializable
+data class OrderDetail(val orderId: String)
+
+@Serializable
+object OrderUnknownScreenFallback
 
 

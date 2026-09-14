@@ -26,6 +26,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "WEB_CLIENT_ID", "\"${localProperties.getProperty("WEB_CLIENT_ID") ?: ""}\"")
         buildConfigField("String", "BASE_URL", "\"${localProperties.getProperty("DEV_BASE_URL") ?: "https://baltazar-backend-kf2f.onrender.com/"}\"")
+        buildConfigField("String", "PAYMENT_BASE_URL", "\"${localProperties.getProperty("PAYMENT_BASE_URL") ?: "https://baltazar-backend-payment.onrender.com/"}\"")
     }
 
     flavorDimensions += "environment"
@@ -33,12 +34,16 @@ android {
         create("dev") {
             dimension = "environment"
             val devUrl = localProperties.getProperty("DEV_BASE_URL") ?: "https://baltazar-backend-kf2f.onrender.com/"
+            val paymentUrl = localProperties.getProperty("PAYMENT_BASE_URL") ?: "https://baltazar-backend-payment.onrender.com/"
             buildConfigField("String", "BASE_URL", "\"$devUrl\"")
+            buildConfigField("String", "PAYMENT_BASE_URL", "\"$paymentUrl\"")
         }
         create("prod") {
             dimension = "environment"
             val prodUrl = localProperties.getProperty("PROD_BASE_URL") ?: "https://baltazar-backend-production.onrender.com/"
+            val paymentUrl = localProperties.getProperty("PAYMENT_BASE_URL") ?: "https://baltazar-backend-payment.onrender.com/"
             buildConfigField("String", "BASE_URL", "\"$prodUrl\"")
+            buildConfigField("String", "PAYMENT_BASE_URL", "\"$paymentUrl\"")
         }
     }
 

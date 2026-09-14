@@ -1,4 +1,4 @@
-package com.example.baltazar.feature.order.ui.screens.order_summary
+package com.example.baltazar.feature.order.ui.screens.order_flow
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class OrderSummaryViewModel @Inject constructor(
+class OrderFlowViewModel @Inject constructor(
     private val orderRepository: IOrderRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -24,8 +24,8 @@ class OrderSummaryViewModel @Inject constructor(
     private val serviceId: String = savedStateHandle["serviceId"] ?: ""
     private val subItemId: String? = savedStateHandle["subItemId"]
 
-    private val _state = MutableStateFlow(OrderSummaryState())
-    val state: StateFlow<OrderSummaryState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(OrderFlowState())
+    val state: StateFlow<OrderFlowState> = _state.asStateFlow()
 
     fun initOrderFlow(onResolvedNextScreen: (NextScreenType, String) -> Unit) {
         if (serviceTypeStr.isBlank() || serviceId.isBlank()) return

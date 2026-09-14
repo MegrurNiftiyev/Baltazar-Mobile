@@ -18,8 +18,8 @@ data class HotelDto(
     @SerialName("rating") val rating: Double = 0.0,
     @SerialName("reviewCount") val reviewCount: Int = 0,
     @SerialName("priceRange") val priceRange: PriceRangeDto? = null,
-    @SerialName("priceSuffix") val priceSuffix: String? = "/ night",
-    @SerialName("currency") val currency: String? = "AZN",
+    @SerialName("priceSuffix") val priceSuffix: String? = null,
+    @SerialName("currency") val currency: String? = null,
     @SerialName("images") val images: List<String> = emptyList(),
     @SerialName("createdAt") val createdAt: String? = null,
     @SerialName("isLiked") val isLiked: Boolean = false
@@ -38,8 +38,8 @@ data class HotelDto(
             reviewCount = reviewCount,
             minPrice = priceRange?.min ?: 0.0,
             maxPrice = priceRange?.max ?: 0.0,
-            priceSuffix = priceSuffix ?: "/ night",
-            currency = currency ?: "AZN",
+            priceSuffix = priceSuffix.orEmpty(),
+            currency = currency.orEmpty(),
             images = images,
             createdAt = createdAt.orEmpty(),
             isLiked = isLiked

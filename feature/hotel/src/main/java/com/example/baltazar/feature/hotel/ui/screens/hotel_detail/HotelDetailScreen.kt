@@ -67,6 +67,8 @@ import compose.icons.TablerIcons
 import compose.icons.tablericons.MapPin
 import kotlinx.coroutines.launch
 
+import com.example.baltazar.core.core.managers.requireAuth
+
 @Composable
 fun HotelDetailScreen(
     navController: NavController,
@@ -97,9 +99,7 @@ fun HotelDetailScreen(
                 actionButtonText = stringResource(R.string.reserve),
                 isLoading = state.isLoading,
                 onActionClick = {
-                    if (viewModel.isGuest()) {
-                        navController.navigate(Login(isPopStack = true))
-                    } else {
+                    viewModel.authGateManager.requireAuth(navController) {
                         navController.navigate(
                             OrderFlow(
                                 serviceType = ServiceType.HOTEL.name,
@@ -290,7 +290,9 @@ fun HotelDetailScreen(
                             isLoading = state.isReviewsLoading || state.isLoading,
                             isSubmittingReview = state.isSubmittingReview,
                             onSubmitReview = { rating, comment ->
-                                viewModel.submitReview(rating, comment)
+                                viewModel.authGateManager.requireAuth(navController) {
+                                    viewModel.submitReview(rating, comment)
+                                }
                             }
                         )
                     }
@@ -301,15 +303,17 @@ fun HotelDetailScreen(
                     onBackClick = { navController.popBackStack() },
                     isFavorite = state.isFavorite,
                     onFavoriteClick = { isFav ->
-                        viewModel.toggleFavorite(isFav)
-                        navController.setPreviousResult(
-                            NavResultKeys.LIKE_RESULT,
-                            LikeResult(
-                                itemId = state.hotel.id,
-                                isLiked = isFav,
-                                serviceType = ServiceType.HOTEL
+                        viewModel.authGateManager.requireAuth(navController) {
+                            viewModel.toggleFavorite(isFav)
+                            navController.setPreviousResult(
+                                NavResultKeys.LIKE_RESULT,
+                                LikeResult(
+                                    itemId = state.hotel.id,
+                                    isLiked = isFav,
+                                    serviceType = ServiceType.HOTEL
+                                )
                             )
-                        )
+                        }
                     }
                 )
             }

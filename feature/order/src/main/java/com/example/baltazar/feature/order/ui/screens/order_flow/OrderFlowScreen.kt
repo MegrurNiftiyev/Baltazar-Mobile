@@ -1,4 +1,4 @@
-package com.example.baltazar.feature.order.ui.screens.order_summary
+package com.example.baltazar.feature.order.ui.screens.order_flow
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,19 +19,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.baltazar.core.R
+import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
 import com.example.baltazar.feature.order.domain.model.NextScreenType
 
 @Composable
-fun OrderSummaryScreen(
+fun OrderFlowScreen(
     navController: NavHostController,
     onNavigateNext: (NextScreenType, String) -> Unit = { _, _ -> },
-    viewModel: OrderSummaryViewModel = hiltViewModel()
+    viewModel: OrderFlowViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -53,11 +53,11 @@ fun OrderSummaryScreen(
                 ) {
                     CircularProgressIndicator(
                         color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(48.dp)
+                        modifier = Modifier.size(IconSizes.Max)
                     )
                     Spacer(modifier = Modifier.height(Spaces.Medium))
                     Text(
-                        text = stringResource(id = R.string.preparing_checkout),
+                        text = stringResource(id = R.string.redirecting_to_next_screen),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

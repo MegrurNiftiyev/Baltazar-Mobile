@@ -45,13 +45,47 @@ import com.example.baltazar.core.core.utils.SnackbarType
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Id
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.example.baltazar.core.core.components.CustomAlertDialog
+import com.example.baltazar.core.core.navigation.Home
+
 @Composable
 fun PassportInfoScreen(
     navController: NavHostController,
+    isFromOrder: Boolean = false,
     viewModel: PassportInfoViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
+    var showCancelDialog by remember { mutableStateOf(false) }
+
+    BackHandler {
+        if (isFromOrder) {
+            showCancelDialog = true
+        } else {
+            navController.popBackStack()
+        }
+    }
+
+    if (showCancelDialog) {
+        CustomAlertDialog(
+            title = stringResource(id = R.string.cancel_order_dialog_title),
+            subtitle = stringResource(id = R.string.cancel_order_dialog_msg),
+            confirmText = stringResource(id = R.string.yes_cancel),
+            cancelText = stringResource(id = R.string.no_stay),
+            isDestructive = true,
+            onConfirm = {
+                showCancelDialog = false
+                navController.navigate(Home()) {
+                    popUpTo(0) { inclusive = true }
+                }
+            },
+            onCancel = { showCancelDialog = false }
+        )
+    }
 
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
@@ -75,7 +109,13 @@ fun PassportInfoScreen(
             CustomAppBar(
                 title = stringResource(R.string.passport_title),
                 alignment = TitleAlignment.CENTER,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = {
+                    if (isFromOrder) {
+                        showCancelDialog = true
+                    } else {
+                        navController.popBackStack()
+                    }
+                }
             )
         },
         containerColor = MaterialTheme.colorScheme.background
@@ -104,6 +144,14 @@ fun PassportInfoScreen(
                     modifier = Modifier.size(36.dp)
                 )
             }
+
+            Text(
+                text = stringResource(R.string.passport_subtitle),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                modifier = Modifier.padding(horizontal = Paddings.Small)
+            )
 
             OutlinedTextField(
                 value = state.passportNumber,

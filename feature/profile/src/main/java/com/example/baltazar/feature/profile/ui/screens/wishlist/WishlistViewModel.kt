@@ -18,10 +18,15 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
+import kotlinx.coroutines.flow.combine
+
+import com.example.baltazar.core.core.managers.AuthGateManager
+
 @HiltViewModel
 class WishlistViewModel @Inject constructor(
     private val wishlistRepository: IWishlistRepository,
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    val authGateManager: AuthGateManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(WishlistState())
@@ -35,26 +40,23 @@ class WishlistViewModel @Inject constructor(
 
     private fun observeUserSession() {
         viewModelScope.launch {
-            sessionManager.isLoadingUser.collect { isLoading ->
-                _state.update { it.copy(isUserLoading = isLoading) }
-            }
-        }
-        viewModelScope.launch {
-            sessionManager.user.collect { user ->
-                val isLoggedIn = !user.isGuest
-                _state.update { it.copy(user = user) }
-                if (isLoggedIn) {
-                    loadWishlist()
-                } else if (!sessionManager.isLoadingUser.value) {
-                    _state.update { it.copy(items = emptyList(), isLoading = false) }
+            combine(sessionManager.user, sessionManager.isLoadingUser) { user, isUserLoading ->
+                Pair(user, isUserLoading)
+            }.collect { (user, isUserLoading) ->
+                _state.update { it.copy(user = user, isUserLoading = isUserLoading) }
+                if (!isUserLoading) {
+                    if (!user.isGuest) {
+                        loadWishlist()
+                    } else {
+                        _state.update { it.copy(items = emptyList(), isLoading = false) }
+                    }
                 }
             }
         }
     }
 
     fun loadWishlist() {
-        val currentUser = sessionManager.user.value
-        if (currentUser.isGuest) {
+        if (sessionManager.isLoadingUser.value || sessionManager.user.value.isGuest) {
             _state.update { it.copy(isLoading = false, isRefreshing = false) }
             return
         }
@@ -139,7 +141,6 @@ class WishlistViewModel @Inject constructor(
 
     fun toggleFavorite(item: ServiceCardItem, isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin()
             return
         }
 

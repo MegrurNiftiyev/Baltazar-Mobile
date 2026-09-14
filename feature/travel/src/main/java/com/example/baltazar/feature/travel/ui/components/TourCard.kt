@@ -154,7 +154,7 @@ fun TourCard(
                         modifier = if (isLoading) Modifier.width(90.dp).height(18.dp) else Modifier
                     ) {
                         Text(
-                            text = if (tour?.price != null) formatPrice(tour.price, "AZN", tour.priceSuffix.orEmpty()) else "",
+                            text = if (tour?.price != null) formatPrice(tour.price, tour.currency, tour.priceSuffix.orEmpty()) else "",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,
@@ -287,7 +287,7 @@ fun TourCard(
                         modifier = if (isLoading) Modifier.width(90.dp).height(18.dp) else Modifier
                     ) {
                         Text(
-                            text = if (tour?.price != null) formatPrice(tour.price, "AZN", tour.priceSuffix.orEmpty()) else "",
+                            text = if (tour?.price != null) formatPrice(tour.price, tour.currency, tour.priceSuffix.orEmpty()) else "",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,

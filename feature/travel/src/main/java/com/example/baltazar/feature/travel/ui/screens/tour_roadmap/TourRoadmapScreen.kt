@@ -70,9 +70,10 @@ fun TourRoadmapScreen(
                 cameraPositionState = cameraPositionState
             ) {
                 // Markers with 1, 2, 3...
+                val checkpointLabel = stringResource(R.string.checkpoint_label)
                 validPoints.forEach { point ->
                     val cleanName = point.name.removePrefix("${point.order}. ").removeSuffix(" ${point.order}").trim()
-                    val markerTitle = if (cleanName.isBlank()) "${point.order}. Məntəqə" else "${point.order}. $cleanName"
+                    val markerTitle = if (cleanName.isBlank()) "${point.order}. $checkpointLabel" else "${point.order}. $cleanName"
                     Marker(
                         state = MarkerState(position = LatLng(point.lat, point.long)),
                         title = markerTitle,

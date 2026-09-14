@@ -69,6 +69,8 @@ import compose.icons.tablericons.Calendar
 import compose.icons.tablericons.Clock
 import kotlinx.coroutines.launch
 
+import com.example.baltazar.core.core.managers.requireAuth
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TravelDetailScreen(
@@ -108,14 +110,12 @@ fun TravelDetailScreen(
         bottomBar = {
             DetailBottomBar(
                 price = state.tour.price,
-                currency = "AZN",
+                currency = state.tour.currency,
                 priceSuffix = state.tour.priceSuffix,
                 actionButtonText = stringResource(R.string.join_tour),
                 isLoading = state.isLoading,
                 onActionClick = {
-                    if (viewModel.isGuest()) {
-                        navController.navigate(Login(isPopStack = true))
-                    } else {
+                    viewModel.authGateManager.requireAuth(navController) {
                         navController.navigate(
                             OrderFlow(
                                 serviceType = ServiceType.TRAVEL.name,
@@ -347,7 +347,9 @@ fun TravelDetailScreen(
                             isLoading = state.isReviewsLoading || state.isLoading,
                             isSubmittingReview = state.isSubmittingReview,
                             onSubmitReview = { rating, comment ->
-                                viewModel.submitReview(rating, comment)
+                                viewModel.authGateManager.requireAuth(navController) {
+                                    viewModel.submitReview(rating, comment)
+                                }
                             }
                         )
                     }
@@ -358,15 +360,17 @@ fun TravelDetailScreen(
                     onBackClick = { navController.popBackStack() },
                     isFavorite = state.isFavorite,
                     onFavoriteClick = { isFav ->
-                        viewModel.toggleFavorite(isFav)
-                        navController.setPreviousResult(
-                            NavResultKeys.LIKE_RESULT,
-                            LikeResult(
-                                itemId = state.tour.id,
-                                isLiked = isFav,
-                                serviceType = ServiceType.TRAVEL
+                        viewModel.authGateManager.requireAuth(navController) {
+                            viewModel.toggleFavorite(isFav)
+                            navController.setPreviousResult(
+                                NavResultKeys.LIKE_RESULT,
+                                LikeResult(
+                                    itemId = state.tour.id,
+                                    isLiked = isFav,
+                                    serviceType = ServiceType.TRAVEL
+                                )
                             )
-                        )
+                        }
                     }
                 )
             }

@@ -7,6 +7,7 @@ data class FoodItem(
     val categories: List<String> = emptyList(),
     val price: Double,
     val priceSuffix: String,
+    val currency: String = "AZN",
     val rating: Double = 0.0,
     val reviewCount: Int = 0,
     val image: String,

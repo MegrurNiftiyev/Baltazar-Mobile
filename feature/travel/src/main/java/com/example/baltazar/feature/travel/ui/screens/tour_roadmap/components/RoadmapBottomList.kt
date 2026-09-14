@@ -76,7 +76,8 @@ fun RoadmapBottomList(
 
                 Spacer(modifier = Modifier.width(Spaces.Small))
 
-                val displayName = androidx.compose.runtime.remember(point) {
+                val checkpointLabel = androidx.compose.ui.res.stringResource(com.example.baltazar.core.R.string.checkpoint_label)
+                val displayName = androidx.compose.runtime.remember(point, checkpointLabel) {
                     var text = point.name.trim()
                     if (text.startsWith("${point.order}. ")) {
                         text = text.removePrefix("${point.order}. ")
@@ -84,7 +85,7 @@ fun RoadmapBottomList(
                     if (text.endsWith(" ${point.order}")) {
                         text = text.removeSuffix(" ${point.order}")
                     }
-                    text
+                    if (text.isBlank()) checkpointLabel else text
                 }
 
                 Column {

@@ -69,7 +69,6 @@ class MainActivity : ComponentActivity() {
                         snackbarHost = { AppSnackbarHost(snackbarHostState) }
                     ) { _ ->
                         AppNavGraph(
-                            sessionManager = sessionManager,
                             startDestination = startDest
                         )
                     }

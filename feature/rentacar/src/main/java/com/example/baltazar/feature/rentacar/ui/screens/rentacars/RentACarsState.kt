@@ -10,5 +10,24 @@ data class RentACarsState(
     val nextCursor: String? = null,
     val hasMore: Boolean = true,
     val error: String? = null,
-    val cardViewMode: CardViewMode = CardViewMode.GRID
-)
+    val cardViewMode: CardViewMode = CardViewMode.GRID,
+
+    // Applied filters
+    val minPrice: Double? = null,
+    val maxPrice: Double? = null,
+    val fuelType: String? = null,
+    val transmission: String? = null,
+
+    // Draft filters
+    val draftMinPrice: Double? = null,
+    val draftMaxPrice: Double? = null,
+    val draftFuelType: String? = null,
+    val draftTransmission: String? = null
+) {
+    val hasDraftChanges: Boolean
+        get() = draftMinPrice != minPrice ||
+                draftMaxPrice != maxPrice ||
+                draftFuelType != fuelType ||
+                draftTransmission != transmission
+}
+

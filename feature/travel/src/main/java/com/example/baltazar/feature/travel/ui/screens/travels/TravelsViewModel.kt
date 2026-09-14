@@ -23,6 +23,7 @@ class TravelsViewModel @Inject constructor(
     private val travelRepository: ITravelRepository,
     private val wishlistRepository: IWishlistRepository,
     private val settingsRepository: ISettingsRepository,
+    val authGateManager: AuthGateManager,
     private val sessionManager: SessionManager
 ) : ViewModel() {
     private val _state = MutableStateFlow(TravelsState())
@@ -33,9 +34,10 @@ class TravelsViewModel @Inject constructor(
         loadInitialData()
     }
 
+    fun isGuest(): Boolean = authGateManager.isGuest()
+
     fun toggleFavorite(tourId: String, isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin()
             return
         }
 
@@ -64,10 +66,29 @@ class TravelsViewModel @Inject constructor(
         }
     }
 
+    fun setDraftMinRating(minRating: Double?) {
+        _state.update { it.copy(draftMinRating = minRating) }
+    }
+
+    fun applyFilters() {
+        _state.update {
+            it.copy(
+                minRating = it.draftMinRating
+            )
+        }
+        loadInitialData()
+    }
+
     fun loadInitialData() {
+        val currentState = _state.value
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isLoading = true, error = null) }
-            val result = travelRepository.getTours(limit = 20, cursor = null)
+            val result = travelRepository.getTours(
+                category = null,
+                minRating = currentState.minRating,
+                limit = 20,
+                cursor = null
+            )
             result.onSuccess { paginatedList ->
                 val hasMore = paginatedList.pagination.hasMore && paginatedList.items.isNotEmpty() && paginatedList.pagination.nextCursor != null
                 _state.update {
@@ -97,7 +118,12 @@ class TravelsViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isPaginationLoading = true) }
-            val result = travelRepository.getTours(limit = 20, cursor = currentState.nextCursor)
+            val result = travelRepository.getTours(
+                category = null,
+                minRating = currentState.minRating,
+                limit = 20,
+                cursor = currentState.nextCursor
+            )
             result.onSuccess { paginatedList ->
                 val newItems = paginatedList.items
                 val existingIds = _state.value.items.map { it.id }.toSet()
@@ -120,3 +146,4 @@ class TravelsViewModel @Inject constructor(
         }
     }
 }
+

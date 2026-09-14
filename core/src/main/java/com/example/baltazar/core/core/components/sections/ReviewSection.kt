@@ -90,7 +90,9 @@ fun ReviewSection(
 
         if (!isLoading) {
             if (reviewEligibility?.canSubmit == true) {
-                Spacer(modifier = Modifier.height(Spaces.Medium))
+                Spacer(modifier = Modifier.height(Spaces.Large))
+                SectionTitle(title = stringResource(R.string.write_review_dialog_title))
+                Spacer(modifier = Modifier.height(Spaces.Small))
                 WriteReviewCard(
                     isSubmitting = isSubmittingReview,
                     onSubmit = onSubmitReview

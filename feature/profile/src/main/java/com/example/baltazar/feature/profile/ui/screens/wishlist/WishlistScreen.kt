@@ -38,6 +38,7 @@ import com.example.baltazar.core.core.extensions.navigateToServiceDetail
 import com.example.baltazar.core.core.navigation.LikeResult
 import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.navigation.NavResultKeys
+import com.example.baltazar.core.core.managers.requireAuth
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Heart
 
@@ -51,10 +52,6 @@ fun WishlistScreen(
     val state by viewModel.state.collectAsState()
 
     val isGuest = state.user.isGuest
-
-    LaunchedEffect(Unit) {
-        viewModel.loadWishlist()
-    }
 
     val currentEntry = navController.currentBackStackEntry
     val likeResult = currentEntry?.consumeResult<LikeResult>(NavResultKeys.LIKE_RESULT)
@@ -164,7 +161,9 @@ fun WishlistScreen(
                                 rating = item.rating,
                                 isFavorite = true,
                                 onFavoriteClick = { isFav ->
-                                    viewModel.toggleFavorite(item, isFav)
+                                    viewModel.authGateManager.requireAuth(navController) {
+                                        viewModel.toggleFavorite(item, isFav)
+                                    }
                                 }
                             )
                         }

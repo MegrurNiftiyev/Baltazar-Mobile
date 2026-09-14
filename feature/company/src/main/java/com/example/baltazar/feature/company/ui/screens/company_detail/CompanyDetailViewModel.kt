@@ -18,18 +18,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import com.example.baltazar.core.core.managers.AuthGateManager
+import com.example.baltazar.core.core.managers.SessionManager
 
 @HiltViewModel
 class CompanyDetailViewModel @Inject constructor(
     private val companyRepository: ICompanyRepository,
     private val reviewRepository: IReviewRepository,
     private val wishlistRepository: IWishlistRepository,
+    val authGateManager: AuthGateManager,
     private val sessionManager: SessionManager,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private var companyId: String = savedStateHandle["id"] ?: savedStateHandle["companyId"] ?: ""
+    private var companyId: String = savedStateHandle["id"] ?: ""
     private val _state = MutableStateFlow(CompanyDetailState())
     val state: StateFlow<CompanyDetailState> = _state.asStateFlow()
 
@@ -100,9 +102,10 @@ class CompanyDetailViewModel @Inject constructor(
         }
     }
 
+    fun isGuest(): Boolean = sessionManager.user.value.isGuest
+
     fun toggleFavorite(isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin()
             return
         }
 
@@ -120,7 +123,6 @@ class CompanyDetailViewModel @Inject constructor(
 
     fun toggleRelatedItemFavorite(itemId: String, isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin()
             return
         }
 

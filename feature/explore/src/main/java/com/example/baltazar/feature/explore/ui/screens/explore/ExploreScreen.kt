@@ -38,6 +38,7 @@ import com.example.baltazar.core.core.extensions.navigateToServiceDetail
 import com.example.baltazar.core.core.extensions.navigateToServiceList
 import com.example.baltazar.core.core.navigation.Cart
 import com.example.baltazar.core.core.navigation.LikeResult
+import com.example.baltazar.core.core.managers.requireAuth
 import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.navigation.NavResultKeys
 import com.example.baltazar.core.core.navigation.Notifications
@@ -71,12 +72,6 @@ fun ExploreScreen(
     LaunchedEffect(likeResult) {
         likeResult?.let { result ->
             viewModel.toggleFavorite(result.itemId, result.serviceType ?: ServiceType.UNKNOWN, result.isLiked)
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.navigateToLoginEvent.collect {
-            navController.navigate(Login(isPopStack = true))
         }
     }
 
@@ -198,7 +193,9 @@ fun ExploreScreen(
                                 onItemClick = { item -> navController.navigateToServiceDetail(item) },
                                 onSeeAllClick = { navController.navigateToServiceList(section.serviceType) },
                                 onFavoriteClick = { item, isFav ->
-                                    viewModel.toggleFavorite(item.id, section.serviceType, isFav)
+                                    viewModel.authGateManager.requireAuth(navController) {
+                                        viewModel.toggleFavorite(item.id, section.serviceType, isFav)
+                                    }
                                 },
                                 modifier = Modifier.padding(bottom = Spaces.Large)
                             )

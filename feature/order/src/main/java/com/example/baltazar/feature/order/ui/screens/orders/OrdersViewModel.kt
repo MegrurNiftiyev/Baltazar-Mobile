@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,24 +28,23 @@ class OrdersViewModel @Inject constructor(
 
     private fun observeUserSession() {
         viewModelScope.launch {
-            sessionManager.isLoadingUser.collect { isLoading ->
-                _state.update { it.copy(isUserLoading = isLoading) }
-            }
-        }
-        viewModelScope.launch {
-            sessionManager.user.collect { user ->
-                _state.update { it.copy(user = user) }
-                if (!user.isGuest) {
-                    fetchOrders()
-                } else if (!sessionManager.isLoadingUser.value) {
-                    _state.update { it.copy(orders = emptyList(), isLoading = false) }
+            combine(sessionManager.user, sessionManager.isLoadingUser) { user, isUserLoading ->
+                Pair(user, isUserLoading)
+            }.collect { (user, isUserLoading) ->
+                _state.update { it.copy(user = user, isUserLoading = isUserLoading) }
+                if (!isUserLoading) {
+                    if (!user.isGuest) {
+                        fetchOrders()
+                    } else {
+                        _state.update { it.copy(orders = emptyList(), isLoading = false) }
+                    }
                 }
             }
         }
     }
 
     fun fetchOrders() {
-        if (sessionManager.user.value.isGuest) {
+        if (sessionManager.isLoadingUser.value || sessionManager.user.value.isGuest) {
             _state.update { it.copy(isLoading = false) }
             return
         }
@@ -54,6 +54,32 @@ class OrdersViewModel @Inject constructor(
             orderRepository.getOrders()
                 .onSuccess { paginated ->
                     _state.update { it.copy(isLoading = false, orders = paginated.items) }
+                }
+                .onFailure { error ->
+                    _state.update { it.copy(isLoading = false, errorMessage = error.message) }
+                }
+        }
+    }
+
+    fun cancelOrder(orderId: String) {
+        viewModelScope.launch {
+            orderRepository.cancelOrder(orderId)
+                .onSuccess {
+                    fetchOrders()
+                }
+                .onFailure { error ->
+                    _state.update { it.copy(errorMessage = error.message) }
+                }
+        }
+    }
+
+    fun continueOrderFlow(orderId: String, onResolvedNextScreen: (com.example.baltazar.feature.order.domain.model.NextScreenType, String) -> Unit) {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            orderRepository.getNextScreen(orderId)
+                .onSuccess { nextResult ->
+                    _state.update { it.copy(isLoading = false) }
+                    onResolvedNextScreen(nextResult.screen, orderId)
                 }
                 .onFailure { error ->
                     _state.update { it.copy(isLoading = false, errorMessage = error.message) }

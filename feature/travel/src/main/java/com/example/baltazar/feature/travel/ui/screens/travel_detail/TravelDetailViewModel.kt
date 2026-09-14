@@ -22,7 +22,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import com.example.baltazar.core.core.managers.AuthGateManager
+import com.example.baltazar.core.core.managers.SessionManager
 
 @HiltViewModel
 class TravelDetailViewModel @Inject constructor(
@@ -30,11 +31,12 @@ class TravelDetailViewModel @Inject constructor(
     private val reviewRepository: IReviewRepository,
     private val wishlistRepository: IWishlistRepository,
     private val includedServiceRepository: IIncludedServiceRepository,
+    val authGateManager: AuthGateManager,
     private val sessionManager: SessionManager,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val tourId: String = savedStateHandle["id"] ?: savedStateHandle["tourId"] ?: ""
+    private val tourId: String = savedStateHandle["id"] ?: ""
     private val _state = MutableStateFlow(TravelDetailState())
     val state: StateFlow<TravelDetailState> = _state.asStateFlow()
 
@@ -83,7 +85,6 @@ class TravelDetailViewModel @Inject constructor(
 
     fun toggleFavorite(isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin()
             return
         }
 
@@ -101,7 +102,6 @@ class TravelDetailViewModel @Inject constructor(
 
     fun submitReview(rating: Int, comment: String) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin()
             return
         }
 
@@ -113,8 +113,11 @@ class TravelDetailViewModel @Inject constructor(
                 rating = rating,
                 comment = comment
             ).onSuccess {
-                _state.update {
-                    it.copy(
+                _state.update { state ->
+                    val updatedEligibility = state.tour.reviewEligibility.copy(canSubmit = false, alreadyReviewed = true)
+                    val updatedTour = state.tour.copy(reviewEligibility = updatedEligibility)
+                    state.copy(
+                        tour = updatedTour,
                         isSubmittingReview = false,
                         userMessage = SnackbarMessage(
                             text = UiText.StringResource(R.string.review_submitted_success),
@@ -137,5 +140,5 @@ class TravelDetailViewModel @Inject constructor(
         }
     }
 
-    fun isGuest(): Boolean = sessionManager.user.value.isGuest
+    fun isGuest(): Boolean = authGateManager.isGuest()
 }

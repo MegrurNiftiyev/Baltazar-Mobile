@@ -15,6 +15,6 @@ data class RoadmapPointDto(
         lat = lat,
         long = long,
         order = order,
-        name = name ?: "Məntəqə"
+        name = name.orEmpty()
     )
 }

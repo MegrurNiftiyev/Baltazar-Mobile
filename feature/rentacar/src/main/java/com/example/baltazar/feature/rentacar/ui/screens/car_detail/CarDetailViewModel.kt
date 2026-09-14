@@ -21,18 +21,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import com.example.baltazar.core.core.managers.AuthGateManager
+import com.example.baltazar.core.core.managers.SessionManager
 
 @HiltViewModel
 class CarDetailViewModel @Inject constructor(
     private val rentACarRepository: IRentACarRepository,
     private val reviewRepository: IReviewRepository,
     private val wishlistRepository: IWishlistRepository,
+    val authGateManager: AuthGateManager,
     private val sessionManager: SessionManager,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val carId: String = savedStateHandle["id"] ?: savedStateHandle["carId"] ?: ""
+    private val carId: String = savedStateHandle["id"] ?: ""
     private val _state = MutableStateFlow(CarDetailState())
     val state: StateFlow<CarDetailState> = _state.asStateFlow()
 
@@ -71,7 +73,6 @@ class CarDetailViewModel @Inject constructor(
 
     fun toggleFavorite(isFav: Boolean) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin()
             return
         }
 
@@ -89,7 +90,6 @@ class CarDetailViewModel @Inject constructor(
 
     fun submitReview(rating: Int, comment: String) {
         if (sessionManager.user.value.isGuest) {
-            sessionManager.requireLogin()
             return
         }
 
@@ -101,8 +101,11 @@ class CarDetailViewModel @Inject constructor(
                 rating = rating,
                 comment = comment
             ).onSuccess {
-                _state.update {
-                    it.copy(
+                _state.update { state ->
+                    val updatedEligibility = state.car.reviewEligibility.copy(canSubmit = false, alreadyReviewed = true)
+                    val updatedCar = state.car.copy(reviewEligibility = updatedEligibility)
+                    state.copy(
+                        car = updatedCar,
                         isSubmittingReview = false,
                         userMessage = SnackbarMessage(
                             text = UiText.StringResource(R.string.review_submitted_success),
@@ -125,5 +128,5 @@ class CarDetailViewModel @Inject constructor(
         }
     }
 
-    fun isGuest(): Boolean = sessionManager.user.value.isGuest
+    fun isGuest(): Boolean = authGateManager.isGuest()
 }

@@ -144,21 +144,21 @@ fun ProfileScreen(
                     ProfileTile(
                         title = stringResource(R.string.profile_personal_info),
                         icon = TablerIcons.UserCheck,
-                        onClick = { navController.navigate(ProfilePersonalInfo) }
+                        onClick = { navController.navigate(ProfilePersonalInfo()) }
                     )
 
                     // Passport Info
                     ProfileTile(
                         title = stringResource(R.string.profile_passport),
                         icon = TablerIcons.Id,
-                        onClick = { navController.navigate(ProfilePassport) }
+                        onClick = { navController.navigate(ProfilePassport()) }
                     )
 
                     // Driver License
                     ProfileTile(
                         title = stringResource(R.string.profile_driver_license),
                         icon = TablerIcons.Car,
-                        onClick = { navController.navigate(ProfileDriverLicense) }
+                        onClick = { navController.navigate(ProfileDriverLicense()) }
                     )
                 }
             }

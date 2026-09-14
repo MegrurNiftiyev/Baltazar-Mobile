@@ -18,10 +18,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CreditCard
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -29,17 +27,13 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -49,13 +43,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.baltazar.core.R
+import com.example.baltazar.core.core.components.CustomAppBar
+import com.example.baltazar.core.core.components.CustomTextField
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
+import com.example.baltazar.core.core.enums.TitleAlignment
+
+import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.example.baltazar.core.core.components.CustomAlertDialog
+import com.example.baltazar.core.core.navigation.Home
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,30 +70,39 @@ fun PaymentScreen(
     viewModel: PaymentViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    val totalPrice = state.order?.totalPrice ?: 0.0
+    var showCancelDialog by remember { mutableStateOf(false) }
+
+    BackHandler {
+        showCancelDialog = true
+    }
+
+    if (showCancelDialog) {
+        CustomAlertDialog(
+            title = stringResource(id = R.string.cancel_order_dialog_title),
+            subtitle = stringResource(id = R.string.cancel_order_dialog_msg),
+            confirmText = stringResource(id = R.string.yes_cancel),
+            cancelText = stringResource(id = R.string.no_stay),
+            isDestructive = true,
+            onConfirm = {
+                showCancelDialog = false
+                navController.navigate(Home()) {
+                    popUpTo(0) { inclusive = true }
+                }
+            },
+            onCancel = { showCancelDialog = false }
+        )
+    }
+
+    val totalPrice = state.order?.totalPrice?.takeIf { it > 0.0 } ?: state.order?.serviceItemSnapshot?.price ?: 0.0
+    val currency = state.order?.serviceItemSnapshot?.currency ?: "AZN"
+    val formattedPrice = if (totalPrice % 1.0 == 0.0) "${totalPrice.toLong()} $currency" else "$totalPrice $currency"
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.payment_method),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                )
+            CustomAppBar(
+                title = stringResource(id = R.string.payment_method),
+                alignment = TitleAlignment.CENTER,
+                onBackClick = { showCancelDialog = true }
             )
         },
         bottomBar = {
@@ -110,27 +124,27 @@ fun PaymentScreen(
                         .height(Paddings.ColossalMinus)
                 ) {
                     if (state.isProcessingPayment) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(IconSizes.Medium),
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            strokeWidth = BorderRadiuses.ExtraMini
-                        )
-                    } else {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.Lock,
-                                contentDescription = null,
-                                modifier = Modifier.size(IconSizes.Small)
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(IconSizes.Medium),
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                strokeWidth = BorderRadiuses.ExtraMini
                             )
                             Spacer(modifier = Modifier.width(Spaces.Small))
                             Text(
-                                text = stringResource(id = R.string.pay_now_format, "\$$totalPrice"),
-                                style = MaterialTheme.typography.titleMedium
+                                text = stringResource(id = R.string.redirecting_to_next_screen),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onPrimary
                             )
                         }
+                    } else {
+                        Text(
+                            text = stringResource(id = R.string.pay_now_format, formattedPrice),
+                            style = MaterialTheme.typography.titleMedium
+                        )
                     }
                 }
             }
@@ -143,7 +157,18 @@ fun PaymentScreen(
                     .padding(innerPadding),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                    Spacer(modifier = Modifier.height(Spaces.Small))
+                    Text(
+                        text = stringResource(id = R.string.redirecting_to_next_screen),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         } else {
             LazyColumn(
@@ -282,7 +307,7 @@ fun PaymentScreen(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Text(
-                                text = "\$$totalPrice",
+                                text = formattedPrice,
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -302,7 +327,7 @@ fun PaymentScreen(
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                text = "\$$totalPrice",
+                                text = formattedPrice,
                                 style = MaterialTheme.typography.headlineMedium,
                                 color = MaterialTheme.colorScheme.primary
                             )
@@ -331,48 +356,54 @@ fun PaymentScreen(
                 )
                 Spacer(modifier = Modifier.height(Spaces.Medium))
 
-                OutlinedTextField(
+                CustomTextField(
                     value = state.cardNumberInput,
                     onValueChange = { viewModel.updateCardNumber(it) },
-                    label = { Text(text = stringResource(id = R.string.card_number)) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
+                    label = stringResource(id = R.string.card_number),
+                    keyboardType = KeyboardType.Number,
+                    errorText = state.cardNumberError
                 )
                 Spacer(modifier = Modifier.height(Spaces.Small))
 
-                OutlinedTextField(
+                CustomTextField(
                     value = state.cardHolderInput,
                     onValueChange = { viewModel.updateCardHolder(it) },
-                    label = { Text(text = stringResource(id = R.string.card_holder_name)) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
+                    label = stringResource(id = R.string.card_holder_name),
+                    keyboardType = KeyboardType.Text,
+                    errorText = state.cardHolderError
                 )
                 Spacer(modifier = Modifier.height(Spaces.Small))
 
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    OutlinedTextField(
-                        value = state.expiryMonthInput,
-                        onValueChange = { viewModel.updateExpiryMonth(it) },
-                        label = { Text(text = stringResource(id = R.string.expiry_month)) },
-                        singleLine = true,
-                        modifier = Modifier.weight(1f)
-                    )
+                    Box(modifier = Modifier.weight(1f)) {
+                        CustomTextField(
+                            value = state.expiryMonthInput,
+                            onValueChange = { viewModel.updateExpiryMonth(it) },
+                            label = stringResource(id = R.string.expiry_month),
+                            keyboardType = KeyboardType.Number,
+                            errorText = state.expiryMonthError
+                        )
+                    }
                     Spacer(modifier = Modifier.width(Spaces.Small))
-                    OutlinedTextField(
-                        value = state.expiryYearInput,
-                        onValueChange = { viewModel.updateExpiryYear(it) },
-                        label = { Text(text = stringResource(id = R.string.expiry_year)) },
-                        singleLine = true,
-                        modifier = Modifier.weight(1f)
-                    )
+                    Box(modifier = Modifier.weight(1f)) {
+                        CustomTextField(
+                            value = state.expiryYearInput,
+                            onValueChange = { viewModel.updateExpiryYear(it) },
+                            label = stringResource(id = R.string.expiry_year),
+                            keyboardType = KeyboardType.Number,
+                            errorText = state.expiryYearError
+                        )
+                    }
                     Spacer(modifier = Modifier.width(Spaces.Small))
-                    OutlinedTextField(
-                        value = state.cvvInput,
-                        onValueChange = { viewModel.updateCvv(it) },
-                        label = { Text(text = stringResource(id = R.string.cvv)) },
-                        singleLine = true,
-                        modifier = Modifier.weight(1f)
-                    )
+                    Box(modifier = Modifier.weight(1f)) {
+                        CustomTextField(
+                            value = state.cvvInput,
+                            onValueChange = { viewModel.updateCvv(it) },
+                            label = stringResource(id = R.string.cvv),
+                            keyboardType = KeyboardType.Number,
+                            errorText = state.cvvError
+                        )
+                    }
                 }
 
                 state.addCardError?.let { err ->
