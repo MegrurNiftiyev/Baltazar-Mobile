@@ -26,6 +26,8 @@ import com.example.baltazar.core.core.enums.TitleAlignment
 import compose.icons.TablerIcons
 import compose.icons.tablericons.ArrowLeft
 
+import androidx.compose.ui.text.style.TextOverflow
+
 @Composable
 fun CustomAppBar(
     title: String,
@@ -74,12 +76,14 @@ fun CustomAppBar(
                 TitleAlignment.END -> Alignment.CenterEnd
             }
 
-            val titlePadding = if (alignment == TitleAlignment.START && hasLeading) {
-                Modifier.padding(start = 48.dp)
-            } else if (alignment == TitleAlignment.END && trailingContent != null) {
-                Modifier.padding(end = 48.dp)
-            } else {
-                Modifier
+            val titlePadding = when (alignment) {
+                TitleAlignment.START -> if (hasLeading) Modifier.padding(start = 48.dp) else Modifier
+                TitleAlignment.CENTER -> {
+                    val startPad = if (hasLeading) 48.dp else 0.dp
+                    val endPad = if (trailingContent != null) 48.dp else 0.dp
+                    Modifier.padding(start = startPad, end = endPad)
+                }
+                TitleAlignment.END -> if (trailingContent != null) Modifier.padding(end = 48.dp) else Modifier
             }
 
             Text(
@@ -89,7 +93,9 @@ fun CustomAppBar(
                     .then(titlePadding),
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
             if (trailingContent != null) {
