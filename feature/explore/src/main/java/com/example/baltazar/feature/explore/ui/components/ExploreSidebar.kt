@@ -20,11 +20,9 @@ import com.example.baltazar.core.core.constants.Spaces
 import com.example.baltazar.core.core.navigation.About
 import com.example.baltazar.core.core.navigation.Cart
 import com.example.baltazar.core.core.navigation.Help
-import com.example.baltazar.core.core.navigation.Notifications
 import com.example.baltazar.core.core.navigation.Settings
 import com.example.baltazar.core.domain.model.User
 import compose.icons.TablerIcons
-import compose.icons.tablericons.Bell
 import compose.icons.tablericons.Help as HelpIcon
 import compose.icons.tablericons.InfoCircle
 import compose.icons.tablericons.Settings as SettingsIcon
@@ -67,12 +65,6 @@ fun ExploreSidebar(
                     title = stringResource(R.string.sidebar_cart),
                     icon = TablerIcons.ShoppingCart,
                     onClick = { onPageClick(Cart) }
-                )
-
-                PageTile(
-                    title = stringResource(R.string.sidebar_notifications),
-                    icon = TablerIcons.Bell,
-                    onClick = { onPageClick(Notifications) }
                 )
 
                 PageTile(

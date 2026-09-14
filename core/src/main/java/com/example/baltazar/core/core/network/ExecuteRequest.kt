@@ -6,8 +6,8 @@ import retrofit2.HttpException
 import java.io.IOException
 
 suspend inline fun <T> executeRequest(
-    crossinline apiCall: suspend () -> T,
-    expectedErrors: List<BaseApiException> = emptyList()
+    expectedErrors: List<BaseApiException> = emptyList(),
+    crossinline apiCall: suspend () -> T
 ): T {
     return try {
         apiCall()

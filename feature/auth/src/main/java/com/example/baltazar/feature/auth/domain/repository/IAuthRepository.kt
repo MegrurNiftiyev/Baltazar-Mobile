@@ -2,7 +2,7 @@ package com.example.baltazar.feature.auth.domain.repository
 
 import com.example.baltazar.core.core.enums.Language
 import com.example.baltazar.core.core.enums.Region
-import com.example.baltazar.feature.auth.domain.model.User
+import com.example.baltazar.core.domain.model.User
 
 interface IAuthRepository {
     suspend fun login(email: String, password: String): Result<User>

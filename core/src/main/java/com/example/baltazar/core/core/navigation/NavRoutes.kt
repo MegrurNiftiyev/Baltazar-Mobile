@@ -13,10 +13,10 @@ object Onboarding
 data class Home(val initialTab: HomeTab = HomeTab.Explore)
 
 @Serializable
-object Login
+data class Login(val isPopStack: Boolean = false)
 
 @Serializable
-object Register
+data class Register(val isPopStack: Boolean = false)
 
 @Serializable
 object AuthSelection
@@ -73,56 +73,75 @@ object FoodCompanyList
 data class FoodCompanyDetail(val id: String)
 
 @Serializable
+object HotelCompanyList
+
+@Serializable
+data class HotelCompanyDetail(val id: String)
+
+@Serializable
+object TravelCompanyList
+
+@Serializable
+data class TravelCompanyDetail(val id: String)
+
+@Serializable
+object RentACarCompanyList
+
+@Serializable
+data class RentACarCompanyDetail(val id: String)
+
+@Serializable
+data class CompanyList(val serviceType: String? = null)
+
+@Serializable
+data class CompanyDetail(val id: String)
+
+@Serializable
 object FoodList
 
 @Serializable
 data class FoodDetail(val id: String)
 
 @Serializable
-data class OrderFlow(val serviceType: String, val serviceId: String)
+data class OrderFlow(
+    val serviceType: String? = null,
+    val serviceId: String? = null,
+    val orderId: String? = null
+)
 
 @Serializable
 object Orders
 
 // Profile Sub-Screens
 @Serializable
-object ProfilePersonalInfo
+data class ProfilePersonalInfo(val isFromOrder: Boolean = false, val orderId: String? = null)
 
 @Serializable
-object ProfileDriverLicense
+data class ProfileDriverLicense(val isFromOrder: Boolean = false, val orderId: String? = null)
 
 @Serializable
-object ProfilePassport
+data class ProfilePassport(val isFromOrder: Boolean = false, val orderId: String? = null)
 
 @Serializable
 object ProfileUserDetail
 
 // Order Flow Sub-Screens
 @Serializable
-object OrderPersonalInfo
-
-@Serializable
-object OrderPassportInfo
-
-@Serializable
 object OrderDriverLicense
 
 @Serializable
-object OrderDeliveryAddress
+data class OrderMapDeliverySelection(val orderId: String = "")
 
 @Serializable
-object OrderAddressSelection
-
-@Serializable
-object OrderMapDeliverySelection
-
-@Serializable
-object OrderSummary
-
-@Serializable
-object OrderPayment
+data class OrderPayment(val orderId: String = "")
 
 @Serializable
 object OrderConfirm
+
+@Serializable
+data class OrderDetail(val orderId: String)
+
+@Serializable
+object OrderUnknownScreenFallback
 
 

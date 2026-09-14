@@ -1,0 +1,7 @@
+<resources>
+    <string name="hotel_title">Hotels</string>
+    <string name="hotel_search_hint">Search hotels or destinations...</string>
+    <string name="hotel_popular">Popular Hotels</string>
+    <string name="hotel_details">Hotel Details</string>
+    <string name="hotel_book_now">Book Now</string>
+</resources>

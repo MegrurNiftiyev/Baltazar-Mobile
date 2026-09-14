@@ -14,13 +14,15 @@ data class TourItemDto(
     @SerialName("categories") val categories: List<String> = emptyList(),
     @SerialName("price") val price: Double,
     @SerialName("priceSuffix") val priceSuffix: String,
+    @SerialName("currency") val currency: String? = null,
     @SerialName("image") val image: String,
     @SerialName("rating") val rating: Double = 0.0,
     @SerialName("reviewCount") val reviewCount: Int = 0,
     @SerialName("duration") val duration: String,
     @SerialName("startDate") val startDate: String,
     @SerialName("endDate") val endDate: String,
-    @SerialName("status") val status: String
+    @SerialName("status") val status: String,
+    @SerialName("isLiked") val isLiked: Boolean = false
 ) {
     fun toDomain(): TourItem = TourItem(
         id = id,
@@ -29,15 +31,18 @@ data class TourItemDto(
         categories = categories,
         price = price,
         priceSuffix = priceSuffix,
+        currency = currency.orEmpty(),
         image = image,
         rating = rating,
         reviewCount = reviewCount,
         duration = duration,
         startDate = startDate,
         endDate = endDate,
-        status = status
+        status = status,
+        isLiked = isLiked
     )
 }
+
 
 @Serializable
 data class TourListResponseDto(

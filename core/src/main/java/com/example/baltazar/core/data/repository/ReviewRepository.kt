@@ -1,6 +1,6 @@
 package com.example.baltazar.core.data.repository
 
-import com.example.baltazar.core.data.datasources.remote.datasources.ReviewRemoteDataSource
+import com.example.baltazar.core.data.datasources.remote.ReviewRemoteDataSource
 import com.example.baltazar.core.data.model.request.CreateReviewRequest
 import com.example.baltazar.core.domain.model.PaginatedList
 import com.example.baltazar.core.domain.model.PaginationInfo

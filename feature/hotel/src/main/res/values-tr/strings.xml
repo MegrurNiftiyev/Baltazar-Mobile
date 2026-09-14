@@ -1,0 +1,7 @@
+<resources>
+    <string name="hotel_title">Oteller</string>
+    <string name="hotel_search_hint">Otel veya konum ara...</string>
+    <string name="hotel_popular">Popüler Oteller</string>
+    <string name="hotel_details">Otel Detayları</string>
+    <string name="hotel_book_now">Hemen Rezerve Et</string>
+</resources>

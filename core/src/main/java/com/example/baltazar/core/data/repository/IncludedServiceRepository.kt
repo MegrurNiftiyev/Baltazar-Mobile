@@ -1,6 +1,6 @@
 package com.example.baltazar.core.data.repository
 
-import com.example.baltazar.core.data.datasources.remote.datasources.IncludedServiceRemoteDataSource
+import com.example.baltazar.core.data.datasources.remote.IncludedServiceRemoteDataSource
 import com.example.baltazar.core.domain.model.IncludedService
 import com.example.baltazar.core.domain.repository.IIncludedServiceRepository
 import javax.inject.Inject

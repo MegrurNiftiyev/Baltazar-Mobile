@@ -7,13 +7,16 @@ data class TourItem(
     val categories: List<String>,
     val price: Double,
     val priceSuffix: String,
+    val currency: String = "AZN",
     val image: String,
     val rating: Double,
     val reviewCount: Int,
     val duration: String,
     val startDate: String,
     val endDate: String,
-    val status: String
+    val status: String,
+    val isLiked: Boolean = false
 )
+
 
 

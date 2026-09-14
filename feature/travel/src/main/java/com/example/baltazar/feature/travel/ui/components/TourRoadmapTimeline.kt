@@ -1,5 +1,6 @@
 package com.example.baltazar.feature.travel.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,10 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.baltazar.core.R
 import com.example.baltazar.core.core.components.SectionTitle
+import com.example.baltazar.core.core.components.ShimmerWrapper
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.Spaces
 import com.example.baltazar.feature.travel.domain.model.TourRoadmapPoint
-import com.example.baltazar.feature.travel.ui.screens.tour_roadmap.components.MapErrorFallback
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -46,8 +47,8 @@ fun TourRoadmapTimeline(
     Column(modifier = modifier.fillMaxWidth()) {
         SectionTitle(
             title = stringResource(R.string.tour_roadmap_title),
-            actionText = if (validPoints.isNotEmpty() && onMapClick != null) stringResource(R.string.view_on_map) else null,
-            onActionClick = if (validPoints.isNotEmpty()) onMapClick else null
+            actionText = if (onMapClick != null) stringResource(R.string.view_on_map) else null,
+            onActionClick = onMapClick
         )
 
         Spacer(modifier = Modifier.height(Spaces.Small))
@@ -58,12 +59,23 @@ fun TourRoadmapTimeline(
                 .height(180.dp)
                 .clip(RoundedCornerShape(BorderRadiuses.Medium))
                 .then(
-                    if (validPoints.isNotEmpty() && onMapClick != null) {
+                    if (onMapClick != null) {
                         Modifier.clickable(onClick = onMapClick)
                     } else Modifier
                 )
         ) {
-            if (validPoints.isNotEmpty()) {
+            if (isLoading) {
+                ShimmerWrapper(
+                    isLoading = true,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                    )
+                }
+            } else if (validPoints.isNotEmpty()) {
                 val firstValid = validPoints.first()
                 val cameraPositionState = rememberCameraPositionState {
                     position = CameraPosition.fromLatLngZoom(LatLng(firstValid.lat, firstValid.long), 10f)
@@ -72,6 +84,7 @@ fun TourRoadmapTimeline(
                 GoogleMap(
                     modifier = Modifier.fillMaxSize(),
                     cameraPositionState = cameraPositionState,
+                    onMapClick = { onMapClick?.invoke() },
                     uiSettings = MapUiSettings(
                         scrollGesturesEnabled = false,
                         zoomGesturesEnabled = false,
@@ -97,9 +110,27 @@ fun TourRoadmapTimeline(
                         )
                     }
                 }
+
+                if (onMapClick != null) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable(onClick = onMapClick)
+                    )
+                }
             } else {
-                MapErrorFallback(modifier = Modifier.fillMaxSize())
+                ShimmerWrapper(
+                    isLoading = true,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                    )
+                }
             }
         }
     }
 }
+

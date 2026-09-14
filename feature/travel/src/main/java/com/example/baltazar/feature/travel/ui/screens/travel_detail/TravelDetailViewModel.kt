@@ -3,7 +3,9 @@ package com.example.baltazar.feature.travel.ui.screens.travel_detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.baltazar.core.R
 import com.example.baltazar.core.core.enums.ServiceType
+import com.example.baltazar.core.core.managers.SessionManager
 import com.example.baltazar.core.core.utils.SnackbarMessage
 import com.example.baltazar.core.core.utils.SnackbarType
 import com.example.baltazar.core.core.utils.UiText
@@ -13,11 +15,14 @@ import com.example.baltazar.core.domain.repository.IWishlistRepository
 import com.example.baltazar.feature.travel.domain.repository.ITravelRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import com.example.baltazar.core.core.managers.AuthGateManager
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,10 +31,12 @@ class TravelDetailViewModel @Inject constructor(
     private val reviewRepository: IReviewRepository,
     private val wishlistRepository: IWishlistRepository,
     private val includedServiceRepository: IIncludedServiceRepository,
+    val authGateManager: AuthGateManager,
+    private val sessionManager: SessionManager,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val tourId: String = savedStateHandle["id"] ?: savedStateHandle["tourId"] ?: ""
+    private val tourId: String = savedStateHandle["id"] ?: ""
     private val _state = MutableStateFlow(TravelDetailState())
     val state: StateFlow<TravelDetailState> = _state.asStateFlow()
 
@@ -46,7 +53,7 @@ class TravelDetailViewModel @Inject constructor(
             _state.update { it.copy(isLoading = true, error = null) }
             travelRepository.getTourDetail(tourId)
                 .onSuccess { detail ->
-                    _state.update { it.copy(tour = detail, isLoading = false) }
+                    _state.update { it.copy(tour = detail, isFavorite = detail.isLiked, isLoading = false) }
                 }
                 .onFailure { error ->
                     _state.update { it.copy(isLoading = false, error = error.message) }
@@ -66,7 +73,7 @@ class TravelDetailViewModel @Inject constructor(
     private fun loadReviews() {
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isReviewsLoading = true) }
-            reviewRepository.getReviews(targetType = "TRAVEL", targetId = tourId)
+            reviewRepository.getReviews(targetType = ServiceType.TRAVEL.name, targetId = tourId)
                 .onSuccess { paginatedList ->
                     _state.update { it.copy(reviews = paginatedList.items, isReviewsLoading = false) }
                 }
@@ -77,30 +84,43 @@ class TravelDetailViewModel @Inject constructor(
     }
 
     fun toggleFavorite(isFav: Boolean) {
+        if (sessionManager.user.value.isGuest) {
+            return
+        }
+
         _state.update { it.copy(isFavorite = isFav) }
         viewModelScope.launch(Dispatchers.IO) {
-            if (isFav) {
-                wishlistRepository.addToWishlist(serviceId = tourId, serviceType = ServiceType.TRAVEL)
-            } else {
-                wishlistRepository.removeFromWishlist(id = tourId)
+            withContext(NonCancellable) {
+                if (isFav) {
+                    wishlistRepository.addToWishlist(serviceId = tourId, serviceType = ServiceType.TRAVEL)
+                } else {
+                    wishlistRepository.removeFromWishlist(id = tourId)
+                }
             }
         }
     }
 
     fun submitReview(rating: Int, comment: String) {
+        if (sessionManager.user.value.isGuest) {
+            return
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isSubmittingReview = true) }
             reviewRepository.createReview(
-                targetType = "TRAVEL",
+                targetType = ServiceType.TRAVEL.name,
                 targetId = tourId,
                 rating = rating,
                 comment = comment
             ).onSuccess {
-                _state.update {
-                    it.copy(
+                _state.update { state ->
+                    val updatedEligibility = state.tour.reviewEligibility.copy(canSubmit = false, alreadyReviewed = true)
+                    val updatedTour = state.tour.copy(reviewEligibility = updatedEligibility)
+                    state.copy(
+                        tour = updatedTour,
                         isSubmittingReview = false,
                         userMessage = SnackbarMessage(
-                            text = UiText.DynamicString("Rəyiniz uğurla əlavə olundu"),
+                            text = UiText.StringResource(R.string.review_submitted_success),
                             type = SnackbarType.SUCCESS
                         )
                     )
@@ -119,4 +139,6 @@ class TravelDetailViewModel @Inject constructor(
             }
         }
     }
+
+    fun isGuest(): Boolean = authGateManager.isGuest()
 }

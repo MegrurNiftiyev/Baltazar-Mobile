@@ -12,10 +12,18 @@ import com.example.baltazar.feature.auth.ui.screens.login.LoginScreen
 import com.example.baltazar.feature.auth.ui.screens.onboarding.OnboardingScreen
 import com.example.baltazar.feature.auth.ui.screens.register.RegisterScreen
 
+import androidx.navigation.toRoute
+
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     composable<Onboarding> { OnboardingScreen(navController) }
     composable<AuthSelection> { AuthSelectionScreen(navController) }
-    composable<Login> { LoginScreen(navController) }
-    composable<Register> { RegisterScreen(navController) }
+    composable<Login> { backStackEntry ->
+        val loginRoute = backStackEntry.toRoute<Login>()
+        LoginScreen(navController = navController, isPopStack = loginRoute.isPopStack)
+    }
+    composable<Register> { backStackEntry ->
+        val registerRoute = backStackEntry.toRoute<Register>()
+        RegisterScreen(navController = navController, isPopStack = registerRoute.isPopStack)
+    }
 }
 

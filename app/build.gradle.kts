@@ -120,6 +120,7 @@ dependencies {
     implementation(project(":feature:profile"))
     implementation(project(":feature:explore"))
     implementation(project(":feature:order"))
+    implementation(project(":feature:company"))
 
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.core.splashscreen)

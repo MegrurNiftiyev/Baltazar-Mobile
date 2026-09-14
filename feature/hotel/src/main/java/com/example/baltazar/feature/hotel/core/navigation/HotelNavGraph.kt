@@ -16,4 +16,3 @@ fun NavGraphBuilder.hotelNavGraph(navController: NavHostController) {
         HotelDetailScreen(navController)
     }
 }
-

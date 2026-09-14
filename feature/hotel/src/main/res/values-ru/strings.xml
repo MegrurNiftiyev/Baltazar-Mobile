@@ -1,0 +1,7 @@
+<resources>
+    <string name="hotel_title">Отели</string>
+    <string name="hotel_search_hint">Поиск отелей или направлений...</string>
+    <string name="hotel_popular">Популярные отели</string>
+    <string name="hotel_details">Детали отеля</string>
+    <string name="hotel_book_now">Забронировать</string>
+</resources>

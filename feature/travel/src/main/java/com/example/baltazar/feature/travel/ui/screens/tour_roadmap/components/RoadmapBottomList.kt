@@ -23,8 +23,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
+import com.example.baltazar.core.R
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
@@ -77,23 +78,27 @@ fun RoadmapBottomList(
 
                 Spacer(modifier = Modifier.width(Spaces.Small))
 
+                val checkpointLabel = stringResource(R.string.checkpoint_label)
+                val displayName = androidx.compose.runtime.remember(point, checkpointLabel) {
+                    var text = point.name.trim()
+                    if (text.startsWith("${point.order}. ")) {
+                        text = text.removePrefix("${point.order}. ")
+                    }
+                    if (text.endsWith(" ${point.order}")) {
+                        text = text.removeSuffix(" ${point.order}")
+                    }
+                    if (text.isBlank()) checkpointLabel else text
+                }
+
                 Column {
                     Text(
-                        text = point.name,
+                        text = displayName,
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-
-                    if (point.lat != 0.0 || point.long != 0.0) {
-                        Text(
-                            text = "%.3f, %.3f".format(point.lat, point.long),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
                 }
             }
         }

@@ -18,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.example.baltazar.core.R
 import com.example.baltazar.core.core.components.CustomTextButton
 import com.example.baltazar.core.core.components.ServiceItemCard
 import com.example.baltazar.core.core.components.ShimmerWrapper
@@ -32,7 +34,8 @@ fun ExploreSectionRow(
     isLoading: Boolean,
     onItemClick: (ServiceCardItem) -> Unit,
     onSeeAllClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFavoriteClick: ((ServiceCardItem, Boolean) -> Unit)? = null
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
@@ -56,7 +59,7 @@ fun ExploreSectionRow(
             
             if (!isLoading) {
                 CustomTextButton(
-                    text = "See all",
+                    text = stringResource(R.string.read_more),
                     onClick = onSeeAllClick
                 )
             }
@@ -87,7 +90,9 @@ fun ExploreSectionRow(
                         price = item.price,
                         currency = item.currency,
                         priceSuffix = item.priceSuffix,
-                        rating = if (item.rating > 0) item.rating else null
+                        rating = if (item.rating > 0) item.rating else null,
+                        isFavorite = item.isLiked,
+                        onFavoriteClick = { isFav -> onFavoriteClick?.invoke(item, isFav) }
                     )
                 }
             }

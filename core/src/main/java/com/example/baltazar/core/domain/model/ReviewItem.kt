@@ -11,9 +11,3 @@ data class ReviewItem(
     val comment: String,
     val createdAt: String
 )
-
-data class ReviewEligibility(
-    val eligible: Boolean = false,
-    val alreadyReviewed: Boolean = false,
-    val canSubmit: Boolean = false
-)

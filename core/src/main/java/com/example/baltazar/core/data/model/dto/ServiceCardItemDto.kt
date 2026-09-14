@@ -13,11 +13,12 @@ data class ServiceCardItemDto(
     @SerialName("title") val title: String,
     @SerialName("image") val image: String,
     @SerialName("price") val price: Double,
-    @SerialName("priceSuffix") val priceSuffix: String = "",
-    @SerialName("currency") val currency: String = "AZN",
+    @SerialName("priceSuffix") val priceSuffix: String? = null,
+    @SerialName("currency") val currency: String? = null,
     @SerialName("rating") val rating: Double = 0.0,
     @SerialName("ratingCount") val ratingCount: Int = 0,
-    @SerialName("category") val category: String? = null
+    @SerialName("category") val category: String? = null,
+    @SerialName("isLiked") val isLiked: Boolean = false
 ) {
     fun toDomain(): ServiceCardItem = ServiceCardItem(
         id = id,
@@ -26,10 +27,11 @@ data class ServiceCardItemDto(
         title = title,
         image = image,
         price = price,
-        priceSuffix = priceSuffix,
-        currency = currency,
+        priceSuffix = priceSuffix.orEmpty(),
+        currency = currency.orEmpty(),
         rating = rating,
         ratingCount = ratingCount,
-        category = category
+        category = category,
+        isLiked = isLiked
     )
 }

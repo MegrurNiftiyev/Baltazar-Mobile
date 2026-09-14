@@ -13,10 +13,12 @@ data class FoodItemDto(
     @SerialName("category") val category: String? = null,
     @SerialName("categories") val categories: List<String> = emptyList(),
     @SerialName("price") val price: Double = 0.0,
-    @SerialName("priceSuffix") val priceSuffix: String? = "",
+    @SerialName("priceSuffix") val priceSuffix: String? = null,
+    @SerialName("currency") val currency: String? = null,
     @SerialName("rating") val rating: Double = 0.0,
     @SerialName("reviewCount") val reviewCount: Int = 0,
-    @SerialName("image") val image: String? = null
+    @SerialName("image") val image: String? = null,
+    @SerialName("isLiked") val isLiked: Boolean = false
 ) {
     fun toDomain(): FoodItem {
         val resolvedCategories = if (categories.isNotEmpty()) {
@@ -33,10 +35,13 @@ data class FoodItemDto(
             title = title ?: name.orEmpty(),
             categories = resolvedCategories,
             price = price,
-            priceSuffix = priceSuffix ?: "",
+            priceSuffix = priceSuffix.orEmpty(),
+            currency = currency.orEmpty(),
             rating = rating,
             reviewCount = reviewCount,
-            image = image.orEmpty()
+            image = image.orEmpty(),
+            isLiked = isLiked
         )
     }
 }
+

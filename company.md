@@ -1,361 +1,370 @@
-# Company Feature — Android Implementation Plan (Baltazar)
+GET
+/api/companies
+Get a list of companies
 
-**v2 — revised against actual codebase (`merged__40_/41_/42_.txt`).** Follows the exact `IXRepository / XRepositoryImpl / XRemoteDataSource / XApiService / XNetworkModule / XRepositoryModule` pattern already used by `User`, `Wishlist`, and `Explore` in this project. Lives in `:core`, base package `com.example.baltazar.core`.
+Parameters
+Cancel
+Name	Description
+serviceType
+string
+(query)
 
-This file is self-contained.
+RENT_A_CAR
+limit
+integer
+(query)
+20
+cursor
+string
+(query)
+cursor
+Execute
+Clear
+Responses
+Curl
 
----
-
-## 1. Scope
-
-`serviceType` applies to: `RENT_A_CAR`, `TRAVEL`, `FOOD`. **Never** `HOTEL` (standalone, not company-tied).
-Deferred: `related-items` endpoint (explicit `TODO`, per earlier decision).
-
----
-
-## 2. What already exists vs. what's new
-
-**Already exist (reuse, do not recreate):**
-- `ApiResponse<T>` / `PaginatedResponse<T>` (`core/data/model/response`) — use these directly, don't invent new response wrapper DTOs.
-- `PaginationDto` → `PaginationInfo` mapping.
-- `ServiceType` enum (`@Serializable`, has `UNKNOWN`).
-- `CompanyListItemDto.kt`, `CompanyDetailsDto.kt` (`core/data/model/dto`) — **exist but are stubs that need fixing, see Section 3.**
-- `CompanyStatus.kt` (`core/core/enums`) — **exists but needs fixing, see Section 3.**
-- `ServiceItemCard.kt` (`core/core/components`) — reuse for rendering items.
-- `NavRoutes.kt` — centralized, single file for **all** app routes. Add Company routes here, don't create a separate route file.
-
-**New (this plan builds them):**
-- `CompanySection.kt` enum — doesn't exist yet.
-- `ReviewEligibilityDto` — doesn't exist yet.
-- Domain models `Company`, `CompanyDetail` — don't exist yet.
-- `ICompanyRepository`, `CompanyRepositoryImpl`, `CompanyRemoteDataSource`, `CompanyApiService`, `CompanyNetworkModule`, `CompanyRepositoryModule`.
-- `CompanyListScreen`, `CompanyDetailScreen` + ViewModels.
-
----
-
-## 3. Fix the two existing DTOs first
-
-Current `CompanyListItemDto.kt` and `CompanyDetailsDto.kt` type `serviceType`/`status` as raw `String`, and are missing fields the real API actually returns (`sectionOrder` on the list item, `reviewEligibility` on the detail). They also carry speculative fields (`images`, `address`) that **do not appear in the confirmed Swagger response** — keep them but mark nullable/unconfirmed.
-
-```kotlin
-// core/core/enums/CompanyStatus.kt — FIX: add @Serializable + UNKNOWN fallback
-@Serializable
-enum class CompanyStatus {
-    @SerialName("ACTIVE") ACTIVE,
-    @SerialName("INACTIVE") INACTIVE,
-    @SerialName("UNKNOWN") UNKNOWN
-}
-```
-
-```kotlin
-// core/core/enums/CompanySection.kt — NEW
-@Serializable
-enum class CompanySection {
-    @SerialName("HEADER") HEADER,
-    @SerialName("ABOUT") ABOUT,
-    @SerialName("GALLERY") GALLERY,
-    @SerialName("ITEMS") ITEMS,
-    @SerialName("REVIEWS") REVIEWS,
-    @SerialName("UNKNOWN") UNKNOWN
-}
-```
-
-```kotlin
-// core/data/model/dto/CompanyListItemDto.kt — FIX
-@Serializable
-data class CompanyListItemDto(
-    @SerialName("id") val id: String,
-    @SerialName("name") val name: String,
-    @SerialName("about") val about: String? = null,
-    @SerialName("serviceType") val serviceType: ServiceType,       // was String
-    @SerialName("logo") val logo: String? = null,
-    @SerialName("profileImage") val profileImage: String? = null,
-    @SerialName("bannerImage") val bannerImage: String? = null,
-    @SerialName("status") val status: CompanyStatus = CompanyStatus.UNKNOWN, // was String?
-    @SerialName("sectionOrder") val sectionOrder: List<CompanySection> = emptyList(), // NEW — confirmed present in real /api/companies response
-    @SerialName("rating") val rating: Double? = null,
-    @SerialName("reviewCount") val reviewCount: Int? = null,
-    @SerialName("cuisineTypes") val cuisineTypes: List<String>? = null // FOOD only
-)
-```
-
-```kotlin
-// core/data/model/dto/CompanyDetailsDto.kt — FIX
-@Serializable
-data class CompanyDetailsDto(
-    @SerialName("id") val id: String,
-    @SerialName("name") val name: String,
-    @SerialName("about") val about: String? = null,
-    @SerialName("serviceType") val serviceType: ServiceType,        // was String
-    @SerialName("logo") val logo: String? = null,
-    @SerialName("profileImage") val profileImage: String? = null,
-    @SerialName("bannerImage") val bannerImage: String? = null,
-    @SerialName("images") val images: List<String> = emptyList(),   // ⚠️ NOT in confirmed Swagger response — confirm with backend before relying on it for GALLERY
-    @SerialName("address") val address: String? = null,             // ⚠️ same — not in confirmed response
-    @SerialName("status") val status: CompanyStatus = CompanyStatus.UNKNOWN, // was String?
-    @SerialName("rating") val rating: Double? = null,
-    @SerialName("reviewCount") val reviewCount: Int? = null,
-    @SerialName("fullSectionOrder") val fullSectionOrder: List<CompanySection> = emptyList(), // was List<String>
-    @SerialName("cuisineTypes") val cuisineTypes: List<String>? = null,
-    @SerialName("reviewEligibility") val reviewEligibility: ReviewEligibilityDto? = null // NEW — was missing entirely
-)
-
-@Serializable
-data class ReviewEligibilityDto(
-    @SerialName("eligible") val eligible: Boolean = false,
-    @SerialName("alreadyReviewed") val alreadyReviewed: Boolean = false,
-    @SerialName("canSubmit") val canSubmit: Boolean = false
-)
-```
-
-**Open question:** confirm with backend whether `images` (gallery) and `address` are real fields planned for the detail response — the confirmed Swagger sample doesn't include them, only `profileImage`/`bannerImage`.
-
----
-
-## 4. Domain models (`core/domain/model`)
-
-```kotlin
-data class Company(
-    val id: String,
-    val name: String,
-    val about: String?,
-    val serviceType: ServiceType,
-    val logo: String?,
-    val profileImage: String?,
-    val bannerImage: String?,
-    val status: CompanyStatus,
-    val sectionOrder: List<CompanySection>,
-    val rating: Double,
-    val reviewCount: Int,
-    val cuisineTypes: List<String>?
-)
-
-data class CompanyDetail(
-    val company: Company,
-    val images: List<String>,
-    val address: String?,
-    val fullSectionOrder: List<CompanySection>,
-    val reviewEligibility: ReviewEligibility
-)
-
-data class ReviewEligibility(
-    val eligible: Boolean,
-    val alreadyReviewed: Boolean,
-    val canSubmit: Boolean
-)
-```
-
-Add `toDomain()` mappers on the DTOs, same as every existing DTO in the project (`CompanyListItemDto.toDomain()`, `CompanyDetailsDto.toDomain()`).
-
----
-
-## 5. Data layer — mirrors `UserRepositoryImpl` / `WishlistRepository` exactly
-
-```kotlin
-// core/data/datasources/remote/services/CompanyApiService.kt
-interface CompanyApiService {
-    @GET("api/companies")
-    suspend fun getCompanies(
-        @Query("serviceType") serviceType: String,
-        @Query("limit") limit: Int = 20,
-        @Query("cursor") cursor: String? = null
-    ): PaginatedResponse<CompanyListItemDto>
-
-    @GET("api/companies/{id}")
-    suspend fun getCompanyDetails(@Path("id") id: String): ApiResponse<CompanyDetailsDto>
-}
-```
-
-```kotlin
-// core/data/datasources/remote/CompanyRemoteDataSource.kt
-class CompanyRemoteDataSource @Inject constructor(
-    private val apiService: CompanyApiService
-) {
-    suspend fun getCompanies(serviceType: String, limit: Int, cursor: String?) =
-        apiService.getCompanies(serviceType, limit, cursor)
-
-    suspend fun getCompanyDetails(id: String) =
-        apiService.getCompanyDetails(id)
-}
-```
-
-```kotlin
-// core/domain/repository/ICompanyRepository.kt
-interface ICompanyRepository {
-    suspend fun getCompanies(
-        serviceType: ServiceType,
-        cursor: String? = null,
-        limit: Int = 20
-    ): Result<PaginatedList<Company>>
-
-    suspend fun getCompanyDetails(companyId: String): Result<CompanyDetail>
-}
-```
-
-```kotlin
-// core/data/repository/CompanyRepositoryImpl.kt — same try/catch + success/data-check style as UserRepositoryImpl, NOT runCatching
-@Singleton
-class CompanyRepositoryImpl @Inject constructor(
-    private val remoteDataSource: CompanyRemoteDataSource
-) : ICompanyRepository {
-
-    override suspend fun getCompanies(
-        serviceType: ServiceType,
-        cursor: String?,
-        limit: Int
-    ): Result<PaginatedList<Company>> {
-        return try {
-            val response = remoteDataSource.getCompanies(serviceType.name, limit, cursor)
-            if (response.success) {
-                val companies = response.data.map { it.toDomain() }
-                val pagination = response.pagination?.toDomain()
-                    ?: PaginationInfo(nextCursor = null, hasMore = false, limit = limit)
-                Result.success(PaginatedList(items = companies, pagination = pagination))
-            } else {
-                Result.failure(Exception("Failed to fetch companies"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+curl -X 'GET' \
+  'https://baltazar-backend-kf2f.onrender.com/api/companies?serviceType=RENT_A_CAR&limit=20' \
+  -H 'accept: */*'
+Request URL
+https://baltazar-backend-kf2f.onrender.com/api/companies?serviceType=RENT_A_CAR&limit=20
+Server response
+Code	Details
+200	
+Response body
+Download
+{
+  "success": true,
+  "data": [
+    {
+      "id": "FVPTgZNozCEwCWGYxWT2",
+      "name": "Azerbaijan Luxury Drive",
+      "about": "Sports and premium class car rental.",
+      "serviceType": "RENT_A_CAR",
+      "profileImage": "https://storage.googleapis.com/baltazar-a28a4.firebasestorage.app/rentacarCompanies%2Fdcf6d7a3-a5c1-4b5d-9962-52c7a55e0e68.jpg",
+      "bannerImage": "https://storage.googleapis.com/baltazar-a28a4.firebasestorage.app/rentacarCompanies%2Fef6ef700-66ca-4b7b-9aad-74462728e5b0.jpg",
+      "status": "ACTIVE",
+      "sectionOrder": [
+        "ABOUT",
+        "ITEMS"
+      ],
+      "order": 0,
+      "createdAt": "2026-08-16T13:16:04.252Z",
+      "relatedItemIds": [
+        "IXnFdfU0oDV3QnmXHZls",
+        "EQ4JJbtcOz7U0NVAMuq6"
+      ],
+      "reviewCount": 2,
+      "ratingSum": 9,
+      "rating": 4.5
+    },
+    {
+      "id": "kCHpaUm5HCHnD2ofYTH9",
+      "name": "VIP Express Car Rental",
+      "about": "VIP vehicles and personal chauffeur services.",
+      "serviceType": "RENT_A_CAR",
+      "profileImage": "https://storage.googleapis.com/baltazar-a28a4.firebasestorage.app/rentacarCompanies%2F5ba59233-6249-46bd-b25c-ae348c111794.jpg",
+      "bannerImage": "https://storage.googleapis.com/baltazar-a28a4.firebasestorage.app/rentacarCompanies%2F29be49c6-227c-4dec-89ca-90d18ed6b401.jpg",
+      "status": "ACTIVE",
+      "sectionOrder": [
+        "GALLERY"
+      ],
+      "order": 0,
+      "createdAt": "2026-08-16T13:16:02.582Z",
+      "relatedItemIds": [
+        "2Z01jn4k3zmC8zcwy5d2",
+        "DtxR34kHem1zfGjy2XsT",
+        "BcQ73wzFiFj3JGVqubP8",
+        "8XlBmtTccrA9D4X0vERw"
+      ],
+      "reviewCount": 3,
+      "ratingSum": 13,
+      "rating": 4.33
+    },
+    {
+      "id": "5F5y9pGD1nv3BS6Fd9i6",
+      "name": "Caspian Car Hire",
+      "about": "Reliable rental service with affordable rates.",
+      "serviceType": "RENT_A_CAR",
+      "profileImage": "https://storage.googleapis.com/baltazar-a28a4.firebasestorage.app/rentacarCompanies%2F25cd1f20-8fb8-4804-a622-beb83f040bc8.jpg",
+      "bannerImage": "https://storage.googleapis.com/baltazar-a28a4.firebasestorage.app/rentacarCompanies%2Ff677ee17-e025-4d29-9a8e-85b95961edef.jpg",
+      "status": "ACTIVE",
+      "sectionOrder": [
+        "ITEMS",
+        "ABOUT"
+      ],
+      "order": 0,
+      "createdAt": "2026-08-16T13:16:00.901Z",
+      "relatedItemIds": [
+        "7z7b4UczBlXrKDAqZa2u",
+        "XUYZAt5Kj7PhxfUld9VH",
+        "iFCtT8EQ7JaAPYD2GsLa"
+      ],
+      "reviewCount": 2,
+      "ratingSum": 7,
+      "rating": 3.5
+    },
+    {
+      "id": "k7sRCvP37vaMNesMeHoE",
+      "name": "Baku Auto Rental",
+      "about": "Luxury and economy car rentals in Baku.",
+      "serviceType": "RENT_A_CAR",
+      "profileImage": "https://storage.googleapis.com/baltazar-a28a4.firebasestorage.app/rentacarCompanies%2Fbf7fb19f-4425-4e63-9c3e-92348acf9af3.jpg",
+      "bannerImage": "https://storage.googleapis.com/baltazar-a28a4.firebasestorage.app/rentacarCompanies%2F21ef9cd3-1f87-4cd2-96ec-a894dc1153f9.jpg",
+      "status": "ACTIVE",
+      "sectionOrder": [
+        "ABOUT",
+        "GALLERY",
+        "ITEMS"
+      ],
+      "order": 0,
+      "rating": 5,
+      "createdAt": "2026-08-16T13:15:59.269Z",
+      "relatedItemIds": [
+        "jiQWiGZCtNLjAgkOAS7T",
+        "t3MCP40XRQCtnEXQtWbH",
+        "FchBrgeYxm9kcFhFHw36",
+        "l7FuaBsG2ElqO0gS0oPj"
+      ],
+      "reviewCount": 3,
+      "ratingSum": 15
     }
+  ],
+  "pagination": {
+    "nextCursor": null,
+    "hasMore": false,
+    "limit": 20
+  }
+}
+Response headers
+ access-control-allow-credentials: true 
+ alt-svc: h3=":443"; ma=86400 
+ cf-cache-status: DYNAMIC 
+ cf-ray: a2c91ebc69ce8ec8-GYD 
+ content-encoding: br 
+ content-length: 1110 
+ content-security-policy: default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests 
+ content-type: application/json; charset=utf-8 
+ cross-origin-opener-policy: same-origin 
+ cross-origin-resource-policy: same-origin 
+ date: Mon,17 Aug 2026 13:45:37 GMT 
+ etag: W/"ab4-dHJjQPhUO+GbRUe0XvMaRy+RgvU" 
+ origin-agent-cluster: ?1 
+ referrer-policy: no-referrer 
+ rndr-id: 4339ff2f-515a-47d6 
+ server: cloudflare 
+ strict-transport-security: max-age=31536000; includeSubDomains 
+ vary: Origin,Accept-Encoding 
+ x-content-type-options: nosniff 
+ x-dns-prefetch-control: off 
+ x-download-options: noopen 
+ x-frame-options: SAMEORIGIN 
+ x-permitted-cross-domain-policies: none 
+ x-render-origin-server: Render 
+ x-xss-protection: 0 
+Responses
+Code	Description	Links
+200	
+List of companies
 
-    override suspend fun getCompanyDetails(companyId: String): Result<CompanyDetail> {
-        return try {
-            val response = remoteDataSource.getCompanyDetails(companyId)
-            val data = response.data
-            if (response.success && data != null) {
-                Result.success(data.toDomain())
-            } else {
-                Result.failure(Exception("Failed to fetch company details"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+No links
+
+POST
+/api/companies
+Create a new company
+
+
+
+GET
+/api/companies/{id}/related-items
+Get resolved related items for a company as cross-service DTO cards
+
+Parameters
+Cancel
+Name	Description
+id *
+string
+(path)
+FVPTgZNozCEwCWGYxWT2
+Execute
+Clear
+Responses
+Curl
+
+curl -X 'GET' \
+  'https://baltazar-backend-kf2f.onrender.com/api/companies/FVPTgZNozCEwCWGYxWT2/related-items' \
+  -H 'accept: */*'
+Request URL
+https://baltazar-backend-kf2f.onrender.com/api/companies/FVPTgZNozCEwCWGYxWT2/related-items
+Server response
+Code	Details
+200	
+Response body
+Download
+{
+  "success": true,
+  "data": [
+    {
+      "id": "IXnFdfU0oDV3QnmXHZls",
+      "serviceType": "RENT_A_CAR",
+      "serviceId": "IXnFdfU0oDV3QnmXHZls",
+      "title": "Porsche 911 Carrera S",
+      "image": "https://storage.googleapis.com/baltazar-a28a4.firebasestorage.app/rentacarCars%2F3ff9120e-8ca2-41e8-bcee-8eb0b3aba4b2.png",
+      "price": 600,
+      "priceSuffix": "/ day",
+      "currency": "USD",
+      "rating": 4.67,
+      "ratingCount": 3,
+      "category": "Lüks"
+    },
+    {
+      "id": "EQ4JJbtcOz7U0NVAMuq6",
+      "serviceType": "RENT_A_CAR",
+      "serviceId": "EQ4JJbtcOz7U0NVAMuq6",
+      "title": "Tesla Model S Plaid",
+      "image": "https://storage.googleapis.com/baltazar-a28a4.firebasestorage.app/rentacarCars%2F37762708-90ab-45a8-ad4b-8d0f1be948a5.png",
+      "price": 400,
+      "priceSuffix": "/ day",
+      "currency": "USD",
+      "rating": 4.33,
+      "ratingCount": 3,
+      "category": "Elektrikli"
     }
+  ]
 }
-```
+Response headers
+ access-control-allow-credentials: true 
+ alt-svc: h3=":443"; ma=86400 
+ cf-cache-status: DYNAMIC 
+ cf-ray: a2c91ffb8b998ec8-GYD 
+ content-encoding: br 
+ content-length: 363 
+ content-security-policy: default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests 
+ content-type: application/json; charset=utf-8 
+ cross-origin-opener-policy: same-origin 
+ cross-origin-resource-policy: same-origin 
+ date: Mon,17 Aug 2026 13:46:27 GMT 
+ etag: W/"2e4-0p6BurSD/CApNnmacT96DMqtbac" 
+ origin-agent-cluster: ?1 
+ priority: u=1,i 
+ referrer-policy: no-referrer 
+ rndr-id: 5f5d64ab-bf01-431b 
+ server: cloudflare 
+ server-timing: cfExtPri 
+ strict-transport-security: max-age=31536000; includeSubDomains 
+ vary: Origin 
+ x-content-type-options: nosniff 
+ x-dns-prefetch-control: off 
+ x-download-options: noopen 
+ x-frame-options: SAMEORIGIN 
+ x-permitted-cross-domain-policies: none 
+ x-render-origin-server: Render 
+ x-xss-protection: 0 
+Responses
+Code	Description	Links
+200	
+List of related item cards
 
-```kotlin
-// core/core/di/CompanyNetworkModule.kt
-@Module
-@InstallIn(SingletonComponent::class)
-object CompanyNetworkModule {
-    @Provides
-    @Singleton
-    fun provideCompanyApiService(@Named("AppRetrofit") retrofit: Retrofit): CompanyApiService =
-        retrofit.create(CompanyApiService::class.java)
-}
-```
+No links
+404	
+Company not found
 
-```kotlin
-// core/core/di/CompanyRepositoryModule.kt
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class CompanyRepositoryModule {
-    @Binds
-    @Singleton
-    abstract fun bindCompanyRepository(impl: CompanyRepositoryImpl): ICompanyRepository
-}
-```
+No links
 
-(`PaginatedList<T>` and `PaginationInfo` already exist in `core/domain/model` — reuse them, don't reinvent.)
+GET
+/api/companies/{id}
+Get a company by ID
 
----
+Parameters
+Cancel
+Name	Description
+id *
+string
+(path)
+FVPTgZNozCEwCWGYxWT2
+Execute
+Clear
+Responses
+Curl
 
-## 6. Navigation — add to the existing `NavRoutes.kt` (single centralized file)
-
-```kotlin
-@Serializable
-data class CompanyList(val serviceType: ServiceType)
-
-@Serializable
-data class CompanyDetail(val companyId: String, val serviceType: ServiceType)
-```
-
-⚠️ `NavRoutes.kt` currently already has one-off `FoodCompanyList` / `FoodCompanyDetail(id)` objects that were never wired to a screen. Recommend **removing them** and replacing with the generic pair above (confirm nothing already references them before deleting). Register once in `AppNavGraph` (or wherever `:core` screens go), called from `:feature:rentacar`, `:feature:travel`, `:feature:food` with `CompanyList(ServiceType.RENT_A_CAR)` etc.
-
----
-
-## 7. Screens
-
-Same `HiltViewModel` + `SavedStateHandle.toRoute<CompanyList>()` pattern as the rest of the app.
-
-```kotlin
-@HiltViewModel
-class CompanyListViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    private val companyRepository: ICompanyRepository
-) : ViewModel() {
-    private val route = savedStateHandle.toRoute<CompanyList>()
-    private val _uiState = MutableStateFlow(CompanyListUiState(isLoading = true))
-    val uiState: StateFlow<CompanyListUiState> = _uiState.asStateFlow()
-
-    init { load() }
-
-    fun load(cursor: String? = null) = viewModelScope.launch {
-        _uiState.update { it.copy(isLoading = cursor == null, isLoadingMore = cursor != null) }
-        companyRepository.getCompanies(route.serviceType, cursor)
-            .onSuccess { result ->
-                _uiState.update {
-                    it.copy(
-                        companies = if (cursor == null) result.items else it.companies + result.items,
-                        pagination = result.pagination,
-                        isLoading = false, isLoadingMore = false, error = null
-                    )
-                }
-            }
-            .onFailure { e -> _uiState.update { it.copy(isLoading = false, isLoadingMore = false, error = e.message) } }
+curl -X 'GET' \
+  'https://baltazar-backend-kf2f.onrender.com/api/companies/FVPTgZNozCEwCWGYxWT2' \
+  -H 'accept: */*'
+Request URL
+https://baltazar-backend-kf2f.onrender.com/api/companies/FVPTgZNozCEwCWGYxWT2
+Server response
+Code	Details
+200	
+Response body
+Download
+{
+  "success": true,
+  "data": {
+    "id": "FVPTgZNozCEwCWGYxWT2",
+    "name": "Azerbaijan Luxury Drive",
+    "about": "Sports and premium class car rental.",
+    "serviceType": "RENT_A_CAR",
+    "profileImage": "https://storage.googleapis.com/baltazar-a28a4.firebasestorage.app/rentacarCompanies%2Fdcf6d7a3-a5c1-4b5d-9962-52c7a55e0e68.jpg",
+    "bannerImage": "https://storage.googleapis.com/baltazar-a28a4.firebasestorage.app/rentacarCompanies%2Fef6ef700-66ca-4b7b-9aad-74462728e5b0.jpg",
+    "status": "ACTIVE",
+    "sectionOrder": [
+      "ABOUT",
+      "ITEMS"
+    ],
+    "order": 0,
+    "createdAt": "2026-08-16T13:16:04.252Z",
+    "relatedItemIds": [
+      "IXnFdfU0oDV3QnmXHZls",
+      "EQ4JJbtcOz7U0NVAMuq6"
+    ],
+    "reviewCount": 2,
+    "rating": 4.5,
+    "fullSectionOrder": [
+      "HEADER",
+      "ABOUT",
+      "ITEMS",
+      "REVIEWS"
+    ],
+    "reviewEligibility": {
+      "eligible": false,
+      "alreadyReviewed": false,
+      "canSubmit": false
     }
+  }
 }
+Response headers
+ access-control-allow-credentials: true 
+ alt-svc: h3=":443"; ma=86400 
+ cf-cache-status: DYNAMIC 
+ cf-ray: a2c91ee088898ec8-GYD 
+ content-encoding: br 
+ content-length: 500 
+ content-security-policy: default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests 
+ content-type: application/json; charset=utf-8 
+ cross-origin-opener-policy: same-origin 
+ cross-origin-resource-policy: same-origin 
+ date: Mon,17 Aug 2026 13:45:41 GMT 
+ etag: W/"30a-5NDbFhTltG5NygQoBYZlIaIWIyY" 
+ origin-agent-cluster: ?1 
+ priority: u=1,i 
+ referrer-policy: no-referrer 
+ rndr-id: 24835fdc-b03c-4f80 
+ server: cloudflare 
+ server-timing: cfExtPri 
+ strict-transport-security: max-age=31536000; includeSubDomains 
+ vary: Origin 
+ x-content-type-options: nosniff 
+ x-dns-prefetch-control: off 
+ x-download-options: noopen 
+ x-frame-options: SAMEORIGIN 
+ x-permitted-cross-domain-policies: none 
+ x-render-origin-server: Render 
+ x-xss-protection: 0 
+Responses
+Code	Description	Links
+200	
+Company details
 
-data class CompanyListUiState(
-    val companies: List<Company> = emptyList(),
-    val pagination: PaginationInfo? = null,
-    val isLoading: Boolean = false,
-    val isLoadingMore: Boolean = false,
-    val error: String? = null
-)
-```
-
-`CompanyListScreen` and `CompanyDetailScreen` composables: same structure as previously drafted (`Scaffold` + `TopAppBar` + loading/error/empty states + `LazyColumn`), rendering `CompanyCard` (new, reuse look of `ServiceItemCard.kt`) and, in detail, iterating `fullSectionOrder` to render `HEADER/ABOUT/GALLERY/ITEMS/REVIEWS`, skipping `UNKNOWN`.
-
----
-
-## 8. ITEMS section — per-service-type fetching
-
-Same recommendation as before: Hilt map-multibinding (`Map<ServiceType, Provider<CompanyItemsProvider>>`), each feature module (`:feature:rentacar`, `:feature:travel`, `:feature:food`) contributes its own `@IntoMap @ServiceTypeKey(...)` binding, mapping its own item DTO to the existing `ServiceCardItem` domain model (already used by Wishlist — reuse it here too, don't invent a new card model), rendered via the existing `ServiceItemCard.kt`.
-
-```
-FOOD       GET /api/services/food/items?companyId={companyId}
-RENT_A_CAR GET /api/services/rentacar/cars?companyId={companyId}
-TRAVEL     GET /api/services/travel/tours?companyId={companyId}
-```
-
----
-
-## 9. Reviews section
-
-```
-GET /api/reviews?targetType=COMPANY&targetId={companyId}&limit=20&cursor=<cursor>
-```
-New `ReviewDto`/`ReviewApiService` following the same 4-file pattern. Gate the "write a review" action on `reviewEligibility.canSubmit`.
-
----
-
-## 10. Open questions
-
-- `images` (gallery) and `address` fields on `CompanyDetailsDto` are not in the confirmed Swagger sample — confirm before shipping the GALLERY section.
-- `CompanyStatus` — only `ACTIVE`/`INACTIVE` observed; confirm if more values exist.
-- Whether `FoodCompanyList`/`FoodCompanyDetail` in `NavRoutes.kt` are safe to delete (unreferenced elsewhere?).
-
-## 11. Acceptance checklist
-
-- [ ] `CompanyListItemDto`/`CompanyDetailsDto` use `ServiceType`/`CompanyStatus` enums directly, not raw strings
-- [ ] List/detail never called with `serviceType = HOTEL`
-- [ ] Unknown `CompanyStatus`/`CompanySection`/`ServiceType` values fall back to `UNKNOWN` without crashing
-- [ ] Detail sections render strictly per `fullSectionOrder`
-- [ ] ITEMS section reuses `ServiceCardItem` + `ServiceItemCard.kt`
-- [ ] `related-items` left as `TODO`, not implemented
-- [ ] New DI modules registered and app compiles/injects correctly (`CompanyNetworkModule`, `CompanyRepositoryModule`)
-PLANEOF
-echo "company plan rewritten: $(wc -l < /mnt/user-data/outputs/company-implementation-plan.md) lines"
+No links
+404	
+Company not found

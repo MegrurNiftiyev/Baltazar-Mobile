@@ -4,6 +4,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -11,8 +12,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.baltazar.core.core.navigation.Home
+import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.navigation.Splash
 import com.example.baltazar.feature.auth.core.navigation.authNavGraph
+import com.example.baltazar.feature.company.core.navigation.companyNavGraph
 import com.example.baltazar.feature.explore.core.navigation.exploreNavGraph
 import com.example.baltazar.feature.food.core.navigation.foodNavGraph
 import com.example.baltazar.feature.hotel.core.navigation.hotelNavGraph
@@ -72,5 +75,6 @@ fun AppNavGraph(
         rentACarNavGraph(navController)
         profileNavGraph(navController)
         orderNavGraph(navController)
+        companyNavGraph(navController)
     }
 }

@@ -37,6 +37,7 @@
     <string name="login_no_account">Hesabınız yoxdur? </string>
     <string name="login_register_now">İndi qeydiyyatdan keçin</string>
     <string name="login_guest">Qonaq olaraq davam et</string>
+    <string name="login_success">Uğurla daxil olundu</string>
 
     <!-- Register -->
     <string name="register_title">Baltazar</string>
@@ -53,5 +54,6 @@
     <string name="register_back_to_login">← Girişə qayıt</string>
     <string name="register_already_have_account">Hesabınız var? </string>
     <string name="register_login_now">Daxil olun</string>
+    <string name="register_success">Uğurla qeydiyyatdan keçdiniz</string>
 </resources>
 

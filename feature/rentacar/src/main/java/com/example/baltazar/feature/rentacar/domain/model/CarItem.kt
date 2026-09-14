@@ -7,9 +7,12 @@ data class CarItem(
     val category: String,
     val price: Double,
     val priceSuffix: String,
+    val currency: String = "AZN",
     val image: String,
     val rating: Double = 0.0,
     val reviewCount: Int = 0,
     val transmission: String,
-    val fuelType: String
+    val fuelType: String,
+    val isLiked: Boolean = false
 )
+

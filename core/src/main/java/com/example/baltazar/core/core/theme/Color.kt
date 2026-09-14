@@ -94,3 +94,11 @@ val SurfaceContainerLowDark = Color(0xFF161C18)
 val SurfaceContainerDark = Color(0xFF1D241F)
 val SurfaceContainerHighDark = Color(0xFF232B25)
 val SurfaceContainerHighestDark = Color(0xFF2A332D)
+
+// Custom semantic & feature colors
+val FavoriteRed = Color(0xFFFF3355)
+val NutritionCalories = Color(0xFFF59E0B)
+val NutritionProtein = Color(0xFFEF4444)
+val NutritionFat = Color(0xFF8B5CF6)
+val NutritionCarbs = Color(0xFF06B6D4)
+

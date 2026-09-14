@@ -20,7 +20,7 @@ class TourRoadmapViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val tourId: String = savedStateHandle["tourId"] ?: savedStateHandle["id"] ?: ""
+    private val tourId: String = savedStateHandle["tourId"] ?: ""
     private val _state = MutableStateFlow(TourRoadmapState())
     val state: StateFlow<TourRoadmapState> = _state.asStateFlow()
 

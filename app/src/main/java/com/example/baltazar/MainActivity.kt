@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.baltazar.core.core.components.AppSnackbarHost
+import com.example.baltazar.core.core.managers.SessionManager
 import com.example.baltazar.core.core.navigation.Home
 import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.navigation.Onboarding
@@ -31,6 +32,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var settingsRepository: ISettingsRepository
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     val splashViewModel: SplashViewModel by viewModels()
 
@@ -56,16 +60,16 @@ class MainActivity : ComponentActivity() {
                 if (!state.isLoading) {
                     val startDest: Any = when {
                         !state.isOnboarded -> Onboarding
-                        !state.isLoginFinished -> Login
+                        !state.isLoginFinished -> Login()
                         else -> Home()
                     }
 
                     Scaffold(
+                        contentWindowInsets = WindowInsets(0, 0, 0, 0),
                         snackbarHost = { AppSnackbarHost(snackbarHostState) }
-                    ) { innerPadding ->
+                    ) { _ ->
                         AppNavGraph(
-                            startDestination = startDest,
-                            modifier = Modifier.padding(innerPadding)
+                            startDestination = startDest
                         )
                     }
                 }

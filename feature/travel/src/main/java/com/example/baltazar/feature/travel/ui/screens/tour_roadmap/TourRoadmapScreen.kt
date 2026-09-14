@@ -17,10 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.compose.foundation.background
+import androidx.compose.ui.res.stringResource
+import com.example.baltazar.core.R
 import com.example.baltazar.core.core.components.DetailFloatingActionButton
+import com.example.baltazar.core.core.components.ShimmerWrapper
 import com.example.baltazar.core.core.constants.Paddings
-import com.example.baltazar.feature.travel.ui.screens.tour_roadmap.components.MapErrorFallback
 import com.example.baltazar.feature.travel.ui.screens.tour_roadmap.components.RoadmapBottomList
+
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -66,11 +70,14 @@ fun TourRoadmapScreen(
                 cameraPositionState = cameraPositionState
             ) {
                 // Markers with 1, 2, 3...
+                val checkpointLabel = stringResource(R.string.checkpoint_label)
                 validPoints.forEach { point ->
+                    val cleanName = point.name.removePrefix("${point.order}. ").removeSuffix(" ${point.order}").trim()
+                    val markerTitle = if (cleanName.isBlank()) "${point.order}. $checkpointLabel" else "${point.order}. $cleanName"
                     Marker(
                         state = MarkerState(position = LatLng(point.lat, point.long)),
-                        title = "${point.order}. ${point.name}",
-                        snippet = "Məntəqə ${point.order}"
+                        title = markerTitle,
+                        snippet = stringResource(R.string.checkpoint_snippet_format, point.order)
                     )
                 }
 
@@ -96,6 +103,7 @@ fun TourRoadmapScreen(
             )
 
             // Bottom Checkpoint Carousel
+
             RoadmapBottomList(
                 roadmap = state.roadmap,
                 selectedPoint = state.selectedPoint,
@@ -106,11 +114,18 @@ fun TourRoadmapScreen(
                     .padding(bottom = Paddings.Medium)
             )
         } else {
-            MapErrorFallback(
+            ShimmerWrapper(
+                isLoading = true,
                 modifier = Modifier.fillMaxSize()
-            )
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                )
+            }
 
-            // Floating Back Button over error fallback
+            // Floating Back Button over shimmer placeholder
             DetailFloatingActionButton(
                 icon = TablerIcons.ArrowLeft,
                 contentDescription = "Back",
@@ -123,3 +138,4 @@ fun TourRoadmapScreen(
         }
     }
 }
+

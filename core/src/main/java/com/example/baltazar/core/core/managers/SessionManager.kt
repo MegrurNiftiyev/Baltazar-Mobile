@@ -1,5 +1,6 @@
 package com.example.baltazar.core.core.managers
 
+import com.example.baltazar.core.core.enums.UserRole
 import com.example.baltazar.core.domain.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +16,7 @@ class SessionManager @Inject constructor() {
             id = "guest",
             name = "",
             email = "",
-            role = "GUEST",
+            role = UserRole.Guest,
             phone = null,
             region = null,
             language = "az",
@@ -51,3 +52,4 @@ class SessionManager @Inject constructor() {
         set(block(_user.value))
     }
 }
+

@@ -55,6 +55,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     navController: NavHostController,
+    isPopStack: Boolean = false,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -63,9 +64,17 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    val isButtonsEnabled = !state.isLoading && !state.isAuthenticationComplete && !state.isSuccess
+
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
-            navController.navigate(Home) { popUpTo(0) { inclusive = true } }
+            if (isPopStack) {
+                navController.popBackStack()
+            } else {
+                navController.navigate(Home()) {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
         }
     }
 
@@ -132,6 +141,7 @@ fun LoginScreen(
             RoundedButton(
                 text = stringResource(R.string.login_button),
                 contentColor = MaterialTheme.colorScheme.background,
+                enabled = isButtonsEnabled,
                 isLoading = state.isLoading,
                 onClick = {
                     viewModel.login(email, password)
@@ -164,6 +174,7 @@ fun LoginScreen(
                 SocialIconButton(
                     icon = TablerIcons.BrandGoogle,
                     contentDescription = "Google Sign In",
+                    enabled = isButtonsEnabled,
                     onClick = {
                         coroutineScope.launch {
                             launchGoogleSignIn(
@@ -182,6 +193,7 @@ fun LoginScreen(
                 SocialIconButton(
                     icon = TablerIcons.BrandApple,
                     contentDescription = "Apple Sign In",
+                    enabled = isButtonsEnabled,
                     onClick = {
                         coroutineScope.launch {
                             launchGoogleSignIn(
@@ -200,6 +212,7 @@ fun LoginScreen(
                 SocialIconButton(
                     icon = TablerIcons.BrandFacebook,
                     contentDescription = "Facebook Sign In",
+                    enabled = isButtonsEnabled,
                     onClick = {
                         coroutineScope.launch {
                             launchGoogleSignIn(
@@ -218,9 +231,10 @@ fun LoginScreen(
                 SocialIconButton(
                     icon = TablerIcons.User,
                     contentDescription = "Continue as Guest",
+                    enabled = isButtonsEnabled,
                     onClick = {
                         viewModel.continueAsGuest()
-                        navController.navigate(Home) {
+                        navController.navigate(Home()) {
                             popUpTo(0) { inclusive = true }
                         }
                     }
@@ -234,7 +248,10 @@ fun LoginScreen(
                     stringResource(R.string.login_no_account),
                     style = MaterialTheme.typography.bodyMedium
                 )
-                TextButton(onClick = { navController.navigate(Register) }) {
+                TextButton(
+                    enabled = isButtonsEnabled,
+                    onClick = { navController.navigate(Register(isPopStack = isPopStack)) }
+                ) {
                     Text(
                         stringResource(R.string.login_register_now),
                         color = MaterialTheme.colorScheme.primary,

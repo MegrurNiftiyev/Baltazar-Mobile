@@ -2,7 +2,10 @@ package com.example.baltazar.feature.food.ui.screens.foods
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.baltazar.core.core.enums.ServiceType
+import com.example.baltazar.core.core.managers.SessionManager
 import com.example.baltazar.core.domain.repository.ISettingsRepository
+import com.example.baltazar.core.domain.repository.IWishlistRepository
 import com.example.baltazar.feature.food.domain.repository.IFoodRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -10,13 +13,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import com.example.baltazar.core.core.managers.AuthGateManager
 
 @HiltViewModel
 class FoodsViewModel @Inject constructor(
     private val foodRepository: IFoodRepository,
-    private val settingsRepository: ISettingsRepository
+    private val wishlistRepository: IWishlistRepository,
+    private val settingsRepository: ISettingsRepository,
+    val authGateManager: AuthGateManager,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
     private val _state = MutableStateFlow(FoodsState())
     val state: StateFlow<FoodsState> = _state.asStateFlow()
@@ -24,6 +33,30 @@ class FoodsViewModel @Inject constructor(
     init {
         observeSettings()
         loadInitialData()
+    }
+
+    fun isGuest(): Boolean = authGateManager.isGuest()
+
+    fun toggleFavorite(foodId: String, isFav: Boolean) {
+        if (sessionManager.user.value.isGuest) {
+            return
+        }
+
+        _state.update { currentState ->
+            val updatedItems = currentState.items.map { item ->
+                if (item.id == foodId) item.copy(isLiked = isFav) else item
+            }
+            currentState.copy(items = updatedItems)
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            withContext(NonCancellable) {
+                if (isFav) {
+                    wishlistRepository.addToWishlist(serviceId = foodId, serviceType = ServiceType.FOOD)
+                } else {
+                    wishlistRepository.removeFromWishlist(id = foodId)
+                }
+            }
+        }
     }
 
     private fun observeSettings() {
@@ -34,10 +67,31 @@ class FoodsViewModel @Inject constructor(
         }
     }
 
+    fun setDraftPrice(minPrice: Double?, maxPrice: Double?) {
+        _state.update { it.copy(draftMinPrice = minPrice, draftMaxPrice = maxPrice) }
+    }
+
+    fun applyFilters() {
+        _state.update {
+            it.copy(
+                minPrice = it.draftMinPrice,
+                maxPrice = it.draftMaxPrice
+            )
+        }
+        loadInitialData()
+    }
+
     fun loadInitialData() {
+        val currentState = _state.value
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isLoading = true, error = null) }
-            val result = foodRepository.getFoodItems(limit = 20, cursor = null)
+            val result = foodRepository.getFoodItems(
+                category = null,
+                minPrice = currentState.minPrice,
+                maxPrice = currentState.maxPrice,
+                limit = 20,
+                cursor = null
+            )
             result.onSuccess { paginatedList ->
                 val hasMore = paginatedList.pagination.hasMore && paginatedList.items.isNotEmpty() && paginatedList.pagination.nextCursor != null
                 _state.update {
@@ -67,7 +121,13 @@ class FoodsViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isPaginationLoading = true) }
-            val result = foodRepository.getFoodItems(limit = 20, cursor = currentState.nextCursor)
+            val result = foodRepository.getFoodItems(
+                category = null,
+                minPrice = currentState.minPrice,
+                maxPrice = currentState.maxPrice,
+                limit = 20,
+                cursor = currentState.nextCursor
+            )
             result.onSuccess { paginatedList ->
                 val newItems = paginatedList.items
                 val existingIds = _state.value.items.map { it.id }.toSet()
@@ -90,3 +150,4 @@ class FoodsViewModel @Inject constructor(
         }
     }
 }
+

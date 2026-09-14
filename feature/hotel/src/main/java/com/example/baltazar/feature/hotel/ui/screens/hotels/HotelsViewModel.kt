@@ -1,14 +1,170 @@
 package com.example.baltazar.feature.hotel.ui.screens.hotels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.baltazar.core.core.enums.ServiceType
+import com.example.baltazar.core.core.managers.SessionManager
+import com.example.baltazar.core.domain.repository.ISettingsRepository
+import com.example.baltazar.core.domain.repository.IWishlistRepository
+import com.example.baltazar.feature.hotel.domain.repository.IHotelRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import com.example.baltazar.core.core.managers.AuthGateManager
 
 @HiltViewModel
-class HotelsViewModel @Inject constructor() : ViewModel() {
+class HotelsViewModel @Inject constructor(
+    private val hotelRepository: IHotelRepository,
+    private val wishlistRepository: IWishlistRepository,
+    private val settingsRepository: ISettingsRepository,
+    val authGateManager: AuthGateManager,
+    private val sessionManager: SessionManager
+) : ViewModel() {
     private val _state = MutableStateFlow(HotelsState())
     val state: StateFlow<HotelsState> = _state.asStateFlow()
+
+    init {
+        observeSettings()
+        loadInitialData()
+    }
+
+    fun isGuest(): Boolean = authGateManager.isGuest()
+
+    fun toggleFavorite(hotelId: String, isFav: Boolean) {
+        if (sessionManager.user.value.isGuest) {
+            return
+        }
+
+        _state.update { currentState ->
+            val updatedItems = currentState.items.map { item ->
+                if (item.id == hotelId) item.copy(isLiked = isFav) else item
+            }
+            currentState.copy(items = updatedItems)
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            withContext(NonCancellable) {
+                if (isFav) {
+                    wishlistRepository.addToWishlist(serviceId = hotelId, serviceType = ServiceType.HOTEL)
+                } else {
+                    wishlistRepository.removeFromWishlist(id = hotelId)
+                }
+            }
+        }
+    }
+
+    private fun observeSettings() {
+        viewModelScope.launch {
+            settingsRepository.cardViewMode.collect { mode ->
+                _state.update { it.copy(cardViewMode = mode) }
+            }
+        }
+    }
+
+    fun setDraftPrice(minPrice: Double?, maxPrice: Double?) {
+        _state.update { it.copy(draftMinPrice = minPrice, draftMaxPrice = maxPrice) }
+    }
+
+    fun setDraftStarRating(starRating: Int?) {
+        _state.update { it.copy(draftStarRating = starRating) }
+    }
+
+    fun setDraftCity(city: String?) {
+        _state.update { it.copy(draftCity = city) }
+    }
+
+    fun setDraftIncludedServices(services: List<String>) {
+        _state.update { it.copy(draftIncludedServices = services) }
+    }
+
+    fun applyFilters() {
+        _state.update {
+            it.copy(
+                city = it.draftCity,
+                starRating = it.draftStarRating,
+                minPrice = it.draftMinPrice,
+                maxPrice = it.draftMaxPrice,
+                includedServices = it.draftIncludedServices
+            )
+        }
+        loadInitialData()
+    }
+
+    fun loadInitialData() {
+        val currentState = _state.value
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.update { it.copy(isLoading = true, error = null) }
+            val result = hotelRepository.getHotels(
+                city = currentState.city,
+                starRating = currentState.starRating,
+                minPrice = currentState.minPrice,
+                maxPrice = currentState.maxPrice,
+                limit = 20,
+                cursor = null
+            )
+            result.onSuccess { paginatedList ->
+                val hasMore = paginatedList.pagination.hasMore && paginatedList.items.isNotEmpty() && paginatedList.pagination.nextCursor != null
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        items = paginatedList.items,
+                        nextCursor = if (hasMore) paginatedList.pagination.nextCursor else null,
+                        hasMore = hasMore
+                    )
+                }
+            }.onFailure { error ->
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = error.message ?: "Failed to load hotels"
+                    )
+                }
+            }
+        }
+    }
+
+    fun loadNextPage() {
+        val currentState = _state.value
+        if (currentState.isPaginationLoading || currentState.isLoading || !currentState.hasMore || currentState.nextCursor == null) {
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.update { it.copy(isPaginationLoading = true) }
+            val result = hotelRepository.getHotels(
+                city = currentState.city,
+                starRating = currentState.starRating,
+                minPrice = currentState.minPrice,
+                maxPrice = currentState.maxPrice,
+                limit = 20,
+                cursor = currentState.nextCursor
+            )
+            result.onSuccess { paginatedList ->
+                val newItems = paginatedList.items
+                val existingIds = _state.value.items.map { it.id }.toSet()
+                val uniqueNewItems = newItems.filterNot { it.id in existingIds }
+
+                val isDuplicateCursor = paginatedList.pagination.nextCursor == currentState.nextCursor
+                val shouldStop = newItems.isEmpty() || uniqueNewItems.isEmpty() || isDuplicateCursor || !paginatedList.pagination.hasMore
+
+                _state.update {
+                    it.copy(
+                        isPaginationLoading = false,
+                        items = it.items + uniqueNewItems,
+                        nextCursor = if (shouldStop) null else paginatedList.pagination.nextCursor,
+                        hasMore = !shouldStop && paginatedList.pagination.hasMore
+                    )
+                }
+            }.onFailure {
+                _state.update { it.copy(isPaginationLoading = false) }
+            }
+        }
+    }
 }
+

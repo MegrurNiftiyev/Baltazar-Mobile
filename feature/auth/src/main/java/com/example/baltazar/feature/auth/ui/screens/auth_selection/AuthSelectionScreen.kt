@@ -86,8 +86,7 @@ fun AuthSelectionScreen(
             )
         }
         
-            Spacer(modifier = Modifier.height(Spaces.Medium))
-
+        Spacer(modifier = Modifier.height(Spaces.Medium))
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -97,7 +96,7 @@ fun AuthSelectionScreen(
         ) {
             RoundedButton(
                 text = stringResource(R.string.auth_selection_login),
-                onClick = { navController.navigate(Login) },
+                onClick = { navController.navigate(Login()) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -111,14 +110,12 @@ fun AuthSelectionScreen(
                 ),
                 onClick = {
                     viewModel.continueAsGuest()
-                    navController.navigate(Home) {
+                    navController.navigate(Home()) {
                         popUpTo(0) { inclusive = true }
                     }
                 }
             )
         }
-                Spacer(modifier = Modifier.weight(0.65f))
-
+        Spacer(modifier = Modifier.weight(0.65f))
     }
 }
-

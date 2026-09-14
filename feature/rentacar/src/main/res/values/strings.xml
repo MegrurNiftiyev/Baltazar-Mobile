@@ -1,0 +1,7 @@
+<resources>
+    <string name="rentacar_title">Rent a Car</string>
+    <string name="rentacar_search_hint">Search cars or brands...</string>
+    <string name="rentacar_popular">Available Cars</string>
+    <string name="rentacar_details">Car Details</string>
+    <string name="rentacar_rent_now">Rent Now</string>
+</resources>
