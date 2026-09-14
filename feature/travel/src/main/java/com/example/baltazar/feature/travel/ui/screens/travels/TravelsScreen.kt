@@ -52,6 +52,7 @@ import com.example.baltazar.core.core.managers.requireAuth
 import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.navigation.NavResultKeys
 import com.example.baltazar.core.core.navigation.TravelDetail
+import com.example.baltazar.core.R as CoreR
 import com.example.baltazar.feature.travel.R
 import com.example.baltazar.feature.travel.ui.components.TourCard
 import compose.icons.TablerIcons
@@ -97,7 +98,7 @@ fun TravelsScreen(
             FilterOption(4.5, "4.5+ ★")
         )
         SingleSelectFilterDialog(
-            title = stringResource(id = com.example.baltazar.core.R.string.filter_star_rating),
+            title = stringResource(id = CoreR.string.filter_star_rating),
             options = ratingOptions,
             selectedOption = state.draftMinRating,
             onApply = { rating ->
@@ -136,7 +137,7 @@ fun TravelsScreen(
                     item {
                         val ratingLabel = state.draftMinRating?.let { "$it+ ★" }
                         FilterChipItem(
-                            label = stringResource(id = com.example.baltazar.core.R.string.filter_star_rating),
+                            label = stringResource(id = CoreR.string.filter_star_rating),
                             selectedValue = ratingLabel,
                             isActive = state.draftMinRating != null,
                             onClick = { showRatingDialog = true },

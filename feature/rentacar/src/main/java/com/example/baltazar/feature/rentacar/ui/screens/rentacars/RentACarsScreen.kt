@@ -52,7 +52,7 @@ import com.example.baltazar.core.core.navigation.LikeResult
 import com.example.baltazar.core.core.managers.requireAuth
 import com.example.baltazar.core.core.navigation.Login
 import com.example.baltazar.core.core.navigation.NavResultKeys
-import com.example.baltazar.core.core.navigation.RentACarDetail
+import com.example.baltazar.core.R as CoreR
 import com.example.baltazar.feature.rentacar.R
 import com.example.baltazar.feature.rentacar.ui.components.CarCard
 import compose.icons.TablerIcons
@@ -113,7 +113,7 @@ fun RentACarsScreen(
             FilterOption("HYBRID", "Hibrid")
         )
         SingleSelectFilterDialog(
-            title = stringResource(id = com.example.baltazar.core.R.string.filter_fuel_type),
+            title = stringResource(id = CoreR.string.filter_fuel_type),
             options = fuelOptions,
             selectedOption = state.draftFuelType,
             onApply = { fuel ->
@@ -130,7 +130,7 @@ fun RentACarsScreen(
             FilterOption("MANUAL", "Mexanika")
         )
         SingleSelectFilterDialog(
-            title = stringResource(id = com.example.baltazar.core.R.string.filter_transmission),
+            title = stringResource(id = CoreR.string.filter_transmission),
             options = transOptions,
             selectedOption = state.draftTransmission,
             onApply = { trans ->
@@ -171,7 +171,7 @@ fun RentACarsScreen(
                             "${state.draftMinPrice ?: 0} - ${state.draftMaxPrice ?: "∞"} ₼"
                         } else null
                         FilterChipItem(
-                            label = stringResource(id = com.example.baltazar.core.R.string.filter_price_range),
+                            label = stringResource(id = CoreR.string.filter_price_range),
                             selectedValue = priceLabel,
                             isActive = state.draftMinPrice != null || state.draftMaxPrice != null,
                             onClick = { showPriceDialog = true },
@@ -190,7 +190,7 @@ fun RentACarsScreen(
                             else -> state.draftFuelType
                         }
                         FilterChipItem(
-                            label = stringResource(id = com.example.baltazar.core.R.string.filter_fuel_type),
+                            label = stringResource(id = CoreR.string.filter_fuel_type),
                             selectedValue = fuelLabel,
                             isActive = state.draftFuelType != null,
                             onClick = { showFuelTypeDialog = true },
@@ -206,7 +206,7 @@ fun RentACarsScreen(
                             else -> state.draftTransmission
                         }
                         FilterChipItem(
-                            label = stringResource(id = com.example.baltazar.core.R.string.filter_transmission),
+                            label = stringResource(id = CoreR.string.filter_transmission),
                             selectedValue = transLabel,
                             isActive = state.draftTransmission != null,
                             onClick = { showTransmissionDialog = true },

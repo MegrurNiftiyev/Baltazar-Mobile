@@ -53,7 +53,7 @@ import com.example.baltazar.core.core.navigation.HotelDetail
 import com.example.baltazar.core.core.navigation.LikeResult
 import com.example.baltazar.core.core.managers.requireAuth
 import com.example.baltazar.core.core.navigation.Login
-import com.example.baltazar.core.core.navigation.NavResultKeys
+import com.example.baltazar.core.R as CoreR
 import com.example.baltazar.feature.hotel.R
 import com.example.baltazar.feature.hotel.ui.components.HotelCard
 import compose.icons.TablerIcons
@@ -112,7 +112,7 @@ fun HotelsScreen(
             FilterOption(5, "5 Ulduz")
         )
         SingleSelectFilterDialog(
-            title = stringResource(id = com.example.baltazar.core.R.string.filter_star_rating),
+            title = stringResource(id = CoreR.string.filter_star_rating),
             options = starOptions,
             selectedOption = state.draftStarRating,
             onApply = { stars ->
@@ -153,7 +153,7 @@ fun HotelsScreen(
                             "${state.draftMinPrice ?: 0} - ${state.draftMaxPrice ?: "∞"} ₼"
                         } else null
                         FilterChipItem(
-                            label = stringResource(id = com.example.baltazar.core.R.string.filter_price_range),
+                            label = stringResource(id = CoreR.string.filter_price_range),
                             selectedValue = priceLabel,
                             isActive = state.draftMinPrice != null || state.draftMaxPrice != null,
                             onClick = { showPriceDialog = true },
@@ -165,7 +165,7 @@ fun HotelsScreen(
                     item {
                         val starLabel = state.draftStarRating?.let { "$it ★" }
                         FilterChipItem(
-                            label = stringResource(id = com.example.baltazar.core.R.string.filter_star_rating),
+                            label = stringResource(id = CoreR.string.filter_star_rating),
                             selectedValue = starLabel,
                             isActive = state.draftStarRating != null,
                             onClick = { showStarRatingDialog = true },

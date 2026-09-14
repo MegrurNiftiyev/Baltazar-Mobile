@@ -23,7 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.res.stringResource
+import com.example.baltazar.core.R
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.IconSizes
 import com.example.baltazar.core.core.constants.Paddings
@@ -76,7 +77,7 @@ fun RoadmapBottomList(
 
                 Spacer(modifier = Modifier.width(Spaces.Small))
 
-                val checkpointLabel = androidx.compose.ui.res.stringResource(com.example.baltazar.core.R.string.checkpoint_label)
+                val checkpointLabel = stringResource(R.string.checkpoint_label)
                 val displayName = androidx.compose.runtime.remember(point, checkpointLabel) {
                     var text = point.name.trim()
                     if (text.startsWith("${point.order}. ")) {

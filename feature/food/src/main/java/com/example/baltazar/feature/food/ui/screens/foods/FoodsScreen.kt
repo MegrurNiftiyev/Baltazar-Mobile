@@ -52,7 +52,7 @@ import com.example.baltazar.core.core.navigation.FoodDetail
 import com.example.baltazar.core.core.navigation.LikeResult
 import com.example.baltazar.core.core.managers.requireAuth
 import com.example.baltazar.core.core.navigation.Login
-import com.example.baltazar.core.core.navigation.NavResultKeys
+import com.example.baltazar.core.R as CoreR
 import com.example.baltazar.feature.food.R
 import com.example.baltazar.feature.food.ui.components.FoodCard
 import compose.icons.TablerIcons
@@ -132,7 +132,7 @@ fun FoodsScreen(
                             "${state.draftMinPrice ?: 0} - ${state.draftMaxPrice ?: "∞"} ₼"
                         } else null
                         FilterChipItem(
-                            label = stringResource(id = com.example.baltazar.core.R.string.filter_price_range),
+                            label = stringResource(id = CoreR.string.filter_price_range),
                             selectedValue = priceLabel,
                             isActive = state.draftMinPrice != null || state.draftMaxPrice != null,
                             onClick = { showPriceDialog = true },

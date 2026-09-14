@@ -21,7 +21,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import androidx.compose.ui.res.stringResource
+import com.example.baltazar.core.R
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.Paddings
 import com.example.baltazar.core.core.constants.Spaces
@@ -65,7 +66,7 @@ fun OrderServiceCard(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = order.serviceItemSnapshot?.title ?: stringResource(id = com.example.baltazar.core.R.string.order_number_format, order.id.takeLast(6)),
+                    text = order.serviceItemSnapshot?.title ?: stringResource(id = R.string.order_number_format, order.id.takeLast(6)),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
