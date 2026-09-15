@@ -25,7 +25,6 @@
   <img src="https://img.shields.io/badge/Material3-777777?style=flat-square" alt="Material3"/>
 </p>
 
----
 
 ## 🏗️ 1. Architecture Overview
 
@@ -76,7 +75,6 @@ feature/<name>/src/main/java/com/example/baltazar/feature/<name>/
 
 > 📌 **Module Coupling Rule**: Feature modules do not depend directly on each other; they only depend on `:core`. Shared models and cross-module infrastructure reside in `:core`.
 
----
 
 ## 🗺️ 2. Global Navigation Architecture
 
@@ -105,7 +103,6 @@ Global NavHost
 
 The navigation graph itself does not decide whether the user needs personal information, a driver's license, a delivery address, or payment.
 
----
 
 ## 🔒 3. Authentication Gate (`AuthGateManager`)
 
@@ -149,7 +146,6 @@ authGateManager.requireAuth(
 - **If authenticated**: `requireAuth()` executes the target action immediately.
 - **If guest**: `requireAuth()` saves the target route, emits `AuthGateState.Required(targetRoute)`, routes to `AuthNavGraph`, and automatically redirects the user to the `targetRoute` upon successful login or registration.
 
----
 
 ## 🛒 4. Service Detail → Order Flow Convergence
 
@@ -177,7 +173,6 @@ Travel Detail    ──────┤
 Rent-a-car Detail ─────┘
 ```
 
----
 
 ## ⚡ 5. Order Flow Execution
 
@@ -187,7 +182,6 @@ The checkout flow is controlled by `OrderNavGraph`. The initial entry point is `
 OrderFlow ──► OrderSummaryScreen ──► OrderSummaryViewModel ──► createOrder() ──► getNextScreen(orderId)
 ```
 
----
 
 ## 🔄 6. Dynamic `next-screen` Mechanism
 
@@ -233,7 +227,6 @@ fun NavHostController.navigateToNextScreen(
 Backend decides WHAT is required  ──►  NextScreenType  ──►  Navigation decides WHERE to go
 ```
 
----
 
 ## 🔄 7. Complete Dynamic Order Navigation Example
 
@@ -273,7 +266,6 @@ Backend decides WHAT is required  ──►  NextScreenType  ──►  Navigati
 └─────────────────────┘
 ```
 
----
 
 ## 🔙 8. `popBackStack()` vs `next-screen`
 
@@ -287,7 +279,6 @@ next-screen    = Forward business flow resolution
 popBackStack   = Backward stack traversal
 ```
 
----
 
 ## 📚 9. Order Flow Navigation Back Stack
 
@@ -310,7 +301,6 @@ Navigation Back Stack:
 
 Calling `navController.popBackStack()` smoothly pops destination by destination.
 
----
 
 ## 🔁 10. Continuing Pending Orders from `OrdersScreen`
 
@@ -331,7 +321,6 @@ User taps pending order (PENDING / AWAITING_PAYMENT / PROCESSING)
 
 Completed orders navigate directly to `OrderDetailScreen(order.id)`.
 
----
 
 ## 📍 11. Delivery Address / Map Flow (`MapDeliverySelection`)
 
@@ -341,7 +330,6 @@ Completed orders navigate directly to `OrderDetailScreen(order.id)`.
 MapDeliverySelection ──► patchDeliveryAddress(...) ──► Success ──► getNextScreen(orderId) ──► navigateToNextScreen(...)
 ```
 
----
 
 ## 💳 12. Payment Architecture & Component Decomposition
 
@@ -357,7 +345,6 @@ PaymentScreen
   └── PaymentErrorBottomSheet
 ```
 
----
 
 ## 💸 13. Payment Request Sequence
 
@@ -370,7 +357,6 @@ Payment execution involves two distinct remote steps:
 
 A successful payment-method update does not guarantee that the transaction authorization will succeed.
 
----
 
 ## ⚠️ 14. Payment Error Handling
 
@@ -379,23 +365,14 @@ If payment authorization fails (e.g. insufficient funds, HTTP 429, card declined
 2. The UI opens `PaymentErrorBottomSheet` with options to **Try Again** or **Choose a Different Card**.
 3. The app **never** forces local fallback navigation on failure; errors are surfaced to the user cleanly.
 
----
 
-## 🎨 AI Coding Rules & Design System
 
-1. **Theme-Driven**: All colors & fonts derive from `MaterialTheme`. No hardcoded hex colors or `.sp` values.
-2. **Design Tokens**: Spacing, padding, and radiuses use `:core:constants` (`Paddings.*`, `Spaces.*`, `BorderRadiuses.*`, `IconSizes.*`).
-3. **Zero Hardcoded Strings**: All user-facing strings live in `strings.xml` with support for English, Azerbaijani, Turkish, and Russian.
-4. **Clean Import Rule**: No inline FQCN package references in code logic; use top-level imports.
-
----
 
 ## 🌐 Backend Services Integration
 
 - **[Baltazar-Backend](https://github.com/MegrurNiftiyev/Baltazar-Backend)**: Primary REST API powering authentication, catalog exploration, reviews, and order state machines.
 - **[Baltazar-Payment-Backend](https://github.com/MegrurNiftiyev/Baltazar-Payment-Backend)**: Microservice managing card tokenization, payment method persistence, and gateway authorizations.
 
----
 
 ## 🛠️ Getting Started
 
@@ -406,7 +383,6 @@ If payment authorization fails (e.g. insufficient funds, HTTP 429, card declined
 2. Open the project in **Android Studio Ladybug** (or newer).
 3. Sync Gradle and run the `:app` configuration.
 
----
 
 ## 📄 License
 
