@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.ui.res.stringResource
+import com.example.baltazar.core.R as CoreR
 import com.example.baltazar.core.core.components.RatingBadge
 import com.example.baltazar.core.core.components.ShimmerWrapper
 import com.example.baltazar.core.core.components.buttons.FavoriteButton
@@ -263,7 +265,7 @@ fun FoodCard(
                         if (food?.reviewCount != null && food.reviewCount > 0) {
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = "(${food.reviewCount} rəy)",
+                                text = stringResource(id = CoreR.string.reviews_count_short_format, food.reviewCount),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )

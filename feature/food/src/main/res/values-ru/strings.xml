@@ -1,0 +1,8 @@
+<resources>
+    <string name="food_title">Еда</string>
+    <string name="food_search_hint">Поиск блюд или ресторанов...</string>
+    <string name="food_categories">Категории</string>
+    <string name="food_popular_dishes">Популярные блюда</string>
+    <string name="food_add_to_cart">Добавить в корзину</string>
+    <string name="food_details">Детали блюда</string>
+</resources>

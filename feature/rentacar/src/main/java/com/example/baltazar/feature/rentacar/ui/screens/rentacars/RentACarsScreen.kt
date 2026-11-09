@@ -236,8 +236,8 @@ fun RentACarsScreen(
                 if (!state.isLoading && state.items.isEmpty()) {
                     EmptyStateView(
                         icon = TablerIcons.Car,
-                        title = "Axtarışa uyğun nəticə tapılmadı",
-                        subtitle = "Daxil etdiyiniz filter kriteriyalarına uyğun heç bir avtomobil tapılmadı.",
+                        title = stringResource(id = CoreR.string.empty_results_title),
+                        subtitle = stringResource(id = CoreR.string.empty_cars_subtitle),
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {

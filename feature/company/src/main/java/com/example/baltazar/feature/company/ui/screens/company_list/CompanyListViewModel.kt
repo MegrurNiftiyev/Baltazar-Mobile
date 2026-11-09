@@ -1,5 +1,7 @@
 package com.example.baltazar.feature.company.ui.screens.company_list
 
+import com.example.baltazar.core.R
+import com.example.baltazar.core.core.utils.UiText
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -58,7 +60,7 @@ class CompanyListViewModel @Inject constructor(
                 }
                 .onFailure { error ->
                     _state.update {
-                        it.copy(isLoading = false, error = error.message ?: "Xəta baş verdi")
+                        it.copy(isLoading = false, error = error.message?.let { UiText.DynamicString(it) } ?: UiText.StringResource(R.string.generic_error))
                     }
                 }
         }
@@ -81,7 +83,7 @@ class CompanyListViewModel @Inject constructor(
                 }
                 .onFailure { error ->
                     _state.update {
-                        it.copy(isRefreshing = false, error = error.message ?: "Xəta baş verdi")
+                        it.copy(isRefreshing = false, error = error.message?.let { UiText.DynamicString(it) } ?: UiText.StringResource(R.string.generic_error))
                     }
                 }
         }

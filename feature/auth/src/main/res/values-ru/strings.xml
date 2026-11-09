@@ -1,0 +1,58 @@
+<resources>
+    <string name="onboarding_skip">Пропустить</string>
+    <string name="onboarding_next">Далее</string>
+    <string name="onboarding_start">Начать</string>
+    <string name="onboarding_title_1">Добро пожаловать в Baltazar</string>
+    <string name="onboarding_description_1">Отели, путешествия, аренда авто и еда — всё, что вам нужно, в одном приложении.</string>
+    <string name="onboarding_title_2">Откройте своё следующее путешествие</string>
+    <string name="onboarding_description_2">Бронируйте лучшие отели и подобранные туры для вашей поездки.</string>
+    <string name="onboarding_title_3">В путь — по-своему</string>
+    <string name="onboarding_description_3">Арендуйте идеальный автомобиль для поездки: гибкая выдача, прозрачные цены.</string>
+
+    <string name="error_field_blank">Поле не может быть пустым</string>
+    <string name="error_invalid_format">Неверный формат</string>
+    <string name="error_too_short">Слишком коротко</string>
+    <string name="error_too_long">Слишком длинно</string>
+    <string name="error_missing_digit">Нужна хотя бы 1 цифра</string>
+    <string name="error_missing_uppercase">Нужна хотя бы 1 заглавная буква</string>
+    <string name="error_missing_special_char">Нужен хотя бы 1 специальный символ</string>
+
+    <!-- Auth Selection -->
+    <string name="auth_selection_title">Baltazar</string>
+    <string name="auth_selection_subtitle">Ваш помощник для\nудобной повседневной логистики.</string>
+    <string name="auth_selection_login">Войти</string>
+    <string name="auth_selection_register">Регистрация</string>
+    <string name="auth_selection_guest">Продолжить как гость</string>
+
+    <!-- Login -->
+    <string name="login_title">Baltazar</string>
+    <string name="login_email_label">Эл. почта</string>
+    <string name="login_email_placeholder">Адрес эл. почты</string>
+    <string name="login_password_label">Пароль</string>
+    <string name="login_password_placeholder">Пароль</string>
+    <string name="login_forgot_password">Забыли пароль?</string>
+    <string name="login_button">Войти</string>
+    <string name="login_or">ИЛИ</string>
+    <string name="login_google">Продолжить с Google</string>
+    <string name="login_no_account">Нет аккаунта? </string>
+    <string name="login_register_now">Зарегистрируйтесь</string>
+    <string name="login_guest">Продолжить как гость</string>
+    <string name="login_success">Вход выполнен успешно</string>
+
+    <!-- Register -->
+    <string name="register_title">Baltazar</string>
+    <string name="register_subtitle">Создайте аккаунт, чтобы начать.</string>
+    <string name="register_name_label">Полное имя</string>
+    <string name="register_name_placeholder">John Doe</string>
+    <string name="register_email_label">Адрес эл. почты</string>
+    <string name="register_email_placeholder">john@example.com</string>
+    <string name="register_phone_label">Номер телефона</string>
+    <string name="register_phone_placeholder">+1 (555) 000-0000</string>
+    <string name="register_password_label">Пароль</string>
+    <string name="register_auto_detect_info">Регион и язык будут определены автоматически по вашему местоположению.</string>
+    <string name="register_button">Создать аккаунт</string>
+    <string name="register_back_to_login">← Назад ко входу</string>
+    <string name="register_already_have_account">Уже есть аккаунт? </string>
+    <string name="register_login_now">Войти</string>
+    <string name="register_success">Регистрация прошла успешно</string>
+</resources>

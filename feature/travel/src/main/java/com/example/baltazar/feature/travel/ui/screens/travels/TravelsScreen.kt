@@ -166,8 +166,8 @@ fun TravelsScreen(
                 if (!state.isLoading && state.items.isEmpty()) {
                     EmptyStateView(
                         icon = TablerIcons.Plane,
-                        title = "Axtarışa uyğun nəticə tapılmadı",
-                        subtitle = "Daxil etdiyiniz filter kriteriyalarına uyğun heç bir tur tapılmadı.",
+                        title = stringResource(id = CoreR.string.empty_results_title),
+                        subtitle = stringResource(id = CoreR.string.empty_tours_subtitle),
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {

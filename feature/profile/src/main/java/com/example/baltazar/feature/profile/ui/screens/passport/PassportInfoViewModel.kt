@@ -61,7 +61,7 @@ class PassportInfoViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         userMessage = SnackbarMessage(
-                            text = UiText.DynamicString(error.message ?: "Xəta baş verdi"),
+                            text = error.message?.let { UiText.DynamicString(it) } ?: UiText.StringResource(R.string.generic_error),
                             type = SnackbarType.ERROR
                         )
                     )

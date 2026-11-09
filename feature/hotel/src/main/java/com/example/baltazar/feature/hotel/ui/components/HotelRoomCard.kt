@@ -22,9 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
+import com.example.baltazar.core.R as CoreR
 import com.example.baltazar.core.core.components.ShimmerWrapper
 import com.example.baltazar.core.core.constants.BorderRadiuses
 import com.example.baltazar.core.core.constants.IconSizes
@@ -122,7 +124,7 @@ fun HotelRoomCard(
                 )
                 Spacer(modifier = Modifier.width(Spaces.ExtraMini))
                 Text(
-                    text = "${room.capacity} nəfərlik",
+                    text = stringResource(id = CoreR.string.room_capacity_format, room.capacity),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

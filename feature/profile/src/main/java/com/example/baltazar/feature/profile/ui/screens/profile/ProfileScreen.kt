@@ -200,7 +200,7 @@ fun ProfileScreen(
                 ProfileTile(
                     title = stringResource(R.string.profile_region),
                     icon = TablerIcons.MapPin,
-                    trailingValue = state.selectedRegion.displayName,
+                    trailingValue = stringResource(id = state.selectedRegion.labelRes),
                     onClick = { viewModel.openRegionSheet() }
                 )
 

@@ -183,8 +183,8 @@ fun HotelsScreen(
                 if (!state.isLoading && state.items.isEmpty()) {
                     EmptyStateView(
                         icon = TablerIcons.Building,
-                        title = "Axtarışa uyğun nəticə tapılmadı",
-                        subtitle = "Daxil etdiyiniz filter kriteriyalarına uyğun heç bir otel tapılmadı.",
+                        title = stringResource(id = CoreR.string.empty_results_title),
+                        subtitle = stringResource(id = CoreR.string.empty_hotels_subtitle),
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {

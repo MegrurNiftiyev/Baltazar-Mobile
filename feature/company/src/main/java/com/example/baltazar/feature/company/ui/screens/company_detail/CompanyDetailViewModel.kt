@@ -61,7 +61,7 @@ class CompanyDetailViewModel @Inject constructor(
 
     fun loadCompanyDetails() {
         if (companyId.isBlank()) {
-            _state.update { it.copy(error = "Məlumat tapılmadı") }
+            _state.update { it.copy(error = UiText.StringResource(R.string.data_not_found)) }
             return
         }
 
@@ -72,7 +72,7 @@ class CompanyDetailViewModel @Inject constructor(
                     _state.update { it.copy(company = detail, isLoading = false) }
                 }
                 .onFailure { error ->
-                    _state.update { it.copy(isLoading = false, error = error.message ?: "Xəta baş verdi") }
+                    _state.update { it.copy(isLoading = false, error = error.message?.let { UiText.DynamicString(it) } ?: UiText.StringResource(R.string.generic_error)) }
                 }
         }
     }
@@ -183,7 +183,7 @@ class CompanyDetailViewModel @Inject constructor(
                     it.copy(
                         isSubmittingReview = false,
                         userMessage = SnackbarMessage(
-                            text = UiText.DynamicString(error.message ?: "Xəta baş verdi"),
+                            text = error.message?.let { UiText.DynamicString(it) } ?: UiText.StringResource(R.string.generic_error),
                             type = SnackbarType.ERROR
                         )
                     )

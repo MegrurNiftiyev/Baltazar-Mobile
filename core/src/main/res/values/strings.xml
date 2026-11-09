@@ -226,4 +226,19 @@
     <string name="star_count_format">%d Ulduz</string>
     <string name="unknown_error_title">Serverdə xəta baş verdi</string>
     <string name="unknown_error_subtitle">Sorğunuz emal edilərkən gözlənilməz xəta baş verdi. Xahiş edirik ana səhifəyə qayıdın.</string>
+    <string name="empty_results_title">Axtarışa uyğun nəticə tapılmadı</string>
+    <string name="empty_foods_subtitle">Daxil etdiyiniz filter kriteriyalarına uyğun heç bir təam tapılmadı.</string>
+    <string name="empty_hotels_subtitle">Daxil etdiyiniz filter kriteriyalarına uyğun heç bir otel tapılmadı.</string>
+    <string name="empty_cars_subtitle">Daxil etdiyiniz filter kriteriyalarına uyğun heç bir avtomobil tapılmadı.</string>
+    <string name="empty_tours_subtitle">Daxil etdiyiniz filter kriteriyalarına uyğun heç bir tur tapılmadı.</string>
+    <string name="company_empty_title">Şirkət tapılmadı</string>
+    <string name="company_empty_subtitle">Seçilmiş kateqoriyaya uyğun aktiv şirkət mövcud deyil.</string>
+    <string name="data_not_found">Məlumat tapılmadı</string>
+    <string name="err_save_card_failed">Kart yadda saxlanılmadı</string>
+    <string name="err_card_tokenization_failed">Kart tokenizasiyası alınmadı</string>
+    <string name="region_azerbaijan">Azərbaycan</string>
+    <string name="region_turkey">Türkiyə</string>
+    <string name="region_usa">ABŞ</string>
+    <string name="region_russia">Rusiya</string>
+    <string name="reviews_count_short_format">(%d rəy)</string>
 </resources>

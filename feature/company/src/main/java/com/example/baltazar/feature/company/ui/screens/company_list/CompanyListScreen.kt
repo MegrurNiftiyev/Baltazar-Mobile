@@ -87,7 +87,7 @@ fun CompanyListScreen(
                 contentAlignment = Alignment.Center
             ) {
                 ErrorBox(
-                    title = state.error ?: stringResource(id = R.string.data_load_failed),
+                    title = state.error?.asString() ?: stringResource(id = R.string.data_load_failed),
                     onRetry = { viewModel.loadCompanies() }
                 )
             }
@@ -102,8 +102,8 @@ fun CompanyListScreen(
                 if (!state.isLoading && state.companies.isEmpty()) {
                     EmptyStateView(
                         icon = TablerIcons.Building,
-                        title = "Şirkət tapılmadı",
-                        subtitle = "Seçilmiş kateqoriyaya uyğun aktiv şirkət mövcud deyil.",
+                        title = stringResource(id = R.string.company_empty_title),
+                        subtitle = stringResource(id = R.string.company_empty_subtitle),
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {

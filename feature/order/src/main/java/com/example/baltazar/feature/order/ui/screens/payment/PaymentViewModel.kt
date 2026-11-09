@@ -3,6 +3,8 @@ package com.example.baltazar.feature.order.ui.screens.payment
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.baltazar.core.R as CoreR
+import com.example.baltazar.core.core.utils.UiText
 import com.example.baltazar.feature.order.domain.repository.IOrderRepository
 import com.example.baltazar.feature.order.domain.repository.IPaymentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -124,34 +126,34 @@ class PaymentViewModel @Inject constructor(
         val cvv = s.cvvInput.trim()
 
         var hasError = false
-        var cardNumberErr: String? = null
-        var cardHolderErr: String? = null
-        var expiryMonthErr: String? = null
-        var expiryYearErr: String? = null
-        var cvvErr: String? = null
+        var cardNumberErr: UiText? = null
+        var cardHolderErr: UiText? = null
+        var expiryMonthErr: UiText? = null
+        var expiryYearErr: UiText? = null
+        var cvvErr: UiText? = null
 
         if (rawCardNumber.length != 16) {
-            cardNumberErr = "Kart nömrəsi 16 rəqəmdən ibarət olmalıdır"
+            cardNumberErr = UiText.StringResource(CoreR.string.err_card_number_invalid)
             hasError = true
         }
 
         if (cardHolder.isBlank()) {
-            cardHolderErr = "Kart sahibinin adını daxil edin"
+            cardHolderErr = UiText.StringResource(CoreR.string.err_card_holder_invalid)
             hasError = true
         }
 
         if (monthInt == null || monthInt !in 1..12) {
-            expiryMonthErr = "Düzgün ay daxil edin (01-12)"
+            expiryMonthErr = UiText.StringResource(CoreR.string.err_expiry_month_invalid)
             hasError = true
         }
 
         if (yearInt == null || s.expiryYearInput.length != 2) {
-            expiryYearErr = "Düzgün il daxil edin (YY)"
+            expiryYearErr = UiText.StringResource(CoreR.string.err_expiry_year_invalid)
             hasError = true
         }
 
         if (cvv.length !in 3..4) {
-            cvvErr = "CVV 3 və ya 4 rəqəmdən ibarət olmalıdır"
+            cvvErr = UiText.StringResource(CoreR.string.err_cvv_invalid)
             hasError = true
         }
 
@@ -198,12 +200,12 @@ class PaymentViewModel @Inject constructor(
                     }
                 }.onFailure { error ->
                     _state.update { state ->
-                        state.copy(isTokenizingCard = false, addCardError = error.message ?: "Failed to save card")
+                        state.copy(isTokenizingCard = false, addCardError = error.message?.let { UiText.DynamicString(it) } ?: UiText.StringResource(CoreR.string.err_save_card_failed))
                     }
                 }
             }.onFailure { error ->
                 _state.update { state ->
-                    state.copy(isTokenizingCard = false, addCardError = error.message ?: "Card tokenization failed")
+                    state.copy(isTokenizingCard = false, addCardError = error.message?.let { UiText.DynamicString(it) } ?: UiText.StringResource(CoreR.string.err_card_tokenization_failed))
                 }
             }
         }
@@ -235,7 +237,7 @@ class PaymentViewModel @Inject constructor(
                             it.copy(
                                 isProcessingPayment = false,
                                 isPaymentDeclined = true,
-                                paymentErrorMessage = error.message ?: "Payment declined"
+                                paymentErrorMessage = error.message
                             )
                         }
                     }

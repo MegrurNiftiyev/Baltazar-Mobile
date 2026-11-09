@@ -108,7 +108,7 @@ fun RegionBottomSheet(
                                     modifier = Modifier.padding(end = 12.dp)
                                 )
                                 Text(
-                                    text = option.region.displayName,
+                                    text = stringResource(id = option.region.labelRes),
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                     color = if (isSelected) {

@@ -111,7 +111,7 @@ fun CompanyDetailScreen(
                 contentAlignment = Alignment.Center
             ) {
                 ErrorBox(
-                    title = state.error ?: stringResource(R.string.data_load_failed),
+                    title = state.error?.asString() ?: stringResource(R.string.data_load_failed),
                     onRetry = { viewModel.loadCompanyDetails() }
                 )
             }

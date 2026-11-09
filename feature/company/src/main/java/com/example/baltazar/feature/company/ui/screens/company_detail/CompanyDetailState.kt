@@ -1,5 +1,6 @@
 package com.example.baltazar.feature.company.ui.screens.company_detail
 
+import com.example.baltazar.core.core.utils.UiText
 import com.example.baltazar.core.core.utils.SnackbarMessage
 import com.example.baltazar.core.domain.model.ReviewItem
 import com.example.baltazar.feature.company.domain.model.CompanyDetail
@@ -14,6 +15,6 @@ data class CompanyDetailState(
     val isReviewsLoading: Boolean = false,
     val isFavorite: Boolean = false,
     val isSubmittingReview: Boolean = false,
-    val error: String? = null,
+    val error: UiText? = null,
     val userMessage: SnackbarMessage? = null
 )
