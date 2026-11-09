@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="app/src/main/res/drawable/ic_launcher_foreground.xml" width="110" alt="Baltazar Logo"/>
+  <img src="assets/logo.png" width="140" alt="Baltazar Logo"/>
 </p>
 
 <h1 align="center">Baltazar Android Application</h1>
@@ -23,6 +23,74 @@
   <img src="https://img.shields.io/badge/kotlinx.serialization-7F52FF?style=flat-square" alt="kotlinx.serialization"/>
   <img src="https://img.shields.io/badge/Navigation%20Compose-4285F4?style=flat-square" alt="Navigation Compose"/>
   <img src="https://img.shields.io/badge/Material3-777777?style=flat-square" alt="Material3"/>
+</p>
+
+<p align="center">
+  <a href="assets/apk/baltazar.apk?raw=true">
+    <img src="https://img.shields.io/badge/Download-APK-34A853?style=for-the-badge&logo=android&logoColor=white" alt="Download APK"/>
+  </a>
+</p>
+
+
+## 📱 Screenshots
+
+### 🚀 Splash & Onboarding
+
+<p align="center">
+  <img src="assets/screenshots/01_splash.jpg" width="190" alt="Splash"/>
+  <img src="assets/screenshots/02_onboarding_welcome.jpg" width="190" alt="Onboarding - Welcome"/>
+  <img src="assets/screenshots/03_onboarding_discover.jpg" width="190" alt="Onboarding - Discover"/>
+  <img src="assets/screenshots/04_onboarding_hit_the_road.jpg" width="190" alt="Onboarding - Hit the Road"/>
+  <img src="assets/screenshots/05_auth_welcome.jpg" width="190" alt="Login / Continue as Guest"/>
+</p>
+
+### 🧭 Explore & Food
+
+<p align="center">
+  <img src="assets/screenshots/06_explore_home.jpg" width="190" alt="Explore Home"/>
+  <img src="assets/screenshots/07_food_list.jpg" width="190" alt="Food List"/>
+  <img src="assets/screenshots/08_food_detail.jpg" width="190" alt="Food Detail"/>
+  <img src="assets/screenshots/09_food_detail_dark.jpg" width="190" alt="Food Detail (Dark)"/>
+  <img src="assets/screenshots/10_companies_list.jpg" width="190" alt="Companies"/>
+  <img src="assets/screenshots/11_company_detail.jpg" width="190" alt="Company Detail"/>
+</p>
+
+### 🏨 Hotels & 🚗 Rent-a-car
+
+<p align="center">
+  <img src="assets/screenshots/12_hotels_filtered.jpg" width="190" alt="Hotels (Filtered)"/>
+  <img src="assets/screenshots/13_hotel_detail_dark.jpg" width="190" alt="Hotel Detail & Rooms"/>
+  <img src="assets/screenshots/19_rentacar_detail.jpg" width="190" alt="Rent-a-car Detail"/>
+</p>
+
+### ✈️ Travel & Tour Routes
+
+<p align="center">
+  <img src="assets/screenshots/14_travel_detail.jpg" width="190" alt="Travel Detail"/>
+  <img src="assets/screenshots/15_travel_detail_gabala_sheki.jpg" width="190" alt="Travel Detail - Gabala & Sheki"/>
+  <img src="assets/screenshots/16_travel_detail_dark.jpg" width="190" alt="Travel Detail (Dark)"/>
+  <img src="assets/screenshots/17_tour_route_map.jpg" width="190" alt="Tour Route Map"/>
+  <img src="assets/screenshots/18_tour_route_map_baku.jpg" width="190" alt="Tour Route Map - Baku"/>
+</p>
+
+### 👤 Profile, Wishlist & Settings
+
+<p align="center">
+  <img src="assets/screenshots/20_wishlist.jpg" width="190" alt="Wishlist"/>
+  <img src="assets/screenshots/21_profile.jpg" width="190" alt="Profile"/>
+  <img src="assets/screenshots/22_profile_guest.jpg" width="190" alt="Profile (Guest)"/>
+  <img src="assets/screenshots/23_personal_information.jpg" width="190" alt="Personal Information"/>
+  <img src="assets/screenshots/24_passport_information.jpg" width="190" alt="Passport Information"/>
+  <img src="assets/screenshots/25_driver_license.jpg" width="190" alt="Driver License"/>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/26_language_selection.jpg" width="190" alt="Language Selection"/>
+  <img src="assets/screenshots/27_region_selection.jpg" width="190" alt="Region Selection"/>
+  <img src="assets/screenshots/28_card_style_selection.jpg" width="190" alt="Card Style Selection"/>
+  <img src="assets/screenshots/29_about_us.jpg" width="190" alt="About Us"/>
+  <img src="assets/screenshots/30_help_support.jpg" width="190" alt="Help & Support"/>
+  <img src="assets/screenshots/31_logout_dialog.jpg" width="190" alt="Log Out Dialog"/>
 </p>
 
 
